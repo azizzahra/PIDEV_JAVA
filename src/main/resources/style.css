@@ -1,0 +1,74 @@
+.root {
+    -fx-background-color: #e9f7e9; /* Very light green background */
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* Header bar (top HBox) */
+.hbox {
+    -fx-background-color: #c5e1c5; /* Light green for header */
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-alignment: center_left;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+/* Button */
+.button {
+    -fx-background-color: #81c784; /* Soft medium green */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 8 16 8 16;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
+.button:hover {
+    -fx-background-color: #66bb6a; /* Slightly darker on hover */
+}
+
+/* TableView (the whole table) */
+.table-view {
+    -fx-background-color: #ffffff; /* White background */
+    -fx-border-color: #a5d6a7; /* Greenish border */
+    -fx-border-width: 1;
+    -fx-padding: 10;
+    -fx-table-cell-border-color: #dcedc8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 1);
+}
+
+/* Table Header */
+.table-view .column-header-background {
+    -fx-background-color: #81c784; /* Medium soft green */
+}
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: white; /* White text for headers */
+}
+
+/* Table Rows - Normal */
+.table-row-cell {
+    -fx-background-color: #ffffff; /* White rows */
+    -fx-border-color: #f0f0f0;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+/* Alternate Rows */
+.table-row-cell:odd {
+    -fx-background-color: #f4f9f4; /* Very light green for alternate rows */
+}
+
+/* Hover on rows */
+.table-row-cell:filled:hover {
+    -fx-background-color: #c8e6c9; /* Light green highlight on hover */
+}
+
+/* Selected row */
+.table-row-cell:filled:selected {
+    -fx-background-color: #66bb6a; /* Stronger green when selected */
+    -fx-text-fill: white;
+}

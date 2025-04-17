@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/24"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.PlaceController">
+
+    <top>
+        <HBox style="-fx-padding: 10;">
+            <Button text="Add New Place" onAction="#handleAdd"/>
+            <Button text="Go to Loans" onAction="#handleGoToLoans" fx:id="goToLoansBtn"/>
+
+        </HBox>
+    </top>
+
+    <center>
+        <TableView fx:id="placeTable">
+            <columns>
+                <TableColumn text="ID" fx:id="idCol"/>
+                <TableColumn text="Name" fx:id="nameCol"/>
+                <TableColumn text="Price" fx:id="priceCol"/>
+                <TableColumn text="Capacity" fx:id="capacityCol"/>
+                <TableColumn text="Actions" fx:id="actionsCol"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

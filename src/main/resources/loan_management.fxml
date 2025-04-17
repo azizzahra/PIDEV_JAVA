@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/24"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.LoanController">
+
+    <top>
+        <HBox style="-fx-padding: 10; -fx-spacing: 10;" styleClass="hbox">
+            <Button text="Add New Loan" onAction="#handleAdd" fx:id="addLoanBtn"/>
+            <Button text="Back to Place" onAction="#handleBackToPlace" fx:id="backToPlaceBtn"/>
+            <Button text="Go to Users" onAction="#handleGoToUsers" fx:id="goToUsersBtn"/>
+        </HBox>
+    </top>
+
+    <center>
+        <TableView fx:id="loanTable">
+            <columns>
+                <TableColumn text="ID" fx:id="idCol"/>
+                <TableColumn text="Ticket Price" fx:id="priceCol"/>
+                <TableColumn text="Tickets Left" fx:id="ticketsLeftCol"/>
+                <TableColumn text="Formation" fx:id="formationCol"/>
+                <TableColumn text="Place" fx:id="placeCol"/>
+                <TableColumn text="Actions" fx:id="actionsCol"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>
