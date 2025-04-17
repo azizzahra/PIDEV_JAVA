@@ -33,7 +33,6 @@ public class PlaceController {
     @FXML
     public void initialize() {
         // Configure table columns
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         capacityCol.setCellValueFactory(new PropertyValueFactory<>("capacity"));

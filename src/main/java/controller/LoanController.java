@@ -43,7 +43,6 @@ public class LoanController {
     }
 
     private void setupTableColumns() {
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         priceCol.setCellValueFactory(new PropertyValueFactory<>("ticketPrice"));
         ticketsLeftCol.setCellValueFactory(new PropertyValueFactory<>("ticketsLeft"));
         formationCol.setCellValueFactory(new PropertyValueFactory<>("formation"));

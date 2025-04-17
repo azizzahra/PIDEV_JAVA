@@ -1,74 +1,114 @@
+/* style.css - Agriculture Theme */
 .root {
-    -fx-background-color: #e9f7e9; /* Very light green background */
-    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: #f5f5f0;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
 }
 
-/* Header bar (top HBox) */
-.hbox {
-    -fx-background-color: #c5e1c5; /* Light green for header */
-    -fx-padding: 10;
-    -fx-spacing: 10;
-    -fx-alignment: center_left;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+/* Top HBox styling */
+.top HBox {
+    -fx-background-color: linear-gradient(to bottom, #4a7c59, #3a5a40);
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
 }
 
-/* Button */
+/* Button styling */
 .button {
-    -fx-background-color: #81c784; /* Soft medium green */
+    -fx-background-color: #588157;
     -fx-text-fill: white;
-    -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-background-radius: 8;
-    -fx-padding: 8 16 8 16;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
-    -fx-transition: background-color 0.3s ease;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
 }
+
 .button:hover {
-    -fx-background-color: #66bb6a; /* Slightly darker on hover */
+    -fx-background-color: #3a5a40;
 }
 
-/* TableView (the whole table) */
+.button:pressed {
+    -fx-background-color: #344e41;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 1);
+}
+
+/* TableView styling */
 .table-view {
-    -fx-background-color: #ffffff; /* White background */
-    -fx-border-color: #a5d6a7; /* Greenish border */
-    -fx-border-width: 1;
-    -fx-padding: 10;
-    -fx-table-cell-border-color: #dcedc8;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 1);
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #d4d4d4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
 }
 
-/* Table Header */
 .table-view .column-header-background {
-    -fx-background-color: #81c784; /* Medium soft green */
+    -fx-background-color: linear-gradient(to bottom, #a3b18a, #588157);
+    -fx-background-radius: 3px 3px 0 0;
 }
+
 .table-view .column-header, .table-view .filler {
     -fx-background-color: transparent;
-    -fx-font-weight: bold;
-    -fx-font-size: 16px;
-    -fx-text-fill: white; /* White text for headers */
+    -fx-size: 35px;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: transparent #e0e0e0 transparent transparent;
 }
 
-/* Table Rows - Normal */
-.table-row-cell {
-    -fx-background-color: #ffffff; /* White rows */
-    -fx-border-color: #f0f0f0;
-    -fx-padding: 5px;
-    -fx-font-size: 14px;
-}
-
-/* Alternate Rows */
-.table-row-cell:odd {
-    -fx-background-color: #f4f9f4; /* Very light green for alternate rows */
-}
-
-/* Hover on rows */
-.table-row-cell:filled:hover {
-    -fx-background-color: #c8e6c9; /* Light green highlight on hover */
-}
-
-/* Selected row */
-.table-row-cell:filled:selected {
-    -fx-background-color: #66bb6a; /* Stronger green when selected */
+.table-view .column-header .label {
     -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-view .table-cell {
+    -fx-padding: 8px;
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 1px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f0f0e8;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #f8f8f8;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #a3b18a;
+    -fx-text-fill: white;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #e0e5d1;
+}
+
+/* Scrollbar styling */
+.scroll-bar:horizontal, .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #a3b18a;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #588157;
+}
+
+/* Context menu styling */
+.context-menu {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #d4d4d4;
+    -fx-border-width: 1px;
+}
+
+.menu-item {
+    -fx-background-color: transparent;
+}
+
+.menu-item:hover {
+    -fx-background-color: #e0e5d1;
 }

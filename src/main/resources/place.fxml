@@ -6,6 +6,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/24"
             xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="style.css"
             fx:controller="controller.PlaceController">
 
     <top>
@@ -19,7 +20,6 @@
     <center>
         <TableView fx:id="placeTable">
             <columns>
-                <TableColumn text="ID" fx:id="idCol"/>
                 <TableColumn text="Name" fx:id="nameCol"/>
                 <TableColumn text="Price" fx:id="priceCol"/>
                 <TableColumn text="Capacity" fx:id="capacityCol"/>

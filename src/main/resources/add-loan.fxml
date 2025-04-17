@@ -7,6 +7,8 @@
 <VBox xmlns="http://javafx.com/javafx/24"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controller.AddLoanController"
+      stylesheets="style.css"
+
       spacing="10" style="-fx-padding: 20;">
 
     <Label text="Add New Loan" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
