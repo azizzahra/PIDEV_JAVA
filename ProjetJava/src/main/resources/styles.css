@@ -1,0 +1,236 @@
+.tile-pane {
+    -fx-padding: 20;
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+}
+
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+.button {
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+/* Styles généraux */
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-background-color: #f8f9fa;
+}
+
+/* Styles de l'en-tête */
+.header-background {
+    -fx-background-image: url("uploads/farms/bg.jpg");
+    -fx-background-size: auto;
+    -fx-background-position: center;
+    -fx-background-color: rgba(0, 0, 0, 0.2); /* Couleur de fond semi-transparente */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
+    -fx-blend-mode: multiply;
+}
+
+.header-title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 3, 0, 0, 2);
+}
+
+.header-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #e9ecef;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 2, 0, 0, 1);
+}
+
+/* Styles du fil d'Ariane */
+.breadcrumb {
+    -fx-font-size: 14px;
+    -fx-text-fill: #adb5bd;
+    -fx-cursor: hand;
+}
+
+.breadcrumb-separator {
+    -fx-font-size: 14px;
+    -fx-text-fill: #adb5bd;
+}
+
+.breadcrumb-current {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2ecc71;
+}
+
+/* Styles de la barre latérale */
+.sidebar {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 2, 0);
+}
+
+.sidebar-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 0 0 10 0;
+}
+
+.filter-category {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 10 0 5 0;
+}
+
+.filter-count {
+    -fx-text-fill: #6c757d;
+    -fx-font-size: 12px;
+}
+
+.filter-apply-btn {
+    -fx-background-color: #27AE60;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 8 15;
+    -fx-background-radius: 5;
+}
+
+.filter-apply-btn:hover {
+    -fx-background-color: #219653;
+}
+
+.filter-clear-btn {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-padding: 8 12;
+    -fx-background-radius: 5;
+}
+
+.filter-clear-btn:hover {
+    -fx-background-color: #c0392b;
+}
+
+/* Styles de la barre de recherche et bouton d'ajout */
+.search-field {
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #dee2e6;
+    -fx-font-size: 14px;
+}
+
+.add-farm-btn {
+    -fx-background-color: #27AE60;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+}
+
+.add-farm-btn:hover {
+    -fx-background-color: #219653;
+}
+
+/* Icônes */
+.plus-icon {
+    -fx-shape: "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";
+    -fx-background-color: white;
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+}
+
+.filter-icon {
+    -fx-shape: "M3,2H21V2H21V4H20.92L14,10.92V22.91L10,18.91V10.91L3.08,4H3V2Z";
+    -fx-background-color: white;
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+}
+
+.trash-icon {
+    -fx-shape: "M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z";
+    -fx-background-color: white;
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+}
+
+/* Styles du container des fermes */
+.farm-container {
+    -fx-padding: 15;
+    -fx-background-color: transparent;
+}
+
+.farm-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.farm-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Style des cartes fermes */
+.farm-card {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 4);
+}
+
+.farm-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 12, 0, 0, 6);
+}
+
+.farm-card-tag {
+    -fx-background-color: #2C3E50;
+    -fx-background-radius: 4px;
+    -fx-text-fill: white;
+    -fx-padding: 3 8;
+    -fx-font-size: 11px;
+}
+
+.farm-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+.farm-location {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6c757d;
+}
+
+.farm-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: #495057;
+}
+
+.farm-size {
+    -fx-font-size: 14px;
+    -fx-text-fill: #27AE60;
+    -fx-font-weight: bold;
+}
+
+/* Style des boutons de carte */
+.card-button {
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+    -fx-font-size: 13px;
+}
+
+.edit-button {
+    -fx-background-color: #2C3E50;
+    -fx-text-fill: white;
+}
+
+.edit-button:hover {
+    -fx-background-color: #1a252f;
+}
+
+.delete-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+}
+
+.delete-button:hover {
+    -fx-background-color: #c0392b;
+}
