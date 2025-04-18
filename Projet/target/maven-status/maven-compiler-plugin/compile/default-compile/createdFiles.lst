@@ -1,0 +1,9 @@
+controller\HomeController.class
+controller\DashboardController.class
+Main\test.class
+controller\ForumDController.class
+controller\PostCardController.class
+controller\AjoutController.class
+services\CommentaireService.class
+controller\PostDetailController.class
+controller\PostController.class

@@ -1,0 +1,92 @@
+/* Styles généraux */
+.main-container {
+    -fx-background-color: white;
+    -fx-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Styles de la barre de navigation */
+.nav-bar {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 0, 0, 0, 2);
+    -fx-alignment: center;
+}
+
+.logo-container {
+    -fx-spacing: 10;
+}
+
+.logo-icon {
+    -fx-fill: #4CAF50;
+}
+
+.logo-text {
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+}
+
+/* Styles du menu de navigation */
+.nav-menu {
+    -fx-alignment: center;
+}
+
+.nav-item {
+    -fx-cursor: hand;
+    -fx-text-fill: #333333;
+    -fx-padding: 5 0;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: transparent;
+}
+
+.nav-item:hover {
+    -fx-text-fill: #4CAF50;
+    -fx-border-color: #4CAF50;
+}
+
+/* Style du bouton de connexion */
+.login-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+}
+
+.login-button .label {
+    -fx-text-fill: white;
+}
+
+.login-button:hover {
+    -fx-background-color: #45a049;
+}
+
+.login-button FontAwesomeIconView {
+    -fx-fill: white;
+}
+
+/* Styles de la section héro */
+.hero-title {
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0, 0, 0);
+}
+
+.hero-subtitle {
+    -fx-font-size: 18px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 3, 0, 0, 0);
+}
+
+/* Styles des flèches du slider */
+.slider-arrow {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-background-radius: 30;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+.slider-arrow:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+.slider-arrow FontAwesomeIconView {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 3, 0, 0, 0);
+}

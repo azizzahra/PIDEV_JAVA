@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<?import javafx.scene.shape.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+
+<VBox xmlns="http://javafx.com/javafx/15.0.1"
+      fx:controller="controller.HomeController"
+      xmlns:fx="http://javafx.com/fxml/1"
+      stylesheets="@home.css"
+      styleClass="main-container">
+
+    <!-- Barre de navigation -->
+    <HBox styleClass="nav-bar">
+        <!-- Logo à gauche -->
+        <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" styleClass="logo-container">
+            <!--<FontAwesomeIconView glyphName="LEAF" size="24" styleClass="logo-icon" />-->
+            <Label text="AGROSPHERE" styleClass="logo-text">
+                <font>
+                    <Font name="System Bold" size="20.0" />
+                </font>
+            </Label>
+        </HBox>
+
+        <!-- Menu au centre -->
+        <HBox alignment="CENTER" HBox.hgrow="ALWAYS" spacing="20" styleClass="nav-menu">
+            <Button   text="Home" />
+            <Button   text="MarketPlace" />
+            <Button   text="Event" />
+            <Button  text="Forum" onAction="#navigateToForum" />
+
+            <Button  text="Farm" />
+            <Button text="About Us" />
+            <Button  text="Contact" />
+        </HBox>
+
+        <!-- Bouton de connexion à droite -->
+        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" styleClass="login-container">
+            <Button styleClass="login-button">
+                <graphic>
+                    <HBox spacing="5" alignment="CENTER">
+                        <FontIcon iconLiteral="fa-user" iconSize="14" />
+
+                        <Label text="Lajmi" />
+                    </HBox>
+                </graphic>
+            </Button>
+        </HBox>
+
+        <padding>
+            <Insets top="15" right="30" bottom="15" left="30" />
+        </padding>
+    </HBox>
+
+    <!-- Section Hero Image avec overlay de texte -->
+    <StackPane VBox.vgrow="ALWAYS">
+        <!-- Image héro -->
+        <ImageView fitWidth="1200" fitHeight="600" preserveRatio="false">
+            <Image url="@/images/hero_1.jpg" />
+
+        </ImageView>
+
+        <!-- Overlay sombre pour améliorer la lisibilité du texte -->
+        <Rectangle width="1200" height="600" opacity="0.4" fill="BLACK" />
+
+        <!-- Contenu central (titre et sous-titre) -->
+        <VBox alignment="CENTER" spacing="20">
+            <Label text="Farming is the best solution of worlds starvation" styleClass="hero-title" textFill="WHITE" wrapText="true" alignment="CENTER">
+                <font>
+                    <Font name="System Bold" size="40.0" />
+                </font>
+                <VBox.margin>
+                    <Insets left="100" right="100" />
+                </VBox.margin>
+            </Label>
+
+            <Label text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                   styleClass="hero-subtitle"
+                   textFill="WHITE"
+                   wrapText="true"
+                   alignment="CENTER">
+                <font>
+                    <Font size="18.0" />
+                </font>
+                <VBox.margin>
+                    <Insets left="150" right="150" />
+                </VBox.margin>
+            </Label>
+        </VBox>
+
+        <!-- Flèches de navigation du slider -->
+        <HBox alignment="CENTER" StackPane.alignment="CENTER">
+            <Button styleClass="slider-arrow, left-arrow">
+                <graphic>
+                    <FontIcon iconLiteral="fa-chevron-left" iconSize="30" iconColor="white" />
+
+                </graphic>
+                <HBox.margin>
+                    <Insets right="900" />
+                </HBox.margin>
+            </Button>
+
+            <Button styleClass="slider-arrow, right-arrow">
+                <graphic>
+
+
+
+                </graphic>
+                <HBox.margin>
+                    <Insets left="900" />
+                </HBox.margin>
+            </Button>
+        </HBox>
+    </StackPane>
+
+</VBox>
