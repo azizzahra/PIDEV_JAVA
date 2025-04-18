@@ -1,0 +1,30 @@
+.background-agriculture {
+    -fx-background-color: #e8f5e9;
+
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.header-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+}
+
+.styled-table {
+    -fx-background-color: #ffffffdd;
+    -fx-border-color: #c5e1a5;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 5;
+    -fx-table-cell-border-color: #aed581;
+}
+
+.add-button {
+    -fx-background-color: #81c784;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16 8 16;
+    -fx-background-radius: 8;
+}

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.Color?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.UserController" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f4f4f4;">
+    <children>
+        <VBox alignment="TOP_CENTER" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
+            <!-- Titre du Formulaire -->
+            <Label text="Modifier Profil Utilisateur" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4caf50;" />
+
+            <GridPane hgap="15" vgap="15">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT"/>
+                    <ColumnConstraints halignment="LEFT"/>
+                </columnConstraints>
+
+                <rowConstraints>
+                    <RowConstraints valignment="CENTER"/>
+                </rowConstraints>
+
+                <children>
+                    <!-- Prénom -->
+                    <Label text="Prénom :" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-size: 14px;" />
+                    <TextField fx:id="firstName" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Entrez votre prénom" style="-fx-padding: 10px; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                    <Label fx:id="checkFirstName" text="" textFill="RED" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+
+                    <!-- Nom -->
+                    <Label text="Nom :" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-size: 14px;" />
+                    <TextField fx:id="lastName" GridPane.rowIndex="1" GridPane.columnIndex="1" promptText="Entrez votre nom" style="-fx-padding: 10px; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                    <Label fx:id="checkLastName" text="" textFill="RED" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+
+                    <!-- Email -->
+                    <Label text="Email :" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-size: 14px;" />
+                    <TextField fx:id="email" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="Entrez votre email" style="-fx-padding: 10px; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                    <Label fx:id="checkEmail" text="" textFill="RED" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+
+                    <!-- Numéro de téléphone -->
+                    <Label text="Téléphone :" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-size: 14px;" />
+                    <TextField fx:id="phoneNumber" GridPane.rowIndex="3" GridPane.columnIndex="1" promptText="Entrez votre numéro" style="-fx-padding: 10px; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                    <Label fx:id="checkPhoneNumber" text="" textFill="RED" GridPane.rowIndex="3" GridPane.columnIndex="2" />
+
+                    <!-- Rôle -->
+                    <Label text="Rôle :" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-size: 14px;" />
+                    <ComboBox fx:id="roleU" GridPane.rowIndex="4" GridPane.columnIndex="1" promptText="Choisissez un rôle" style="-fx-padding: 10px; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+
+                    <!-- Date de naissance -->
+                    <Label text="Date de naissance :" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-font-size: 14px;" />
+                    <DatePicker fx:id="dateBirthday" GridPane.rowIndex="5" GridPane.columnIndex="1" style="-fx-padding: 10px; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+
+                    <!-- Mot de passe -->
+                    <Label text="Mot de passe :" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-font-size: 14px;" />
+                    <PasswordField fx:id="password" GridPane.rowIndex="6" GridPane.columnIndex="1" promptText="Mot de passe" style="-fx-padding: 10px; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                    <Label fx:id="checkPassword" text="" textFill="RED" GridPane.rowIndex="6" GridPane.columnIndex="2" />
+
+                    <!-- Confirmation du mot de passe -->
+                    <Label text="Confirmer le mot de passe :" GridPane.rowIndex="7" GridPane.columnIndex="0" style="-fx-font-size: 14px;" />
+                    <PasswordField fx:id="confirmPassword" GridPane.rowIndex="7" GridPane.columnIndex="1" promptText="Confirmer le mot de passe" style="-fx-padding: 10px; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                    <Label fx:id="checkConfirmPassword" text="" textFill="RED" GridPane.rowIndex="7" GridPane.columnIndex="2" />
+
+                    <!-- Ancien mot de passe -->
+                    <Label text="Ancien mot de passe :" GridPane.rowIndex="8" GridPane.columnIndex="0" style="-fx-font-size: 14px;" />
+                    <PasswordField fx:id="oldPassword" GridPane.rowIndex="8" GridPane.columnIndex="1" promptText="Ancien mot de passe" style="-fx-padding: 10px; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
+                    <Label fx:id="checkOldPassword" text="" textFill="RED" GridPane.rowIndex="8" GridPane.columnIndex="2" />
+                </children>
+            </GridPane>
+
+            <Button text="Sauvegarder"
+                    style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-padding: 10px 20px; -fx-font-size: 16px; -fx-background-radius: 5px; -fx-border-radius: 5px;"
+                    onAction="#saveProfile" />
+
+        </VBox>
+    </children>
+</AnchorPane>

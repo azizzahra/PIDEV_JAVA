@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.UserListController"
+            prefWidth="800" prefHeight="500"
+            stylesheets="@user.css"
+            styleClass="background-agriculture">
+
+    <VBox spacing="15" alignment="TOP_CENTER">
+        <padding>
+            <Insets top="20" right="30" bottom="20" left="30"/>
+        </padding>
+
+        <Label text="🌿 Liste des Utilisateurs" styleClass="header-label"/>
+
+        <TableView fx:id="userTable" prefHeight="400" styleClass="styled-table">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="colNom" text="Nom" prefWidth="100"/>
+                <TableColumn fx:id="colPrenom" text="Prénom" prefWidth="100"/>
+                <TableColumn fx:id="colEmail" text="Email" prefWidth="150"/>
+                <TableColumn fx:id="colRole" text="Rôle" prefWidth="100"/>
+                <TableColumn fx:id="colTel" text="Téléphone" prefWidth="120"/>
+                <TableColumn fx:id="colStatus" text="Status" prefWidth="80"/>
+                <TableColumn fx:id="colBirth" text="Date Naissance" prefWidth="120"/>
+            </columns>
+        </TableView>
+
+        <Button text="➕ Ajouter un utilisateur" styleClass="add-button"/>
+    </VBox>
+</AnchorPane>
