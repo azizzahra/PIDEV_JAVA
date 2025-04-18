@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.FarmDetailsController"
+            stylesheets="@styles.css"
+            prefHeight="800.0"
+            prefWidth="1200.0">
+
+    <!-- ScrollPane principal qui rend toute l'interface scrollable -->
+    <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <!-- Layout principal -->
+        <BorderPane>
+            <!-- En-tête avec image de fond -->
+            <top>
+                <VBox spacing="10" styleClass="header-background" alignment="CENTER">
+                    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                    <!-- Titre principal -->
+                    <Label text="Farm Details" styleClass="header-title"/>
+
+                    <!-- Fil d'Ariane -->
+                    <HBox spacing="5" alignment="CENTER">
+                        <Label text="Home" styleClass="breadcrumb"/>
+                        <Label text="/" styleClass="breadcrumb-separator"/>
+                        <Label text="Farm" styleClass="breadcrumb"/>
+                        <Label text="/" styleClass="breadcrumb-separator"/>
+                        <Label fx:id="farmNameBreadcrumb" text="Farm Name" styleClass="breadcrumb-current"/>
+                    </HBox>
+                </VBox>
+            </top>
+
+            <!-- Contenu principal -->
+            <center>
+                <HBox spacing="20">
+                    <!-- Section gauche avec les détails de la ferme -->
+                    <VBox spacing="20" HBox.hgrow="ALWAYS" styleClass="farm-details-container">
+                        <padding><Insets top="30" right="20" bottom="30" left="30"/></padding>
+
+                        <!-- Image de la ferme -->
+                        <ImageView fx:id="farmImage" fitWidth="700" fitHeight="350" preserveRatio="true" styleClass="farm-detail-image"/>
+
+                        <!-- Informations principales -->
+                        <GridPane vgap="15" hgap="30">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="30" />
+                                <ColumnConstraints percentWidth="70" />
+                            </columnConstraints>
+
+                            <!-- Titre -->
+                            <Label text="Farm Name:" styleClass="detail-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <Label fx:id="farmName" text="Loading..." styleClass="detail-value" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                            <!-- Taille -->
+                            <Label text="Size:" styleClass="detail-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <Label fx:id="farmSize" text="Loading..." styleClass="detail-value" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                            <!-- Localisation -->
+                            <Label text="Location:" styleClass="detail-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                            <Label fx:id="farmLocation" text="Loading..." styleClass="detail-value" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                            <!-- Coordonnées -->
+                            <Label text="Coordinates:" styleClass="detail-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                            <Label fx:id="farmCoordinates" text="Loading..." styleClass="detail-value" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                        </GridPane>
+
+                        <!-- Description -->
+                        <VBox spacing="10">
+                            <Label text="Description:" styleClass="detail-section-title"/>
+                            <TextArea fx:id="farmDescription" wrapText="true" editable="false" styleClass="farm-description-area" prefHeight="150"/>
+                        </VBox>
+
+                        <!-- Liste des plantes - Heading and Add button -->
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="List of Plants:" styleClass="detail-section-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="+ Add Plant" onAction="#openAddPlantForm" styleClass="buttonn"/>
+                        </HBox>
+
+                        <!-- Plants container - Amélioré avec un FlowPane au lieu d'un TilePane pour un meilleur affichage -->
+                        <FlowPane fx:id="plantsContainer"
+                                  hgap="15" vgap="15"
+                                  prefWrapLength="700"
+                                  styleClass="plants-container"/>
+
+                        <!-- Boutons de navigation -->
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Button text="Return to List" onAction="#returnToList" styleClass="nav-button"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Panneau latéral droit -->
+                    <VBox spacing="25" prefWidth="300" styleClass="sidebar">
+                        <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+
+                        <!-- Recherche de plantes -->
+                        <VBox spacing="10">
+                            <Label text="Search Plants" styleClass="sidebar-header"/>
+                            <TextField fx:id="searchPlantField" promptText="Search plants by name..." styleClass="search-field"/>
+                            <Button text="Search" styleClass="buttonn"/>
+                        </VBox>
+
+                        <!-- Catégories -->
+                        <VBox spacing="10">
+                            <Label text="Categories" styleClass="sidebar-header"/>
+                            <VBox fx:id="categoriesContainer" spacing="5">
+                                <CheckBox text="Vegetables" selected="false">
+                                    <graphic>
+                                        <Label text="(3)" styleClass="filter-count"/>
+                                    </graphic>
+                                </CheckBox>
+                                <CheckBox text="Fruits" selected="false">
+                                    <graphic>
+                                        <Label text="(2)" styleClass="filter-count"/>
+                                    </graphic>
+                                </CheckBox>
+                                <CheckBox text="Flowers" selected="false">
+                                    <graphic>
+                                        <Label text="(1)" styleClass="filter-count"/>
+                                    </graphic>
+                                </CheckBox>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Détection des maladies avec IA -->
+                        <VBox spacing="10">
+                            <Label text="Detect Plants Disease AI" styleClass="sidebar-header"/>
+                            <Label text="Upload Plant Image:"/>
+                            <Button text="Choose File" styleClass="file-button"/>
+                            <Button text="Detect Diseases" styleClass="buttonn"/>
+                        </VBox>
+
+                        <!-- Actions -->
+                        <VBox spacing="10">
+                            <Label text="Actions" styleClass="sidebar-header"/>
+                            <HBox spacing="10">
+                                <Button fx:id="updateButton" text="Update Farm" onAction="#openUpdateForm" styleClass="buttonn"/>
+                                <Button fx:id="deleteButton" text="Remove Farm" onAction="#deleteFarm" styleClass="buttonn"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </center>
+        </BorderPane>
+    </ScrollPane>
+</AnchorPane>

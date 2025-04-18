@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.UpdatePlanteController"
+            stylesheets="@styles.css"
+            prefHeight="700.0" prefWidth="900.0">
+
+    <BorderPane AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <!-- En-tête -->
+        <top>
+            <VBox spacing="10" styleClass="header-background" alignment="CENTER">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                <!-- Titre principal -->
+                <Label text="Update Plant" styleClass="header-title"/>
+
+                <!-- Fil d'Ariane -->
+                <HBox spacing="5" alignment="CENTER">
+                    <Label text="Home" styleClass="breadcrumb"/>
+                    <Label text="/" styleClass="breadcrumb-separator"/>
+                    <Label text="Farm" styleClass="breadcrumb"/>
+                    <Label text="/" styleClass="breadcrumb-separator"/>
+                    <Label fx:id="farmNameBreadcrumb" text="Farm Name" styleClass="breadcrumb"/>
+                    <Label text="/" styleClass="breadcrumb-separator"/>
+                    <Label fx:id="planteNameBreadcrumb" text="Plant Name" styleClass="breadcrumb"/>
+                    <Label text="/" styleClass="breadcrumb-separator"/>
+                    <Label text="Update" styleClass="breadcrumb-current"/>
+                </HBox>
+            </VBox>
+        </top>
+
+        <!-- Formulaire -->
+        <center>
+            <VBox spacing="20" styleClass="form-container">
+                <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+
+                <!-- Nom -->
+                <VBox spacing="5">
+                    <Label text="Plant Name:" styleClass="form-label"/>
+                    <TextField fx:id="nameField" promptText="Enter plant name" styleClass="form-field"/>
+                    <Label fx:id="nameError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                </VBox>
+
+                <!-- Type -->
+                <VBox spacing="5">
+                    <Label text="Plant Type:" styleClass="form-label"/>
+                    <ComboBox fx:id="typeComboBox" promptText="Select plant type" prefWidth="200" styleClass="form-field"/>
+                    <Label fx:id="typeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                </VBox>
+
+                <!-- Date de plantation -->
+                <VBox spacing="5">
+                    <Label text="Plantation Date:" styleClass="form-label"/>
+                    <DatePicker fx:id="plantationDatePicker" promptText="Select plantation date" styleClass="form-field"/>
+                    <Label fx:id="plantationDateError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                </VBox>
+
+                <!-- Date de récolte -->
+                <VBox spacing="5">
+                    <Label text="Harvest Date:" styleClass="form-label"/>
+                    <DatePicker fx:id="harvestDatePicker" promptText="Select harvest date" styleClass="form-field"/>
+                    <Label fx:id="harvestDateError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                </VBox>
+
+                <!-- Quantité -->
+                <VBox spacing="5">
+                    <Label text="Quantity:" styleClass="form-label"/>
+                    <TextField fx:id="quantityField" promptText="Enter quantity" styleClass="form-field"/>
+                    <Label fx:id="quantityError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                </VBox>
+
+                <!-- Image -->
+                <VBox spacing="5">
+                    <Label text="Plant Image:" styleClass="form-label"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button fx:id="chooseImageButton" text="Choose Image" styleClass="file-button"/>
+                        <Label fx:id="imagePathLabel" text="No image selected" styleClass="file-path-label"/>
+                    </HBox>
+                    <Label fx:id="imageError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                    <ImageView fx:id="imagePreview" fitHeight="150" fitWidth="200" preserveRatio="true"/>
+                </VBox>
+
+                <!-- Boutons -->
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                    <Button text="Cancel" onAction="#cancel" styleClass="nav-button"/>
+                    <Button text="Update Plant" onAction="#updatePlant" styleClass="save-button"/>
+                </HBox>
+            </VBox>
+        </center>
+    </BorderPane>
+</AnchorPane>

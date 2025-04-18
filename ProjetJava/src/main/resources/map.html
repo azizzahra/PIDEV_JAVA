@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Farm Location Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // Initialiser la carte centrée sur l'Algérie (d'après votre capture d'écran)
+    var map = L.map('map').setView([36.7, 3.0], 6);
+
+    // Ajouter la couche de tuiles OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Variable pour stocker le marqueur actuel
+    var currentMarker = null;
+
+    // Gérer les clics sur la carte
+    map.on('click', function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        // Supprimer l'ancien marqueur s'il existe
+        if (currentMarker) {
+            map.removeLayer(currentMarker);
+        }
+
+        // Ajouter un nouveau marqueur
+        currentMarker = L.marker([lat, lng]).addTo(map)
+            .bindPopup('Position sélectionnée<br>Lat: ' + lat.toFixed(4) + '<br>Lng: ' + lng.toFixed(4))
+            .openPopup();
+
+        // Envoyer l'événement au code Java
+        var event = new CustomEvent('mapClicked', {
+            detail: {
+                lat: lat,
+                lng: lng
+            }
+        });
+        document.dispatchEvent(event);
+    });
+</script>
+</body>
+</html>

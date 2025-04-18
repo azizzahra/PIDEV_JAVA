@@ -1,11 +1,9 @@
 package Controller;
 import Main.mainPrincipal;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,10 +15,7 @@ import services.FarmService;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+
 
 
 import java.io.IOException;
@@ -30,12 +25,11 @@ import javafx.application.Platform;
 
 public class ListeFarmsController {
 
-    private ObservableList<Farm> farmList = FXCollections.observableArrayList();
     private FarmService farmService = new FarmService();
 
 
     @FXML
-    private TilePane farmContainer; // Changement de VBox à TilePane
+    private TilePane farmContainer;
 
     @FXML
     private TextField searchField;
@@ -160,20 +154,6 @@ public class ListeFarmsController {
         contentBox.getChildren().add(descriptionLabel);
         contentBox.setPadding(new Insets(5, 15, 10, 15));
 
-        // Conteneur pour les boutons
-        HBox buttonBox = new HBox(10);
-        buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.setPadding(new Insets(0, 0, 15, 0));
-
-        Button editButton = new Button("Modifier");
-        editButton.getStyleClass().addAll("card-button", "edit-button");
-        editButton.setOnAction(e -> openUpdateFormWithId(farm.getId()));
-
-        Button deleteButton = new Button("Supprimer");
-        deleteButton.getStyleClass().addAll("card-button", "delete-button");
-        deleteButton.setOnAction(e -> deleteFarm(farm.getId()));
-
-        buttonBox.getChildren().addAll(editButton, deleteButton);
 
         // Mise en place des éléments dans la carte
         StackPane imageContainer = new StackPane();
@@ -186,7 +166,8 @@ public class ListeFarmsController {
 
         card.setTop(imageContainer);
         card.setCenter(new VBox(titleBox, contentBox));
-        card.setBottom(buttonBox);
+        card.setOnMouseClicked(event -> openFarmDetails(farm.getId()));
+
 
         return card;
     }
@@ -221,27 +202,6 @@ public class ListeFarmsController {
         return farmImage;
     }
 
-    private void openUpdateFormWithId(int farmId) {
-        try {
-            // Utiliser directement le stage principal
-            Stage mainStage = mainPrincipal.getPrimaryStage();
-
-            // Charger la vue de mise à jour
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateFarm.fxml"));
-            Parent root = loader.load();
-
-            // Configurer le contrôleur avec l'ID de la ferme
-            UpdateFarmController controller = loader.getController();
-            controller.setFarmId(farmId);
-
-            // Remplacer le contenu du stage principal
-            mainStage.getScene().setRoot(root);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @FXML
     private void OpenAddForm() {
         try {
@@ -260,40 +220,27 @@ public class ListeFarmsController {
         }
     }
 
-    private void deleteFarm(int farmId) {
+
+
+    // Nouvelle méthode pour ouvrir les détails d'une ferme
+    private void openFarmDetails(int farmId) {
         try {
-            // Afficher une boîte de dialogue de confirmation
-            Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmDialog.setTitle("Confirmation de suppression");
-            confirmDialog.setHeaderText("Êtes-vous sûr de vouloir supprimer cette ferme ?");
-            confirmDialog.setContentText("Cette action est irréversible.");
+            // Utiliser directement le stage principal
+            Stage mainStage = mainPrincipal.getPrimaryStage();
 
-            // Si l'utilisateur confirme
-            if (confirmDialog.showAndWait().get() == ButtonType.OK) {
-                FarmService farmService = new FarmService();
+            // Charger la vue des détails
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FarmDetails.fxml"));
+            Parent root = loader.load();
 
-                // Récupérer d'abord l'objet Farm complet par son ID
-                Farm farmToDelete = farmService.getone(farmId);
+            // Configurer le contrôleur avec l'ID de la ferme
+            FarmDetailsController controller = loader.getController();
+            controller.setFarmId(farmId);
 
-                if (farmToDelete != null) {
-                    // Supprimer la ferme
-                    farmService.delete(farmToDelete);
-
-                    // Afficher un message de succès
-                    showAlert("Succès", "Ferme supprimée avec succès", Alert.AlertType.INFORMATION);
-
-                    // Rafraîchir la liste des fermes
-                    refreshFarmList();
-                } else {
-                    // Afficher un message d'erreur si la ferme n'est pas trouvée
-                    showAlert("Erreur", "Impossible de trouver la ferme à supprimer", Alert.AlertType.ERROR);
-                }
-            }
-        } catch (SQLException e) {
+            // Remplacer le contenu du stage principal
+            mainStage.getScene().setRoot(root);
+        } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Erreur de base de données",
-                    "Une erreur s'est produite lors de la suppression : " + e.getMessage(),
-                    Alert.AlertType.ERROR);
+            showAlert("Erreur", "Erreur lors de l'ouverture des détails de la ferme", Alert.AlertType.ERROR);
         }
     }
 
@@ -304,5 +251,4 @@ public class ListeFarmsController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-
 }

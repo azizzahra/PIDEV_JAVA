@@ -80,10 +80,9 @@ public class UpdateFarmController {
     @FXML
     private Label fuserError;
 
-    // Chemin du répertoire où les images seront stockées
     private final String UPLOAD_DIR = "src/resources/uploads/farms/";
     private File selectedImageFile;
-    private String currentImagePath; // Pour stocker le chemin de l'image actuelle
+    private String currentImagePath;
 
     @FXML
     public void initialize() {
@@ -94,25 +93,8 @@ public class UpdateFarmController {
             btnUpdateFarm.setDisable(false);
         }
 
-        // Ajouter des écouteurs pour valider les champs lors de la saisie
         setupValidationListeners();
-
-        // Créer le répertoire d'uploads s'il n'existe pas
-        createUploadDirectory();
-        // Configuration du bouton de sélection d'image
         btnSelectImage.setOnAction(event -> selectImage());
-    }
-
-    private void createUploadDirectory() {
-        try {
-            Path uploadPath = Paths.get(UPLOAD_DIR);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-                System.out.println("Répertoire d'upload créé : " + uploadPath.toAbsolutePath());
-            }
-        } catch (IOException e) {
-            System.err.println("Erreur lors de la création du répertoire d'upload : " + e.getMessage());
-        }
     }
 
     @FXML
@@ -171,6 +153,143 @@ public class UpdateFarmController {
         // Retourner le chemin relatif pour l'accès via l'application
         return "uploads/farms/" + newFileName;
     }
+
+
+    private int FarmId;
+    public void setFarmId(int id) {
+        this.FarmId = id;
+        loadFarmData(); // Charger les données quand l'ID est défini
+    }
+
+    private void loadFarmData() {
+        try {
+            FarmService service = new FarmService();
+            Farm farm = service.getone(FarmId);
+
+            if (farm != null) {
+                this.FarmId = farm.getId(); // stocke en interne
+                fname.setText(farm.getName());
+                fsize.setText(String.valueOf(farm.getSize()));
+                flocation.setText(farm.getLocation());
+                fimage.setText(farm.getImage());
+                currentImagePath = farm.getImage(); // Stocke le chemin de l'image actuelle
+                fdescription.setText(farm.getDescription());
+                flatitude.setText(String.valueOf(farm.getLatitude()));
+                flongitude.setText(String.valueOf(farm.getLongitude()));
+                fuser.setText(String.valueOf(farm.getUserId()));
+
+                // Charger l'aperçu de l'image existante si disponible
+                if (currentImagePath != null && !currentImagePath.isEmpty()) {
+                    try {
+                        // Construire le chemin complet vers l'image
+                        String fullPath = "src/resources/" + currentImagePath;
+                        File imageFile = new File(fullPath);
+                        if (imageFile.exists()) {
+                            Image image = new Image(imageFile.toURI().toString());
+                            imagePreview.setImage(image);
+                            imagePreview.setVisible(true);
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void UpdateFarmAction(ActionEvent event) {
+        try {
+            // Masquer tous les messages d'erreur existants
+            hideAllErrorMessages();
+
+            // Validation des champs
+            boolean isValid = validateFields();
+            if (!isValid) {
+                return;
+            }
+
+            // Vérifier l'ID de l'événement
+            Integer idfarm = this.FarmId;
+            if (idfarm==null) {
+                showWarningAlert("Veuillez entrer l'ID de l'événement.");
+                return;
+            }
+
+
+            // Récupérer les autres champs
+            String name = fname.getText().trim();
+            String description = fdescription.getText().trim();
+            String location = flocation.getText().trim();
+            int size = Integer.parseInt(fsize.getText().trim());
+            String image = fimage.getText().trim();
+            Double latitude = Double.parseDouble(flatitude.getText().trim());
+            Double longitude = Double.parseDouble(flongitude.getText().trim());
+            Integer userid = Integer.parseInt(fuser.getText().trim());
+
+            // Vérifier que les champs obligatoires sont remplis
+            if (name.isEmpty() || description.isEmpty() || location.isEmpty() || size < 1 || image.isEmpty() || latitude.isNaN() || longitude.isNaN()) {
+                showWarningAlert("Veuillez remplir tous les champs obligatoires.");
+                return;
+            }
+            // Sauvegarder l'image sélectionnée et récupérer son chemin
+            String imagePath;
+            if (selectedImageFile != null) {
+                imagePath = saveImage();
+                if (imagePath.isEmpty()) {
+                    fimageError.setText("Erreur lors de l'enregistrement de l'image");
+                    fimageError.setVisible(true);
+                    return;
+                }
+            } else {
+                // Conserver l'image existante
+                imagePath = currentImagePath;
+            }
+
+
+            // Créer l'événement mis à jour
+            Farm farm = new Farm(
+                    idfarm, name, size, location, imagePath, description, latitude, longitude, userid
+            );
+
+            // Mettre à jour l'événement
+            FarmService service = new FarmService();
+            int rowsAffected = service.update(farm);
+
+            if (rowsAffected > 0) {
+                showInfoAlert("La ferme a été mise à jour avec succès !");
+
+                // Ne pas fermer le stage, juste charger la vue ListeFarms
+                Stage mainStage = mainPrincipal.getPrimaryStage();
+
+                /// Charger la vue de détails de la ferme
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/FarmDetails.fxml"));
+                Parent root = loader.load();
+
+                // Configurer le contrôleur avec l'ID de la ferme
+                FarmDetailsController controller = loader.getController();
+                controller.setFarmId(idfarm);
+
+                // Remplacer le contenu du stage principal
+                mainStage.getScene().setRoot(root);
+            } else {
+                showErrorAlert("Aucun ferme trouvé avec cet ID.");
+            }
+        } catch (NumberFormatException e) {
+            showErrorAlert("Les champs numériques doivent contenir des nombres valides.");
+            e.printStackTrace();
+        } catch (Exception e) {
+            showErrorAlert("Une erreur s'est produite : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 
 
     private void setupValidationListeners() {
@@ -302,138 +421,6 @@ public class UpdateFarmController {
                 fuserError.setVisible(true);
             }
         });
-    }
-
-
-    private int FarmId;
-    public void setFarmId(int id) {
-        this.FarmId = id;
-        loadFarmData(); // Charger les données quand l'ID est défini
-    }
-
-    private void loadFarmData() {
-        try {
-            FarmService service = new FarmService();
-            Farm farm = service.getone(FarmId);
-
-            if (farm != null) {
-                this.FarmId = farm.getId(); // stocke en interne
-                fname.setText(farm.getName());
-                fsize.setText(String.valueOf(farm.getSize()));
-                flocation.setText(farm.getLocation());
-                fimage.setText(farm.getImage());
-                currentImagePath = farm.getImage(); // Stocke le chemin de l'image actuelle
-                fdescription.setText(farm.getDescription());
-                flatitude.setText(String.valueOf(farm.getLatitude()));
-                flongitude.setText(String.valueOf(farm.getLongitude()));
-                fuser.setText(String.valueOf(farm.getUserId()));
-
-                // Charger l'aperçu de l'image existante si disponible
-                if (currentImagePath != null && !currentImagePath.isEmpty()) {
-                    try {
-                        // Construire le chemin complet vers l'image
-                        String fullPath = "src/resources/" + currentImagePath;
-                        File imageFile = new File(fullPath);
-                        if (imageFile.exists()) {
-                            Image image = new Image(imageFile.toURI().toString());
-                            imagePreview.setImage(image);
-                            imagePreview.setVisible(true);
-                        }
-                    } catch (Exception e) {
-                        System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void UpdateFarmAction(ActionEvent event) {
-        try {
-            // Masquer tous les messages d'erreur existants
-            hideAllErrorMessages();
-
-            // Validation des champs
-            boolean isValid = validateFields();
-            if (!isValid) {
-                return;
-            }
-
-            // Vérifier l'ID de l'événement
-            Integer idfarm = this.FarmId;
-            if (idfarm==null) {
-                showWarningAlert("Veuillez entrer l'ID de l'événement.");
-                return;
-            }
-
-
-            // Récupérer les autres champs
-            String name = fname.getText().trim();
-            String description = fdescription.getText().trim();
-            String location = flocation.getText().trim();
-            int size = Integer.parseInt(fsize.getText().trim());
-            String image = fimage.getText().trim();
-            Double latitude = Double.parseDouble(flatitude.getText().trim());
-            Double longitude = Double.parseDouble(flongitude.getText().trim());
-            Integer userid = Integer.parseInt(fuser.getText().trim());
-
-            // Vérifier que les champs obligatoires sont remplis
-            if (name.isEmpty() || description.isEmpty() || location.isEmpty() || size < 1 || image.isEmpty() || latitude.isNaN() || longitude.isNaN()) {
-                showWarningAlert("Veuillez remplir tous les champs obligatoires.");
-                return;
-            }
-            // Sauvegarder l'image sélectionnée et récupérer son chemin
-            String imagePath;
-            if (selectedImageFile != null) {
-                imagePath = saveImage();
-                if (imagePath.isEmpty()) {
-                    fimageError.setText("Erreur lors de l'enregistrement de l'image");
-                    fimageError.setVisible(true);
-                    return;
-                }
-            } else {
-                // Conserver l'image existante
-                imagePath = currentImagePath;
-            }
-
-
-            // Créer l'événement mis à jour
-            Farm farm = new Farm(
-                    idfarm, name, size, location, imagePath, description, latitude, longitude, userid
-            );
-
-            // Mettre à jour l'événement
-            FarmService service = new FarmService();
-            int rowsAffected = service.update(farm);
-
-            if (rowsAffected > 0) {
-                showInfoAlert("La ferme a été mise à jour avec succès !");
-
-                // Ne pas fermer le stage, juste charger la vue ListeFarms
-                Stage mainStage = mainPrincipal.getPrimaryStage();
-
-                // Rechargez la vue principale
-                FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/ListeFarms.fxml"));
-                Parent mainRoot = mainLoader.load();
-
-                // Mettre à jour la scène du stage principal
-                mainStage.getScene().setRoot(mainRoot);
-
-                // Assurez-vous que le contrôleur est initialisé et rafraîchi
-                ListeFarmsController listController = mainLoader.getController();
-                listController.refreshFarmList();
-            } else {
-                showErrorAlert("Aucun ferme trouvé avec cet ID.");
-            }
-        } catch (NumberFormatException e) {
-            showErrorAlert("Les champs numériques doivent contenir des nombres valides.");
-            e.printStackTrace();
-        } catch (Exception e) {
-            showErrorAlert("Une erreur s'est produite : " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     private void hideAllErrorMessages() {

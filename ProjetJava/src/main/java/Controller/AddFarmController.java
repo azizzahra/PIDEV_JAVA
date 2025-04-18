@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.regex.Pattern;
 
+
 public class AddFarmController {
 
     @FXML
@@ -71,27 +72,13 @@ public class AddFarmController {
     @FXML
     private Label fuserError;
 
-    // Chemin du répertoire où les images seront stockées
+
     private final String UPLOAD_DIR = "src/resources/uploads/farms/";
     private File selectedImageFile;
 
     @FXML
     public void initialize() {
-        // Créer le répertoire d'uploads s'il n'existe pas
-        createUploadDirectory();
-        // Ajouter des écouteurs pour valider les champs lors de la saisie
         setupValidationListeners();
-    }
-    private void createUploadDirectory() {
-        try {
-            Path uploadPath = Paths.get(UPLOAD_DIR);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-                System.out.println("Répertoire d'upload créé : " + uploadPath.toAbsolutePath());
-            }
-        } catch (IOException e) {
-            System.err.println("Erreur lors de la création du répertoire d'upload : " + e.getMessage());
-        }
     }
 
     @FXML
@@ -108,16 +95,13 @@ public class AddFarmController {
         selectedImageFile = fileChooser.showOpenDialog(btnSelectImage.getScene().getWindow());
 
         if (selectedImageFile != null) {
-            // Afficher le chemin du fichier dans le champ texte
+            // Afficher le chemin du fichier dans le champ texte caché
             fimage.setText(selectedImageFile.getName());
 
             // Afficher l'aperçu de l'image
             try {
                 Image image = new Image(selectedImageFile.toURI().toString());
                 imagePreview.setImage(image);
-                imagePreview.setFitWidth(200);
-                imagePreview.setFitHeight(150);
-                imagePreview.setPreserveRatio(true);
                 imagePreview.setVisible(true);
 
                 // Validation ok - masquer message d'erreur
@@ -152,136 +136,6 @@ public class AddFarmController {
     }
 
 
-    private void setupValidationListeners() {
-        // Validation en temps réel pour le nom
-        fname.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty() || newValue.trim().length() < 3) {
-                fnameError.setText("Le nom doit contenir au moins 3 caractères");
-                fnameError.setVisible(true);
-            } else {
-                fnameError.setVisible(false);
-            }
-        });
-
-        // Validation en temps réel pour la taille
-        fsize.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                if (newValue.trim().isEmpty()) {
-                    fsizeError.setText("La superficie est requise");
-                    fsizeError.setVisible(true);
-                    return;
-                }
-                int size = Integer.parseInt(newValue.trim());
-                if (size <= 0) {
-                    fsizeError.setText("La superficie doit être un nombre positif");
-                    fsizeError.setVisible(true);
-                } else {
-                    fsizeError.setVisible(false);
-                }
-            } catch (NumberFormatException e) {
-                fsizeError.setText("Veuillez saisir un nombre entier valide");
-                fsizeError.setVisible(true);
-            }
-        });
-
-        // Validation en temps réel pour l'emplacement
-        flocation.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                flocationError.setText("L'emplacement est requis");
-                flocationError.setVisible(true);
-            } else {
-                flocationError.setVisible(false);
-            }
-        });
-
-        // Validation en temps réel pour l'URL de l'image
-        fimage.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.trim().isEmpty()) {
-                String urlRegex = "^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?$";
-                if (!Pattern.matches(urlRegex, newValue.trim())) {
-                    fimageError.setText("Format d'URL invalide");
-                    fimageError.setVisible(true);
-                } else {
-                    fimageError.setVisible(false);
-                }
-            } else {
-                fimageError.setVisible(false);
-            }
-        });
-
-        // Validation en temps réel pour la description
-        fdescription.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty() || newValue.trim().length() < 10) {
-                fdescriptionError.setText("La description doit contenir au moins 10 caractères");
-                fdescriptionError.setVisible(true);
-            } else {
-                fdescriptionError.setVisible(false);
-            }
-        });
-
-        // Validation en temps réel pour la latitude
-        flatitude.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                if (newValue.trim().isEmpty()) {
-                    flatitudeError.setText("La latitude est requise");
-                    flatitudeError.setVisible(true);
-                    return;
-                }
-                double lat = Double.parseDouble(newValue.trim());
-                if (lat < -90 || lat > 90) {
-                    flatitudeError.setText("La latitude doit être entre -90 et 90");
-                    flatitudeError.setVisible(true);
-                } else {
-                    flatitudeError.setVisible(false);
-                }
-            } catch (NumberFormatException e) {
-                flatitudeError.setText("Format numérique invalide");
-                flatitudeError.setVisible(true);
-            }
-        });
-
-        // Validation en temps réel pour la longitude
-        flongitude.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                if (newValue.trim().isEmpty()) {
-                    flongitudeError.setText("La longitude est requise");
-                    flongitudeError.setVisible(true);
-                    return;
-                }
-                double lon = Double.parseDouble(newValue.trim());
-                if (lon < -180 || lon > 180) {
-                    flongitudeError.setText("La longitude doit être entre -180 et 180");
-                    flongitudeError.setVisible(true);
-                } else {
-                    flongitudeError.setVisible(false);
-                }
-            } catch (NumberFormatException e) {
-                flongitudeError.setText("Format numérique invalide");
-                flongitudeError.setVisible(true);
-            }
-        });
-
-        // Validation en temps réel pour l'ID utilisateur
-        fuser.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                if (newValue.trim().isEmpty()) {
-                    fuserError.setText("L'ID utilisateur est requis");
-                    fuserError.setVisible(true);
-                    return;
-                }
-                int userId = Integer.parseInt(newValue.trim());
-                if (userId <= 0) {
-                    fuserError.setText("L'ID utilisateur doit être positif");
-                    fuserError.setVisible(true);
-                } else {
-                    fuserError.setVisible(false);
-                }
-            } catch (NumberFormatException e) {
-                fuserError.setText("Format numérique invalide");
-                fuserError.setVisible(true);
-            }
-        });
-    }
 
     @FXML
     void AddFarmAction(ActionEvent event) {
@@ -376,6 +230,137 @@ public class AddFarmController {
         flongitudeError.setVisible(false);
         fuserError.setVisible(false);
     }
+    private void setupValidationListeners() {
+        // Validation en temps réel pour le nom
+        fname.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty() || newValue.trim().length() < 3) {
+                fnameError.setText("Le nom doit contenir au moins 3 caractères");
+                fnameError.setVisible(true);
+            } else {
+                fnameError.setVisible(false);
+            }
+        });
+
+        // Validation en temps réel pour la taille
+        fsize.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                if (newValue.trim().isEmpty()) {
+                    fsizeError.setText("La superficie est requise");
+                    fsizeError.setVisible(true);
+                    return;
+                }
+                int size = Integer.parseInt(newValue.trim());
+                if (size <= 0) {
+                    fsizeError.setText("La superficie doit être un nombre positif");
+                    fsizeError.setVisible(true);
+                } else {
+                    fsizeError.setVisible(false);
+                }
+            } catch (NumberFormatException e) {
+                fsizeError.setText("Veuillez saisir un nombre entier valide");
+                fsizeError.setVisible(true);
+            }
+        });
+
+        // Validation en temps réel pour l'emplacement
+        flocation.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                flocationError.setText("L'emplacement est requis");
+                flocationError.setVisible(true);
+            } else {
+                flocationError.setVisible(false);
+            }
+        });
+
+        // Validation en temps réel pour l'URL de l'image
+        fimage.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.trim().isEmpty()) {
+                String urlRegex = "^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?$";
+                if (!Pattern.matches(urlRegex, newValue.trim())) {
+                    fimageError.setText("Format d'URL invalide");
+                    fimageError.setVisible(true);
+                } else {
+                    fimageError.setVisible(false);
+                }
+            } else {
+                fimageError.setVisible(false);
+            }
+        });
+
+        // Validation en temps réel pour la description
+        fdescription.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty() || newValue.trim().length() < 10) {
+                fdescriptionError.setText("La description doit contenir au moins 10 caractères");
+                fdescriptionError.setVisible(true);
+            } else {
+                fdescriptionError.setVisible(false);
+            }
+        });
+
+        // Validation en temps réel pour la latitude
+        flatitude.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                if (newValue.trim().isEmpty()) {
+                    flatitudeError.setText("La latitude est requise");
+                    flatitudeError.setVisible(true);
+                    return;
+                }
+                double lat = Double.parseDouble(newValue.trim());
+                if (lat < -180 || lat > 180) {
+                    flatitudeError.setText("La latitude doit être entre -180 et 180");
+                    flatitudeError.setVisible(true);
+                } else {
+                    flatitudeError.setVisible(false);
+                }
+            } catch (NumberFormatException e) {
+                flatitudeError.setText("Format numérique invalide");
+                flatitudeError.setVisible(true);
+            }
+        });
+
+        // Validation en temps réel pour la longitude
+        flongitude.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                if (newValue.trim().isEmpty()) {
+                    flongitudeError.setText("La longitude est requise");
+                    flongitudeError.setVisible(true);
+                    return;
+                }
+                double lon = Double.parseDouble(newValue.trim());
+                if (lon < -180 || lon > 180) {
+                    flongitudeError.setText("La longitude doit être entre -180 et 180");
+                    flongitudeError.setVisible(true);
+                } else {
+                    flongitudeError.setVisible(false);
+                }
+            } catch (NumberFormatException e) {
+                flongitudeError.setText("Format numérique invalide");
+                flongitudeError.setVisible(true);
+            }
+        });
+
+        // Validation en temps réel pour l'ID utilisateur
+        fuser.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                if (newValue.trim().isEmpty()) {
+                    fuserError.setText("L'ID utilisateur est requis");
+                    fuserError.setVisible(true);
+                    return;
+                }
+                int userId = Integer.parseInt(newValue.trim());
+                if (userId <= 0) {
+                    fuserError.setText("L'ID utilisateur doit être positif");
+                    fuserError.setVisible(true);
+                } else {
+                    fuserError.setVisible(false);
+                }
+            } catch (NumberFormatException e) {
+                fuserError.setText("Format numérique invalide");
+                fuserError.setVisible(true);
+            }
+        });
+    }
+
 
     private boolean validateFields() {
         boolean isValid = true;
@@ -432,11 +417,23 @@ public class AddFarmController {
 
         // Validation de l'image (facultative mais doit être une image valide si sélectionnée)
         if (selectedImageFile == null) {
-            fimageError.setText("Veuillez sélectionner une image");
+            fimageError.setText("Une image est requise");
             fimageError.setVisible(true);
             if (isValid) {
                 btnSelectImage.requestFocus();
                 isValid = false;
+            }
+        } else {
+            // Vérifiez si c'est un format d'image valide (code existant)
+            String filename = selectedImageFile.getName().toLowerCase();
+            if (!(filename.endsWith(".jpg") || filename.endsWith(".jpeg") ||
+                    filename.endsWith(".png") || filename.endsWith(".gif"))) {
+                fimageError.setText("Format d'image non pris en charge");
+                fimageError.setVisible(true);
+                if (isValid) {
+                    btnSelectImage.requestFocus();
+                    isValid = false;
+                }
             }
         }
 
@@ -463,7 +460,7 @@ public class AddFarmController {
         } else {
             try {
                 double lat = Double.parseDouble(latStr);
-                if (lat < -90 || lat > 90) {
+                if (lat < -180 || lat > 180) {
                     flatitudeError.setText("La latitude doit être entre -90 et 90");
                     flatitudeError.setVisible(true);
                     if (isValid) {
@@ -493,7 +490,7 @@ public class AddFarmController {
         } else {
             try {
                 double lat = Double.parseDouble(longStr);
-                if (lat < -90 || lat > 90) {
+                if (lat < -180 || lat > 180) {
                     flongitudeError.setText("La longitude doit être entre -90 et 90");
                     flongitudeError.setVisible(true);
                     if (isValid) {
@@ -526,26 +523,7 @@ public class AddFarmController {
         return isValid;
     }
 
-    @FXML
-    private void cancelAdd() {
-        try {
-            // Utiliser directement le stage principal
-            Stage mainStage = mainPrincipal.getPrimaryStage();
 
-            // Recharger la vue principale
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListeFarms.fxml"));
-            Parent root = loader.load();
-
-            // Remplacer le contenu du stage principal
-            mainStage.getScene().setRoot(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Affiche une boîte de dialogue d'alerte
-     */
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
