@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+    <VBox xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.devmasters.agrosphere.marketplaceManagment.Controller.CategoryController"
+          spacing="10" alignment="CENTER" style="-fx-padding: 20px;">
+        <TextField fx:id="nameField" promptText="Category Name"/>
+        <TextArea fx:id="descriptionField" promptText="Category Description"/>
+
+        <HBox spacing="10">
+            <Button fx:id="saveButton" text="Save Category" onAction="#saveCategory"/>
+        </HBox>
+    </VBox>

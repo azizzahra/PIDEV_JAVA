@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.devmasters.agrosphere.marketplaceManagment.Controller.ProductListController"
+      style="-fx-padding: 20;">
+    <!-- Header -->
+    <Label text="📦 Product Dashboard" styleClass="label"/>
+
+    <!-- Toolbar -->
+    <ToolBar>
+        <Button text="🔍 Filter"/>
+        <Button text="↕ Sort"/>
+        <Region fx:id="spacer" HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnToggleView" text="+ Create New" onAction="#handleAddProduct"/>
+    </ToolBar>
+
+    <!-- Main Product Container -->
+    <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" VBox.vgrow="ALWAYS">
+        <VBox fx:id="productContainer" spacing="10" style="-fx-padding: 15;"/>
+    </ScrollPane>
+</VBox>
+<!--
+<BorderPane fx:id="root" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.devmasters.agrosphere.marketplaceManagment.Controller.ProductListController">
+
+    <top>
+        <HBox spacing="30" style="-fx-background-color: #1e6829; -fx-padding: 15px; -fx-alignment: center;">
+            <Button text="Products"
+                    style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 120px;"
+                    onAction="#initialize"/>
+            <Button text="Categories"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-min-width: 120px;"
+                    onAction="#handleCategoryNav"/>
+            <Button text="Orders"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-min-width: 120px;"
+                    onAction="#handleOrdersNav"/>
+            <Button text="Archived Products"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-min-width: 120px;"
+                    onAction="#handleArchivedNav"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" styleClass="top-bar" style="-fx-padding: 20;">
+            <Label text="📦 Product Dashboard" styleClass="label"/>
+
+            <ToolBar>
+                <Button text="🔍 Filter"/>
+                <Button text="↕ Sort"/>
+                <Region fx:id="spacer" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnToggleView" text="+ Create New" onAction="#handleAddProduct"/>
+            </ToolBar>
+
+            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;">
+                <VBox fx:id="productContainer" spacing="10" style="-fx-padding: 15;"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>
+-->

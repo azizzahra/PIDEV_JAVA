@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.devmasters.agrosphere.marketplaceManagment.Controller.CategoryListController"
+            fitToWidth="true" prefWidth="800" prefHeight="600">
+
+    <!-- Outer VBox that holds everything -->
+    <VBox spacing="20" style="-fx-padding: 20px;">
+
+        <!-- Top Button -->
+        <HBox alignment="CENTER_RIGHT">
+            <Button fx:id="btnAddCategory"
+                    text="+ Add Category"
+                    style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;"
+                    onAction="#handleAddCategory"/>
+        </HBox>
+
+        <!-- Category Items Container -->
+        <VBox fx:id="categoryContainer" spacing="10" />
+
+    </VBox>
+</ScrollPane>
