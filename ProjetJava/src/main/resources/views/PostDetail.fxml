@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/16"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.PostDetailController"
+            stylesheets="@post_detail1.css"
+            styleClass="main-container">
+
+    <center>
+        <ScrollPane fitToWidth="true"
+                    vbarPolicy="AS_NEEDED"
+                    hbarPolicy="NEVER"
+                    styleClass="transparent-background">
+
+            <VBox fx:id="mainVBox"
+                  spacing="20"
+                  alignment="TOP_CENTER"
+                  styleClass="post-detail-container"
+                  maxWidth="1550">
+
+                <!-- Titre du post -->
+                <Label fx:id="postTitleLabel"
+                       styleClass="post-title"
+                       text="Titre du Post..." />
+
+                <!-- Infos sur l'utilisateur et date -->
+                <HBox spacing="10" styleClass="post-info-box">
+                    <Label fx:id="postUsernameLabel"
+                           styleClass="post-username"
+                           text="Auteur : user123"/>
+                    <Label fx:id="postDateLabel"
+                           styleClass="post-date"
+                           text="27/02/2025"/>
+                </HBox>
+
+                <!-- Contenu du post -->
+                <Text fx:id="postContentText"
+                      styleClass="post-content-text"
+                      wrappingWidth="1200"/>
+
+                <!-- Séparateur -->
+                <Separator styleClass="post-separator"/>
+
+                <!-- Liste des commentaires -->
+                <Label text="Commentaires :" styleClass="comments-title"/>
+                <VBox fx:id="commentsContainer" spacing="15" styleClass="comments-container"/>
+
+                <!-- Ajout de commentaire -->
+                <Label text="Ajouter un commentaire :" styleClass="comment-label" />
+                <TextArea fx:id="commentTextArea"
+                          promptText="Écrivez votre commentaire ici..."
+                          wrapText="true"
+                          styleClass="comment-textarea"/>
+
+                <Button text="Envoyer"
+                        onAction="#handleCommentSubmit"
+                        styleClass="comment-submit-btn" />
+
+                <!-- Padding en bas -->
+                <Region minHeight="50"/>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

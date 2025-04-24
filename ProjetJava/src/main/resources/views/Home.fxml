@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<?import javafx.scene.shape.*?>
+
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<VBox xmlns="http://javafx.com/javafx/15.0.1"
+      fx:controller="controller.HomeController"
+      xmlns:fx="http://javafx.com/fxml/1"
+      stylesheets="/views/home.css"
+      styleClass="main-container">
+
+    <!-- Include the navigation bar -->
+    <fx:include source="/views/NavBar.fxml" />
+
+    <!-- Section Hero Image avec overlay de texte -->
+    <StackPane VBox.vgrow="ALWAYS">
+        <!-- Image héro -->
+        <ImageView fitWidth="1200" fitHeight="600" preserveRatio="false">
+            <Image url="/images/hero_1.jpg" />
+        </ImageView>
+
+        <!-- Overlay sombre pour améliorer la lisibilité du texte -->
+        <Rectangle width="1200" height="600" opacity="0.4" fill="BLACK" />
+
+        <!-- Contenu central (titre et sous-titre) -->
+        <VBox alignment="CENTER" spacing="20">
+            <Label text="Farming is the best solution of worlds starvation" styleClass="hero-title" textFill="WHITE" wrapText="true" alignment="CENTER">
+                <font>
+                    <Font name="System Bold" size="40.0" />
+                </font>
+                <VBox.margin>
+                    <Insets left="100" right="100" />
+                </VBox.margin>
+            </Label>
+
+            <Label text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                   styleClass="hero-subtitle"
+                   textFill="WHITE"
+                   wrapText="true"
+                   alignment="CENTER">
+                <font>
+                    <Font size="18.0" />
+                </font>
+                <VBox.margin>
+                    <Insets left="150" right="150" />
+                </VBox.margin>
+            </Label>
+        </VBox>
+
+        <!-- Flèches de navigation du slider -->
+        <HBox alignment="CENTER" StackPane.alignment="CENTER">
+            <Button styleClass="slider-arrow, left-arrow">
+                <graphic>
+                    <FontIcon iconLiteral="fa-chevron-left" iconSize="30" iconColor="white" />
+                </graphic>
+                <HBox.margin>
+                    <Insets right="900" />
+                </HBox.margin>
+            </Button>
+
+            <Button styleClass="slider-arrow, right-arrow">
+                <HBox.margin>
+                    <Insets left="900" />
+                </HBox.margin>
+            </Button>
+        </HBox>
+    </StackPane>
+</VBox>

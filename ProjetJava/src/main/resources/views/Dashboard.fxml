@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.FontWeight?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.DashboardController">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox style="-fx-background-color: #3e8914; -fx-padding: 15px; -fx-alignment: center-left; -fx-spacing: 10px;">
+            <Label text="🌱 AgroSmart Dashboard" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label text="Bonjour, Amna" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+            <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true">
+                <!--<Image url="@user_profile.png"/>-->
+            </ImageView>
+        </HBox>
+    </top>
+
+    <!-- SIDE MENU -->
+    <left>
+        <VBox style="-fx-background-color: #1e5631; -fx-padding: 15px; -fx-spacing: 15px;" prefWidth="220">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <Button text="🏠 Dashboard"
+                    style="-fx-background-color: #2d7340; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="👨‍🌾 User" onAction="#handleCommunity"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="🌾 Ferme" onAction="#navigateToListFarm"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+
+
+            <Button text="📅 Liste des Evenements"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+            <Button text="🛒 Liste des Produits"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="💬 Forum" onAction="#handleForum"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+            <Button text="📊 Analyses Sol"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="💧 Irrigation"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="🌤️ Météo"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Pane VBox.vgrow="ALWAYS"/>
+
+            <Separator style="-fx-background-color: #2d7340;"/>
+            <Button text="⚙️ Paramètres"
+                    style="-fx-background-color: transparent; -fx-text-fill: #c1e1c5; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+            <Button text="🚪 Déconnexion" onAction="#handleLogout"
+                    style="-fx-background-color: transparent; -fx-text-fill: #c1e1c5; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+        </VBox>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <StackPane style="-fx-background-color: #f7fbf4;">
+            <VBox fx:id="content" style="-fx-padding: 25px; -fx-spacing: 20px;">
+                <HBox style="-fx-spacing: 15px; -fx-alignment: center-left;">
+                    <Label text="Bienvenue sur votre plateforme d'agriculture intelligente" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e5631;"/>
+                    <Label text="🚜 🌱 🌿" style="-fx-font-size: 18px;"/>
+                </HBox>
+
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <VBox styleClass="dashboard-card" style="-fx-background-color: #e8f5e9; -fx-padding: 15px; -fx-background-radius: 8px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5);" HBox.hgrow="ALWAYS">
+                        <Label text="🌡️ Capteurs" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2d7340;"/>
+                        <Label text="Tous les capteurs sont actifs" style="-fx-text-fill: #558b2f;"/>
+                        <Label text="Dernière synchronisation: Aujourd'hui 08:45" style="-fx-text-fill: #558b2f; -fx-font-size: 12px;"/>
+                    </VBox>
+
+                    <VBox styleClass="dashboard-card" style="-fx-background-color: #e8f5e9; -fx-padding: 15px; -fx-background-radius: 8px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5);" HBox.hgrow="ALWAYS">
+                        <Label text="💧 Irrigation" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2d7340;"/>
+                        <Label text="Programmée pour 17h00" style="-fx-text-fill: #558b2f;"/>
+                        <Label text="Humidité du sol: 65%" style="-fx-text-fill: #558b2f; -fx-font-size: 12px;"/>
+                    </VBox>
+
+                    <VBox styleClass="dashboard-card" style="-fx-background-color: #e8f5e9; -fx-padding: 15px; -fx-background-radius: 8px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5);" HBox.hgrow="ALWAYS">
+                        <Label text="🌤️ Météo" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2d7340;"/>
+                        <Label text="Ensoleillé, 24°C" style="-fx-text-fill: #558b2f;"/>
+                        <Label text="Prévisions: Pas de pluie cette semaine" style="-fx-text-fill: #558b2f; -fx-font-size: 12px;"/>
+                    </VBox>
+                </HBox>
+
+                <TitledPane text="📈 Analyse des données" expanded="true" style="-fx-text-fill: #1e5631;">
+                    <VBox spacing="10" style="-fx-padding: 10px;">
+                        <Label text="Statistiques de croissance des cultures" style="-fx-font-weight: bold;"/>
+                        <!-- Chart content would go here -->
+                        <Pane style="-fx-min-height: 200; -fx-background-color: #f0f7ed; -fx-border-color: #c8e6c9; -fx-border-width: 1px;"/>
+                    </VBox>
+                </TitledPane>
+
+                <HBox spacing="20">
+                    <VBox style="-fx-background-color: #e8f5e9; -fx-padding: 15px; -fx-background-radius: 8px; -fx-min-width: 300;" HBox.hgrow="ALWAYS">
+                        <Label text="🗓️ Tâches prioritaires" style="-fx-font-weight: bold; -fx-text-fill: #1e5631; -fx-font-size: 14px;"/>
+                        <ListView fx:id="tasksList" prefHeight="150" style="-fx-background-color: transparent;"/>
+                        <Button text="➕ Ajouter une tâche" style="-fx-background-color: #3e8914; -fx-text-fill: white; -fx-background-radius: 4;"/>
+                    </VBox>
+
+                    <VBox style="-fx-background-color: #e8f5e9; -fx-padding: 15px; -fx-background-radius: 8px; -fx-min-width: 300;" HBox.hgrow="ALWAYS">
+                        <Label text="📝 Notes récentes" style="-fx-font-weight: bold; -fx-text-fill: #1e5631; -fx-font-size: 14px;"/>
+                        <TextArea fx:id="notesArea" prefHeight="150" style="-fx-background-color: white; -fx-border-color: #c8e6c9;"/>
+                        <Button text="💾 Sauvegarder" style="-fx-background-color: #3e8914; -fx-text-fill: white; -fx-background-radius: 4;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </StackPane>
+    </center>
+
+    <!-- FOOTER -->
+    <bottom>
+        <HBox style="-fx-background-color: #3e8914; -fx-padding: 8px; -fx-alignment: center-right; -fx-spacing: 10;">
+            <Label text="AgroSmart © 2025 - Technologie au service de l'agriculture" style="-fx-text-fill: white; -fx-font-size: 12px;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/16"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.PostController"
+            fitToWidth="true"
+            style="-fx-background: #F8F9FA;">
+
+    <VBox spacing="0">
+
+        <!-- En-tête -->
+        <VBox alignment="CENTER" style="-fx-background-color: linear-gradient(to bottom, #2d4d2d, #1a331a);
+                     -fx-padding: 40 20 20 20;
+                     -fx-spacing: 15;">
+            <Label text="Forum d'Agriculture Intelligente 🌱"
+                   style="-fx-text-fill: white;
+                          -fx-font-size: 28px;
+                          -fx-font-weight: bold;
+                            "/>
+
+            <Label text="Posez vos questions sur les technologies et innovations agricoles"
+                   style="-fx-text-fill: #cce6cc;
+                          -fx-font-size: 16px;"/>
+
+            <HBox spacing="10" alignment="CENTER">
+                <Hyperlink text="Home"
+                           style="-fx-text-fill: #99cc99; -fx-underline: true;"/>
+                <Label text=">" style="-fx-text-fill: #99cc99;"/>
+                <Hyperlink text="Add Post"
+                           onAction="#openAjoutPostWindow"
+                           style="-fx-text-fill: white; -fx-underline: true;"/>
+            </HBox>
+        </VBox>
+
+        <!-- Contenu principal -->
+        <HBox spacing="20" styleClass="general-padding" style="-fx-padding: 20;">
+
+            <!-- Section des posts -->
+            <VBox spacing="15" prefWidth="1200" prefHeight="600">
+                <ScrollPane fx:id="scrollPane"
+                            fitToHeight="true"
+                            fitToWidth="true"
+                            style="-fx-background: transparent;">
+                    <VBox fx:id="postListView" spacing="15" style="-fx-padding: 10;">
+                        <!-- Les cartes de posts seront ajoutées ici dynamiquement -->
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+
+            <!-- Barre latérale -->
+            <VBox spacing="15" prefWidth="250">
+                <VBox fx:id="sidebarBoxGlobal"
+                      spacing="15"
+                      style="-fx-background-color: #edf7ed; /* vert très doux */
+                 -fx-padding: 12;
+                 -fx-background-radius: 10;
+                 -fx-border-color: #cce6cc;
+                 -fx-border-radius: 10;">
+                <!-- Catégories -->
+                <VBox styleClass="sidebar-box" spacing="10">
+                    <Label text="📢 Catégories" styleClass="sidebar-title"/>
+                    <Button text="Tous les posts" styleClass="category-btn"/>
+                    <Button text="AgroTech" styleClass="category-btn"/>
+                    <Button text="Matériel Agricole" styleClass="category-btn"/>
+                    <Button text="Énergies Vertes" styleClass="category-btn"/>
+                </VBox>
+
+                <!-- Tendances -->
+                <VBox styleClass="sidebar-box" spacing="10">
+                    <Label text="🔥 Tendances" styleClass="sidebar-title"/>
+                    <Label fx:id="trendMostViewed" text="▶ Post le plus vu : Irrigation 4.0" styleClass="trend-item"/>
+                    <Label fx:id="trendBestRated" text="▶ Meilleure note : Robots désherbeurs" styleClass="trend-item"/>
+                </VBox>
+            </VBox>
+            </VBox>
+
+        </HBox>
+
+    </VBox>
+</ScrollPane>

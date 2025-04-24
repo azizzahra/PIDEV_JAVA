@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FarmService implements Iservices<Farm>
+public class FarmService implements IservicesAziz<Farm>
 {
     Connection cnx;
 

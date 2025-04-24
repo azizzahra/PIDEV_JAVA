@@ -11,7 +11,6 @@ public class place {
     private double longitude;
     private int userId;
 
-    // Constructeurs
     public place() {}
 
     public place(int id, String name, int size, String location, String image, String description, double latitude, double longitude, int userId) {

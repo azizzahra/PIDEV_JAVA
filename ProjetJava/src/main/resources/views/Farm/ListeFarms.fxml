@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<VBox xmlns="http://javafx.com/javafx/20.0.2"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controller.Farm.ListeFarmsController"
+      stylesheets="@styles.css"
+      prefHeight="800.0"
+      prefWidth="1200.0">
+
+    <!-- Include the navigation bar -->
+    <fx:include source="/views/NavBar.fxml" />
+
+    <AnchorPane VBox.vgrow="ALWAYS">
+        <!-- Layout principal -->
+        <BorderPane AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                    AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+            <!-- En-tête avec image de fond -->
+            <top>
+                <VBox spacing="10" styleClass="header-background" alignment="CENTER">
+                    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                    <!-- Titre principal -->
+                    <Label text="Farm Management" styleClass="header-title"/>
+
+                    <!-- Sous-titre -->
+                    <Label text="Welcome to the farm management interface, where you can efficiently manage, monitor, and optimize your farms"
+                           styleClass="header-subtitle"/>
+
+                    <!-- Fil d'Ariane -->
+                    <HBox spacing="5" alignment="CENTER">
+                        <Label text="Home" styleClass="breadcrumb"/>
+                        <Label text="/" styleClass="breadcrumb-separator"/>
+                        <Label text="Farm" styleClass="breadcrumb-current"/>
+                    </HBox>
+                </VBox>
+            </top>
+
+            <!-- Panneau latéral pour les filtres -->
+            <left>
+                <VBox styleClass="sidebar" prefWidth="250" spacing="15">
+                    <padding><Insets top="20" right="15" bottom="20" left="15"/></padding>
+
+                    <!-- Titre des filtres -->
+                    <Label text="--Filters--" styleClass="sidebar-header"/>
+
+                    <!-- Section de filtre par emplacement -->
+                    <Label text="Location" styleClass="filter-category"/>
+                    <VBox spacing="5">
+                        <CheckBox text="Nabeul" selected="false">
+                            <graphic>
+                                <Label text="(1)" styleClass="filter-count"/>
+                            </graphic>
+                        </CheckBox>
+                        <CheckBox text="Bizerte" selected="false">
+                            <graphic>
+                                <Label text="(1)" styleClass="filter-count"/>
+                            </graphic>
+                        </CheckBox>
+                        <CheckBox text="Monastir" selected="false">
+                            <graphic>
+                                <Label text="(1)" styleClass="filter-count"/>
+                            </graphic>
+                        </CheckBox>
+                    </VBox>
+
+                    <!-- Section de filtre par taille -->
+                    <Label text="Size" styleClass="filter-category"/>
+                    <VBox spacing="5">
+                        <CheckBox text="&lt; 1000 KM²" selected="false">
+                            <graphic>
+                                <Label text="(2)" styleClass="filter-count"/>
+                            </graphic>
+                        </CheckBox>
+                        <CheckBox text="1000 - 2000 KM²" selected="false">
+                            <graphic>
+                                <Label text="(1)" styleClass="filter-count"/>
+                            </graphic>
+                        </CheckBox>
+                        <CheckBox text="&gt; 2000 KM²" selected="false">
+                            <graphic>
+                                <Label text="(0)" styleClass="filter-count"/>
+                            </graphic>
+                        </CheckBox>
+                    </VBox>
+
+                    <!-- Boutons d'action pour les filtres -->
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button text="Apply Filters" styleClass="filter-apply-btn">
+                            <graphic>
+                                <Region styleClass="filter-icon"/>
+                            </graphic>
+                        </Button>
+                        <Button styleClass="filter-clear-btn">
+                            <graphic>
+                                <Region styleClass="trash-icon"/>
+                            </graphic>
+                        </Button>
+                    </HBox>
+                </VBox>
+            </left>
+
+            <!-- Contenu principal -->
+            <center>
+                <VBox spacing="20">
+                    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                    <!-- Barre de recherche et bouton d'ajout -->
+                    <HBox spacing="15" alignment="CENTER">
+                        <TextField fx:id="searchField" promptText="Search..." styleClass="search-field" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnAdd" text="Add Farm" styleClass="add-farm-btn" onAction="#OpenAddForm">
+                            <graphic>
+                                <Region styleClass="plus-icon"/>
+                            </graphic>
+                        </Button>
+                    </HBox>
+
+                    <!-- Liste des fermes -->
+                    <ScrollPane fitToWidth="true" styleClass="farm-scroll-pane" VBox.vgrow="ALWAYS">
+                        <TilePane fx:id="farmContainer"
+                                  prefColumns="2"
+                                  hgap="20"
+                                  vgap="20"
+                                  styleClass="farm-container"/>
+                    </ScrollPane>
+                </VBox>
+            </center>
+        </BorderPane>
+    </AnchorPane>
+</VBox>

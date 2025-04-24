@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.Farm.AddFarmController"
+      prefHeight="800.0"
+      prefWidth="1200.0">
+
+   <!-- Include the navigation bar -->
+   <fx:include source="/views/NavBar.fxml" />
+
+   <StackPane VBox.vgrow="ALWAYS">
+      <!-- Background Image -->
+      <ImageView fx:id="backgroundImageView" fitWidth="1200" fitHeight="800" preserveRatio="false">
+         <image>
+            <Image url="file:/C:/xampp/htdocs/uploads/farm_image/bg.jpg" />
+         </image>
+         <opacity>0.5</opacity>
+      </ImageView>
+
+      <!-- Main Content -->
+      <VBox alignment="CENTER" spacing="30">
+         <!-- Title -->
+         <Label text="Farm Information" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #3e5f29;" />
+
+         <HBox alignment="TOP_CENTER" spacing="50">
+            <!-- Left Side - Image Upload -->
+            <VBox alignment="TOP_CENTER" spacing="10" minWidth="300">
+               <!-- Image Selection Area -->
+               <Rectangle width="190" height="180" arcWidth="10" arcHeight="10"
+                          style="-fx-fill: transparent; -fx-stroke: #95be76; -fx-stroke-width: 2;" />
+               <!-- Preview Image (Initially showing a placeholder) -->
+
+               <StackPane>
+                  <!-- Preview Image (Initially showing a placeholder) -->
+                  <ImageView fx:id="imagePreview" fitWidth="180" fitHeight="150" preserveRatio="true">
+                     <image>
+                        <Image url="file:/C:/xampp/htdocs/uploads/farm_image/bg.jpg" />
+                     </image>
+                  </ImageView>
+               </StackPane>
+
+               <Label text="Choose an Image" style="-fx-font-size: 14px; -fx-text-fill: #3e5f29;" />
+
+               <Button fx:id="btnSelectImage" onAction="#selectImage" text="Browse"
+                       style="-fx-background-color: #90c46e; -fx-text-fill: white; -fx-font-size: 12px;
+                                  -fx-padding: 5 20; -fx-background-radius: 5;" />
+
+               <Label fx:id="fimageError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+
+               <!-- Empty Space for Map in Original Design -->
+               <Pane minHeight="200" />
+            </VBox>
+
+            <!-- Right Side - Form Fields -->
+            <VBox spacing="20" minWidth="600" maxWidth="800">
+               <!-- Farm Name -->
+               <VBox spacing="5">
+                  <Label text="Name" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #3e5f29;" />
+                  <TextField fx:id="fname" promptText="Farm Name"
+                             style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                        -fx-padding: 8; -fx-font-size: 14px;" />
+                  <Label fx:id="fnameError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+               </VBox>
+
+               <!-- Description -->
+               <VBox spacing="5">
+                  <Label text="Description" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #3e5f29;" />
+                  <TextArea fx:id="fdescription" promptText="Description" prefHeight="150"
+                            style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                       -fx-font-size: 14px;" wrapText="true" />
+                  <Label fx:id="fdescriptionError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+               </VBox>
+
+               <!-- Location -->
+               <VBox spacing="5">
+                  <Label text="Location" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #3e5f29;" />
+                  <TextField fx:id="flocation" promptText="Location"
+                             style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                        -fx-padding: 8; -fx-font-size: 14px;" />
+                  <Label fx:id="flocationError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+               </VBox>
+
+               <!-- Size -->
+               <VBox spacing="5">
+                  <Label text="Size M²" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #3e5f29;" />
+                  <TextField fx:id="fsize" promptText="Size (in KM²)"
+                             style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                        -fx-padding: 8; -fx-font-size: 14px;" />
+                  <Label fx:id="fsizeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+               </VBox>
+
+               <!-- Hidden Fields -->
+               <HBox spacing="10" visible="false">
+                  <VBox spacing="5" HBox.hgrow="ALWAYS">
+                     <Label text="Latitude:" />
+                     <TextField fx:id="flatitude" text="0.0" />
+                     <Label fx:id="flatitudeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                  </VBox>
+                  <VBox spacing="5" HBox.hgrow="ALWAYS">
+                     <Label text="Longitude:" />
+                     <TextField fx:id="flongitude" text="0.0" />
+                     <Label fx:id="flongitudeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                  </VBox>
+                  <VBox spacing="5" HBox.hgrow="ALWAYS">
+                     <Label text="User ID:" />
+                     <TextField fx:id="fuser" text="1" /> <!-- Default value -->
+                     <Label fx:id="fuserError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                  </VBox>
+                  <TextField fx:id="fimage" visible="false" /> <!-- Hidden field for image path -->
+               </HBox>
+
+               <!-- Save Button -->
+               <HBox alignment="CENTER">
+                  <Button fx:id="btnAddFarm" onAction="#AddFarmAction" text="Save Farm"
+                          style="-fx-background-color: #45722e; -fx-text-fill: white; -fx-font-size: 14px;
+                                      -fx-padding: 8 30; -fx-background-radius: 3;" />
+               </HBox>
+            </VBox>
+         </HBox>
+      </VBox>
+   </StackPane>
+</VBox>

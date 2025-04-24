@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.Farm.FarmDetailsController"
+      stylesheets="@styles.css"
+      prefHeight="800.0"
+      prefWidth="1200.0">
+
+    <!-- Include the navigation bar -->
+    <fx:include source="/views/NavBar.fxml" />
+
+    <AnchorPane VBox.vgrow="ALWAYS">
+        <!-- ScrollPane principal qui rend toute l'interface scrollable -->
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                    AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+            <!-- Layout principal -->
+            <BorderPane>
+                <!-- En-tête avec image de fond -->
+                <top>
+                    <VBox spacing="10" styleClass="header-background">
+                        <padding><Insets top="40" right="20" bottom="40" left="20"/></padding>
+
+                        <!-- Titre principal -->
+                        <HBox alignment="CENTER">
+                            <Label text="Farm Details" styleClass="header-title"/>
+                        </HBox>
+
+                        <!-- Description sous le titre -->
+                        <HBox alignment="CENTER">
+                            <Label text="Esse dolorum voluptatum uliam est sint nemo et est ipsa porro placeat quibusdam quia assumenda numquam molestias."
+                                   styleClass="header-subtitle" textAlignment="CENTER" wrapText="true"/>
+                        </HBox>
+
+                        <!-- Fil d'Ariane -->
+                        <HBox spacing="5" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                            <Label text="Home" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label text="Liste Farm" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label fx:id="farmNameBreadcrumb" text="Farm Name" styleClass="breadcrumb-current"/>
+                        </HBox>
+                    </VBox>
+                </top>
+
+                <!-- Contenu principal -->
+                <center>
+                    <HBox spacing="20">
+                        <!-- Section gauche avec les détails de la ferme -->
+                        <VBox spacing="20" HBox.hgrow="ALWAYS" styleClass="farm-details-container">
+                            <padding><Insets top="30" right="20" bottom="30" left="30"/></padding>
+
+                            <!-- Image de la ferme -->
+                            <ImageView fx:id="farmImage" fitWidth="700" fitHeight="350" preserveRatio="true" styleClass="farm-detail-image"/>
+
+                            <!-- Titre et informations principales -->
+                            <VBox spacing="10">
+                                <Label fx:id="farmName" text="Alpine Acres" styleClass="farm-title" style="-fx-font-size: 30px;"/>
+
+                                <HBox spacing="15" alignment="CENTER_LEFT">
+                                    <!-- Location -->
+                                    <HBox spacing="5" alignment="CENTER_LEFT">
+                                        <Label text="📍" styleClass="icon-label"/>
+                                        <Label fx:id="farmLocation" text="Nabeul" styleClass="detail-value"/>
+                                    </HBox>
+
+                                    <!-- Size -->
+                                    <HBox spacing="5" alignment="CENTER_LEFT">
+                                        <Label text="📏" styleClass="icon-label"/>
+                                        <Label fx:id="farmSize" text="657 KM²" styleClass="detail-value"/>
+                                    </HBox>
+
+                                    <!-- Coordinates, if needed -->
+                                    <HBox spacing="5" alignment="CENTER_LEFT" visible="false">
+                                        <Label text="🌐" styleClass="icon-label"/>
+                                        <Label fx:id="farmCoordinates" text="Lat: 0, Long: 0" styleClass="detail-value"/>
+                                    </HBox>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Description -->
+                            <VBox spacing="10">
+                                <Label text="Description:" styleClass="detail-section-title"/>
+                                <TextArea fx:id="farmDescription" wrapText="true" editable="false" styleClass="farm-description-area" prefHeight="100"/>
+                            </VBox>
+
+                            <!-- Liste des plantes - Titre et statistiques -->
+                            <VBox spacing="5">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="List of plants" styleClass="detail-section-title"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label text="Number of plants : " styleClass="detail-value"/>
+                                    <Label fx:id="plantCount" text="5" styleClass="detail-value" style="-fx-font-weight: bold;"/>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Plants container - avec FlowPane pour ressembler aux captures d'écran -->
+                            <FlowPane fx:id="plantsContainer"
+                                      hgap="20" vgap="20"
+                                      prefWrapLength="700"
+                                      styleClass="plants-container"/>
+
+                            <!-- Pagination -->
+                            <HBox styleClass="pagination-container" alignment="CENTER">
+                                <Button text="« Previous" styleClass="pagination-button"/>
+                                <Button text="1" styleClass="pagination-button active"/>
+                                <Button text="2" styleClass="pagination-button"/>
+                                <Button text="Next »" styleClass="pagination-button"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Panneau latéral droit -->
+                        <VBox spacing="25" prefWidth="300" styleClass="sidebar">
+                            <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+
+                            <!-- To-Do List - Nouvelle section comme sur l'image -->
+                            <VBox styleClass="todo-container" spacing="10">
+                                <Label text="To-Do List" styleClass="section-title"/>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <TextField promptText="What do you need to do?" HBox.hgrow="ALWAYS"/>
+                                    <Button text="+" styleClass="green-button"/>
+                                </HBox>
+
+                                <VBox spacing="8">
+                                    <!-- Todo items examples -->
+                                    <HBox spacing="10" alignment="CENTER_LEFT" styleClass="todo-item">
+                                        <Label text="qsdsqd" HBox.hgrow="ALWAYS"/>
+                                        <Label text="24 Feb 2025"/>
+                                        <Label text="High priority" styleClass="todo-priority high"/>
+                                        <Label text="×" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                                    </HBox>
+
+                                    <HBox spacing="10" alignment="CENTER_LEFT" styleClass="todo-item">
+                                        <Label text="azze" HBox.hgrow="ALWAYS"/>
+                                        <Label text="24 Feb 2025"/>
+                                        <Label text="Middle priority" styleClass="todo-priority medium"/>
+                                        <Label text="×" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                                    </HBox>
+
+                                    <HBox spacing="10" alignment="CENTER_LEFT" styleClass="todo-item">
+                                        <Label text="scqcdscs" HBox.hgrow="ALWAYS"/>
+                                        <Label text="24 Feb 2025"/>
+                                        <Label text="Low priority" styleClass="todo-priority low"/>
+                                        <Label text="×" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                                    </HBox>
+
+                                    <HBox spacing="10" alignment="CENTER_LEFT" styleClass="todo-item">
+                                        <Label text="sqvsd" HBox.hgrow="ALWAYS"/>
+                                        <Label text="24 Feb 2025"/>
+                                        <Label text="Done" styleClass="todo-priority done"/>
+                                        <Label text="×" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Recherche de plantes -->
+                            <VBox spacing="10">
+                                <Label text="Search Plants" styleClass="section-title"/>
+                                <HBox spacing="5">
+                                    <TextField fx:id="searchPlantField" promptText="Search plants by name..." styleClass="search-field" HBox.hgrow="ALWAYS"/>
+                                    <Button text="🔍" styleClass="green-button"/>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Catégories -->
+                            <VBox spacing="10">
+                                <Label text="Categories" styleClass="section-title"/>
+                                <VBox fx:id="categoriesContainer" spacing="8">
+                                    <HBox spacing="5" alignment="CENTER_LEFT" styleClass="category-item">
+                                        <Label text="Vegetables" styleClass="category-name" HBox.hgrow="ALWAYS"/>
+                                        <Label text="(3)" styleClass="category-count"/>
+                                    </HBox>
+                                    <HBox spacing="5" alignment="CENTER_LEFT" styleClass="category-item">
+                                        <Label text="Fruits" styleClass="category-name" HBox.hgrow="ALWAYS"/>
+                                        <Label text="(2)" styleClass="category-count"/>
+                                    </HBox>
+                                    <HBox spacing="5" alignment="CENTER_LEFT" styleClass="category-item">
+                                        <Label text="Flowers" styleClass="category-name" HBox.hgrow="ALWAYS"/>
+                                        <Label text="(1)" styleClass="category-count"/>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Détection des maladies avec IA -->
+                            <VBox spacing="10">
+                                <Label text="Detect Plants Disease AI" styleClass="section-title"/>
+                                <Label text="Upload Plant Image:"/>
+                                <HBox spacing="5">
+                                    <TextField text="Aucun fichier choisi" editable="false" HBox.hgrow="ALWAYS"/>
+                                    <Button text="Choisir un fichier" styleClass="green-button"/>
+                                </HBox>
+                                <Button text="Detect Diseases" styleClass="green-button"/>
+                            </VBox>
+
+                            <!-- Actions -->
+                            <VBox spacing="10">
+                                <Label text="Actions" styleClass="section-title"/>
+                                <HBox spacing="10">
+                                    <Button fx:id="updateButton" text="Update Farm" onAction="#openUpdateForm"
+                                            styleClass="green-button" HBox.hgrow="ALWAYS"/>
+                                    <Button fx:id="deleteButton" text="Remove Farm" onAction="#deleteFarm"
+                                            styleClass="green-button" HBox.hgrow="ALWAYS"/>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+                </center>
+            </BorderPane>
+        </ScrollPane>
+    </AnchorPane>
+</VBox>

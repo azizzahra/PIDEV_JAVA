@@ -5,8 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -23,10 +23,9 @@ public class mainPrincipal extends Application {
     public void start(Stage stage) {
         try {
             primaryStage = stage; // Initialiser la variable
-            Parent root = FXMLLoader.load(getClass().getResource("/ListeFarms.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/views/Home.fxml"));
 
             // Configuration de la taille
-            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
             primaryStage.setMaximized(true); // Pour occuper tout l'écran sans être en mode fullscreen
 
 

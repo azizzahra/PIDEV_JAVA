@@ -1,28 +1,40 @@
 package controller;
 
 import Main.mainPrincipal;
+import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 import java.io.IOException;
 
-public class HomeController {
+public class DashboardController {
 
 
-    @FXML
-    public void navigateToForum(ActionEvent event) {
+
+
+    /**
+     * Toggles the Offers menu with a smooth slide animation.
+     */
+
+@FXML
+    public void handleForum(ActionEvent event) {
         try {
+            // Spécifiez le chemin correct vers forum.fxml
+            // Assurez-vous que ce chemin correspond à l'emplacement réel du fichier
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/ForumD.fxml"));
+            Parent root = loader.load();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/post.fxml"));
-            ScrollPane root = loader.load();
+            // Obtenez la scène actuelle
             Scene currentScene = ((Node) event.getSource()).getScene();
 
             // Remplacez le contenu de la scène par le nouveau contenu
@@ -38,10 +50,20 @@ public class HomeController {
             alert.showAndWait();
         }
     }
-    // Helper method to load FXML files
-    private ScrollPane loadFXML(String fxmlFileName) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFileName));
-        return loader.load();  // Now returning ScrollPane instead of AnchorPane
+    /**
+     * Applies a fade-in transition effect to the new content.
+     */
+    private void applyFadeTransition(Object pane) {
+        FadeTransition fade = new FadeTransition(Duration.millis(400), (javafx.scene.Node) pane);
+        fade.setFromValue(0);
+        fade.setToValue(1);
+        fade.play();
+    }
+
+    public void handleLogout(ActionEvent actionEvent) {
+    }
+
+    public void handleCommunity(ActionEvent actionEvent) {
     }
 
     @FXML

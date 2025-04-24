@@ -1,0 +1,157 @@
+/* ============================
+   STYLE GÉNÉRAL
+============================ */
+.main-container {
+    -fx-background-color: #f0f9ef;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.post-detail-container {
+    -fx-padding: 30;
+    -fx-background-color: #f8fff8;
+    -fx-spacing: 20;
+}
+
+/* ============================
+   SCROLLPANE TRANSPARENT
+============================ */
+.transparent-background {
+    -fx-background-color: transparent;
+}
+
+.transparent-background > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+/* ============================
+   TITRE DU POST
+============================ */
+.post-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a29;
+    -fx-wrap-text: true;
+    -fx-padding: 0 0 10 0;
+}
+
+/* ============================
+   INFORMATIONS DU POST
+============================ */
+.post-info-box {
+    -fx-padding: 5 0;
+    -fx-alignment: center-left;
+}
+
+.post-username {
+    -fx-text-fill: #388e3c;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.post-date {
+    -fx-text-fill: #6c757d;
+    -fx-font-size: 12px;
+}
+
+/* ============================
+   CONTENU DU POST
+============================ */
+.post-content-text {
+    -fx-font-size: 16px;
+    -fx-fill: #333333;
+    -fx-line-spacing: 1.4;
+}
+
+/* ============================
+   SÉPARATEUR
+============================ */
+.post-separator {
+    -fx-background-color: #d1e7dd;
+}
+
+/* ============================
+   COMMENTAIRES
+============================ */
+.comments-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a29;
+}
+
+.comments-container {
+    -fx-padding: 10;
+    -fx-background-color: #ffffff;
+    -fx-spacing: 15;
+}
+
+.comment-box {
+    -fx-padding: 10;
+    -fx-background-color: #e8f5e9;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.1), 2, 0.0, 0, 1);
+}
+
+.comment-username {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #1e3a29;
+}
+
+.comment-date {
+    -fx-font-size: 12px;
+    -fx-text-fill: #888888;
+    -fx-padding: 0 0 5 0;
+}
+
+.comment-content {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+/* ============================
+   AJOUT DE COMMENTAIRE
+============================ */
+.comment-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+.comment-textarea {
+    -fx-pref-height: 100px;
+    -fx-wrap-text: true;
+    -fx-padding: 10;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-color: #c1c1c1;
+}
+
+.comment-submit-btn {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.comment-submit-btn:hover {
+    -fx-background-color: #388e3c;
+}
+
+/* ============================
+   UTILITAIRES
+============================ */
+.label {
+    -fx-wrap-text: true;
+}
+
+.separator {
+    -fx-background-color: #ccc;
+}
+

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.PostCardController"
+      style="-fx-background-color: #e6f2e6;
+             -fx-border-color: #99cc99;
+             -fx-border-radius: 10;
+             -fx-background-radius: 10;
+             -fx-padding: 15;"
+      spacing="10">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label fx:id="categoryLabel"
+               style="-fx-background-color: #4CAF50;
+                      -fx-text-fill: white;
+                      -fx-padding: 3 8;
+                      -fx-background-radius: 15;
+                      -fx-font-size: 12px;
+                      -fx-font-weight: bold;"/>
+        <Label fx:id="usernameLabel"
+               style="-fx-text-fill: #333333;
+                      -fx-font-weight: bold;
+                      -fx-font-size: 14px;"/>
+    </HBox>
+
+    <Label fx:id="postTitleLabel"
+           style="-fx-text-fill: #2d4d2d;
+                  -fx-font-size: 18px;
+                  -fx-font-weight: bold;
+                  -fx-padding: 5 0;"/>
+
+    <Text fx:id="postPreviewText"
+          style="-fx-fill: #444444;
+                 -fx-font-size: 14px;
+                 -fx-line-spacing: 4px;"
+          wrappingWidth="600"/>
+
+    <HBox spacing="20" style="-fx-padding: 5 0;">
+        <Label fx:id="postDateLabel"
+               style="-fx-text-fill: #666666;
+                      -fx-font-size: 12px;"/>
+        <Label fx:id="viewsLabel"
+               style="-fx-text-fill: #666666;
+                      -fx-font-size: 12px;"/>
+        <Label fx:id="attachmentLabel"
+               onMouseClicked="#handleAttachmentClick"
+               style="-fx-text-fill: #0066cc;
+              -fx-underline: true;
+              -fx-font-size: 12px;
+              -fx-cursor: hand;" />
+
+    </HBox>
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Button fx:id="likeButton"
+                style="-fx-text-fill: #4CAF50;
+                       -fx-font-size: 14px;
+                       -fx-padding: 5 10;
+                       -fx-background-color: transparent;
+                       -fx-border-color: transparent;"/>
+        <Button fx:id="commentButton"
+                style="-fx-text-fill: #4CAF50;
+                       -fx-font-size: 14px;
+                       -fx-padding: 5 10;
+                       -fx-background-color: transparent;
+                       -fx-border-color: transparent;"/>
+        <Button fx:id="shareButton"
+                style="-fx-text-fill: #4CAF50;
+                       -fx-font-size: 14px;
+                       -fx-padding: 5 10;
+                       -fx-background-color: transparent;
+                       -fx-border-color: transparent;"/>
+    </HBox>
+</VBox>
