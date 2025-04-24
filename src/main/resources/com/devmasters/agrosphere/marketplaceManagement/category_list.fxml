@@ -4,7 +4,7 @@
 
 
 <ScrollPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.devmasters.agrosphere.marketplaceManagment.Controller.CategoryListController"
+            fx:controller="com.devmasters.agrosphere.marketplaceManagement.Controller.CategoryListController"
             fitToWidth="true" prefWidth="800" prefHeight="600">
 
     <!-- Outer VBox that holds everything -->

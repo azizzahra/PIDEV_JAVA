@@ -1,20 +1,10 @@
-package com.devmasters.agrosphere.marketplaceManagment.Controller;
+package com.devmasters.agrosphere.marketplaceManagement.Controller;
 
-import com.devmasters.agrosphere.marketplaceManagment.entities.category;
+import com.devmasters.agrosphere.marketplaceManagement.Controller.CategoryListController;
+import com.devmasters.agrosphere.marketplaceManagement.entities.category;
 import services.marketPlace.CategoryService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
-import javafx.stage.FileChooser;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class CategoryController {
 

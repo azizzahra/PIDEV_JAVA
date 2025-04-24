@@ -1,7 +1,7 @@
-package com.devmasters.agrosphere.marketplaceManagment.Controller;
+package com.devmasters.agrosphere.marketplaceManagement.Controller;
 
-import com.devmasters.agrosphere.marketplaceManagment.entities.product;
-import com.devmasters.agrosphere.marketplaceManagment.entities.category;
+import com.devmasters.agrosphere.marketplaceManagement.entities.product;
+import com.devmasters.agrosphere.marketplaceManagement.entities.category;
 import services.marketPlace.ProductService;
 import services.marketPlace.CategoryService;
 
@@ -13,12 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import java.util.Optional;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.input.MouseEvent;
 
 
 public class ProductItemController {

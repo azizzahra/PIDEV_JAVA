@@ -1,5 +1,5 @@
-package com.devmasters.agrosphere.marketplaceManagment.Controller;
-import com.devmasters.agrosphere.marketplaceManagment.entities.category;
+package com.devmasters.agrosphere.marketplaceManagement.Controller;
+import com.devmasters.agrosphere.marketplaceManagement.entities.category;
 import services.marketPlace.CategoryService;
 
 import javafx.fxml.FXML;
@@ -29,7 +29,7 @@ public class CategoryItemController {
     @FXML
     private void onEditClicked() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/devmasters/agrosphere/marketplaceManagment/category_form.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/devmasters/agrosphere/marketplaceManagement/category_form.fxml"));
             VBox formView = loader.load();
 
             CategoryController formController = loader.getController();

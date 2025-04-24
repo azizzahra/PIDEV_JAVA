@@ -1,4 +1,4 @@
-package com.devmasters.agrosphere.marketplaceManagment.entities;
+package com.devmasters.agrosphere.marketplaceManagement.entities;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

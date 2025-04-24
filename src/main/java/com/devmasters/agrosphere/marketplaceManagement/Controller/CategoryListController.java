@@ -1,7 +1,6 @@
-package com.devmasters.agrosphere.marketplaceManagment.Controller;
+package com.devmasters.agrosphere.marketplaceManagement.Controller;
 
-import com.devmasters.agrosphere.marketplaceManagment.entities.category;
-import com.devmasters.agrosphere.userManagament.entities.user;
+import com.devmasters.agrosphere.marketplaceManagement.entities.category;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -9,10 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import services.marketPlace.CategoryService;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.stage.FileChooser;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
@@ -36,7 +31,7 @@ public class CategoryListController {
             List<category> categories = categoryService.getAll();
 
             for (category c : categories) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/devmasters/agrosphere/marketplaceManagment/category_item.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/devmasters/agrosphere/marketplaceManagement/category_item.fxml"));
                 HBox item = loader.load();
 
                 CategoryItemController controller = loader.getController();
@@ -53,7 +48,7 @@ public class CategoryListController {
     private void handleAddCategory(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/com/devmasters/agrosphere/marketplaceManagment/category_form.fxml"
+                    "/com/devmasters/agrosphere/marketplaceManagement/category_form.fxml"
             ));
             Parent formRoot = loader.load();
 

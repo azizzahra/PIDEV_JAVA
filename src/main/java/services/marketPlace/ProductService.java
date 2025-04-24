@@ -1,6 +1,6 @@
 package services.marketPlace;
 
-import com.devmasters.agrosphere.marketplaceManagment.entities.product;
+import com.devmasters.agrosphere.marketplaceManagement.entities.product;
 import services.Iservices;
 import com.devmasters.agrosphere.utils.DBConnection;
 

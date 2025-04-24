@@ -4,10 +4,11 @@ module com.devmasters.agrosphere {
     requires java.sql;
 
     // Required to allow FXML reflection access
-    opens com.devmasters.agrosphere.marketplaceManagment.Controller to javafx.fxml;
-    opens com.devmasters.agrosphere.marketplaceManagment.entities to javafx.base;
+    opens com.devmasters.agrosphere.marketplaceManagement.Controller to javafx.fxml;
+    opens com.devmasters.agrosphere.marketplaceManagement.entities to javafx.base;
+    opens com.devmasters.agrosphere to javafx.fxml;
 
     exports com.devmasters.agrosphere;
-    exports com.devmasters.agrosphere.marketplaceManagment.Controller;
+    exports com.devmasters.agrosphere.marketplaceManagement.Controller;
     exports com.devmasters.agrosphere.shared;
 }

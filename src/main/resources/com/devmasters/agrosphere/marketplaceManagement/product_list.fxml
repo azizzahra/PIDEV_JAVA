@@ -4,10 +4,10 @@
 <?import javafx.scene.layout.*?>
 
 <VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.devmasters.agrosphere.marketplaceManagment.Controller.ProductListController"
-      style="-fx-padding: 20;">
-    <!-- Header -->
-    <Label text="📦 Product Dashboard" styleClass="label"/>
+      fx:controller="com.devmasters.agrosphere.marketplaceManagement.Controller.ProductListController"
+      style="-fx-padding: 5;">
+    <!-- Header
+    <Label text="📦 Product Dashboard" styleClass="label"/>-->
 
     <!-- Toolbar -->
     <ToolBar>

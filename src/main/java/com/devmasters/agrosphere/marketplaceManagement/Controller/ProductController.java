@@ -1,21 +1,19 @@
-package com.devmasters.agrosphere.marketplaceManagment.Controller;
+package com.devmasters.agrosphere.marketplaceManagement.Controller;
 
-import com.devmasters.agrosphere.marketplaceManagment.entities.product;
-import com.devmasters.agrosphere.marketplaceManagment.entities.category;
+import com.devmasters.agrosphere.marketplaceManagement.entities.product;
+import com.devmasters.agrosphere.marketplaceManagement.entities.category;
 import com.devmasters.agrosphere.userManagament.entities.user;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import services.marketPlace.ProductService;
 import services.marketPlace.CategoryService;
@@ -235,46 +233,19 @@ public class ProductController {
         }
     }
 
-    /*@FXML
-    private void handleToggleView() {
-        try {
-            Region listView = FXMLLoader.load(getClass().getResource(
-                    "/com/devmasters/agrosphere/marketplaceManagment/product_list.fxml"
-            ));
-            root.setCenter(listView); // Switch center view back to product list
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Failed to load product list: " + e.getMessage());
-        }
-    }
-    */
     @FXML
     private void handleToggleView() {
         try {
-            // Find dashboard root
-            Parent current = nameField.getScene().getRoot();
-            BorderPane dashboardRoot = null;
+            // Get reference to the DashboardProductController
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/com/devmasters/agrosphere/marketplaceManagement/product_list.fxml"
+            ));
+            Region listView = loader.load();
 
-            while (current != null) {
-                if (current instanceof BorderPane && ((BorderPane) current).getId() != null &&
-                        ((BorderPane) current).getId().equals("dashboardRoot")) {
-                    dashboardRoot = (BorderPane) current;
-                    break;
-                }
-                if (current.getParent() != null) {
-                    current = current.getParent();
-                } else {
-                    break;
-                }
-            }
-
-            if (dashboardRoot != null) {
-                // Load product list view
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                        "/com/devmasters/agrosphere/marketplaceManagment/product_list.fxml"
-                ));
-                Parent listView = loader.load();
-                dashboardRoot.setCenter(listView);
+            // Find the StackPane contentArea in the root BorderPane
+            StackPane contentArea = (StackPane) nameField.getScene().lookup("#contentArea");
+            if (contentArea != null) {
+                contentArea.getChildren().setAll(listView);
             }
         } catch (IOException e) {
             e.printStackTrace();

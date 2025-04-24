@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 <HBox spacing="20" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.devmasters.agrosphere.marketplaceManagment.Controller.CategoryItemController">
+      fx:controller="com.devmasters.agrosphere.marketplaceManagement.Controller.CategoryItemController">
     <VBox>
         <Label fx:id="nameLabel" style="-fx-font-weight: bold"/>
         <Label fx:id="descLabel"/>

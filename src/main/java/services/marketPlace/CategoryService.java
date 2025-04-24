@@ -1,7 +1,6 @@
 package services.marketPlace;
 
-import com.devmasters.agrosphere.marketplaceManagment.entities.category;
-import services.Iservices;
+import com.devmasters.agrosphere.marketplaceManagement.entities.category;
 import com.devmasters.agrosphere.utils.DBConnection;
 
 import java.sql.*;
