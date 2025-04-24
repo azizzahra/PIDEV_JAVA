@@ -2,98 +2,172 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.image.ImageView?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.Farm.UpdatePlanteController"
-            stylesheets="@styles.css"
-            prefHeight="700.0" prefWidth="900.0">
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.Farm.UpdatePlanteController"
+      stylesheets="@styles.css">
 
-    <BorderPane AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
-                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+    <!-- Include the navigation bar -->
+    <fx:include source="/views/NavBar.fxml" />
 
-        <!-- En-tête -->
-        <top>
-            <VBox spacing="10" styleClass="header-background" alignment="CENTER">
-                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    <AnchorPane VBox.vgrow="ALWAYS">
+        <!-- ScrollPane principal qui rend toute l'interface scrollable -->
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                    AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
-                <!-- Titre principal -->
-                <Label text="Update Plant" styleClass="header-title"/>
+            <BorderPane>
+                <!-- En-tête avec image de fond (comme dans FarmDetails) -->
+                <top>
+                    <VBox spacing="10" styleClass="header-background">
+                        <padding><Insets top="40" right="20" bottom="40" left="20"/></padding>
 
-                <!-- Fil d'Ariane -->
-                <HBox spacing="5" alignment="CENTER">
-                    <Label text="Home" styleClass="breadcrumb"/>
-                    <Label text="/" styleClass="breadcrumb-separator"/>
-                    <Label text="Farm" styleClass="breadcrumb"/>
-                    <Label text="/" styleClass="breadcrumb-separator"/>
-                    <Label fx:id="farmNameBreadcrumb" text="Farm Name" styleClass="breadcrumb"/>
-                    <Label text="/" styleClass="breadcrumb-separator"/>
-                    <Label fx:id="planteNameBreadcrumb" text="Plant Name" styleClass="breadcrumb"/>
-                    <Label text="/" styleClass="breadcrumb-separator"/>
-                    <Label text="Update" styleClass="breadcrumb-current"/>
-                </HBox>
-            </VBox>
-        </top>
+                        <!-- Titre principal -->
+                        <HBox alignment="CENTER">
+                            <Label text="Update Plant" styleClass="header-title"/>
+                        </HBox>
 
-        <!-- Formulaire -->
-        <center>
-            <VBox spacing="20" styleClass="form-container">
-                <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+                        <!-- Description sous le titre -->
+                        <HBox alignment="CENTER">
+                            <Label text="Update your plant information to keep track of its growth and changes over time"
+                                   styleClass="header-subtitle" textAlignment="CENTER" wrapText="true"/>
+                        </HBox>
 
-                <!-- Nom -->
-                <VBox spacing="5">
-                    <Label text="Plant Name:" styleClass="form-label"/>
-                    <TextField fx:id="nameField" promptText="Enter plant name" styleClass="form-field"/>
-                    <Label fx:id="nameError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
-                </VBox>
+                        <!-- Fil d'Ariane -->
+                        <HBox spacing="5" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                            <Label text="Home" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label text="Farm" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label fx:id="farmNameBreadcrumb" text="Farm Name" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label fx:id="planteNameBreadcrumb" text="Plant Name" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label text="Update" styleClass="breadcrumb-current"/>
+                        </HBox>
+                    </VBox>
+                </top>
 
-                <!-- Type -->
-                <VBox spacing="5">
-                    <Label text="Plant Type:" styleClass="form-label"/>
-                    <ComboBox fx:id="typeComboBox" promptText="Select plant type" prefWidth="200" styleClass="form-field"/>
-                    <Label fx:id="typeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
-                </VBox>
+                <!-- Contenu principal (comme dans AddFarm) -->
+                <center>
+                    <StackPane>
+                        <!-- Background Image -->
+                        <ImageView fx:id="backgroundImageView" preserveRatio="true">
+                            <image>
+                                <Image url="file:/C:/xampp/htdocs/uploads/farm_image/bg.jpg" />
+                            </image>
+                            <opacity>0.3</opacity>
+                        </ImageView>
 
-                <!-- Date de plantation -->
-                <VBox spacing="5">
-                    <Label text="Plantation Date:" styleClass="form-label"/>
-                    <DatePicker fx:id="plantationDatePicker" promptText="Select plantation date" styleClass="form-field"/>
-                    <Label fx:id="plantationDateError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
-                </VBox>
+                        <Rectangle width="1200" height="800" arcWidth="10" arcHeight="10"
+                                   style="-fx-fill: #e6e4e4; -fx-stroke: #2e7d32; -fx-stroke-width: 2;" />
 
-                <!-- Date de récolte -->
-                <VBox spacing="5">
-                    <Label text="Harvest Date:" styleClass="form-label"/>
-                    <DatePicker fx:id="harvestDatePicker" promptText="Select harvest date" styleClass="form-field"/>
-                    <Label fx:id="harvestDateError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
-                </VBox>
+                        <!-- Main Content -->
+                        <VBox alignment="CENTER" spacing="30">
+                            <!-- Title -->
+                            <Label text="Update Plant Information" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
 
-                <!-- Quantité -->
-                <VBox spacing="5">
-                    <Label text="Quantity:" styleClass="form-label"/>
-                    <TextField fx:id="quantityField" promptText="Enter quantity" styleClass="form-field"/>
-                    <Label fx:id="quantityError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
-                </VBox>
+                            <HBox alignment="TOP_CENTER" spacing="50">
+                                <!-- Left Side - Image Upload -->
+                                <VBox alignment="TOP_CENTER" spacing="10" minWidth="300">
+                                    <StackPane>
+                                        <!-- Image Selection Area -->
+                                        <Rectangle width="190" height="180" arcWidth="10" arcHeight="10"
+                                                   style="-fx-fill: transparent; -fx-stroke: #2e7d32; -fx-stroke-width: 2;" />
+                                        <!-- Preview Image -->
+                                        <ImageView fx:id="imagePreview" fitWidth="180" fitHeight="150" preserveRatio="true" />
+                                    </StackPane>
 
-                <!-- Image -->
-                <VBox spacing="5">
-                    <Label text="Plant Image:" styleClass="form-label"/>
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Button fx:id="chooseImageButton" text="Choose Image" styleClass="file-button"/>
-                        <Label fx:id="imagePathLabel" text="No image selected" styleClass="file-path-label"/>
-                    </HBox>
-                    <Label fx:id="imageError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
-                    <ImageView fx:id="imagePreview" fitHeight="150" fitWidth="200" preserveRatio="true"/>
-                </VBox>
+                                    <Label text="Current Image" style="-fx-font-size: 14px; -fx-text-fill: #2e7d32;" />
 
-                <!-- Boutons -->
-                <HBox spacing="15" alignment="CENTER_RIGHT">
-                    <Button text="Cancel" onAction="#cancel" styleClass="nav-button"/>
-                    <Button text="Update Plant" onAction="#updatePlant" styleClass="save-button"/>
-                </HBox>
-            </VBox>
-        </center>
-    </BorderPane>
-</AnchorPane>
+                                    <Button fx:id="chooseImageButton" text="Change Image"
+                                            styleClass="form-button"/>
+
+                                    <Label fx:id="imageError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                    <Label fx:id="imagePathLabel" text="No new image selected" styleClass="file-path-label" visible="false"/>
+                                </VBox>
+
+                                <!-- Right Side - Form Fields -->
+                                <VBox spacing="20" minWidth="600" maxWidth="800">
+                                    <!-- Plant Name -->
+                                    <VBox spacing="5">
+                                        <Label text="Plant Name" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                        <TextField fx:id="nameField" promptText="Enter plant name"
+                                                   style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                        -fx-padding: 8; -fx-font-size: 14px;" />
+                                        <Label fx:id="nameError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                    </VBox>
+
+                                    <!-- Plant Type -->
+                                    <VBox spacing="5">
+                                        <Label text="Plant Type" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                        <ComboBox fx:id="typeComboBox" promptText="Select plant type" prefWidth="400"
+                                                  style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                        -fx-padding: 8; -fx-font-size: 14px;" />
+                                        <Label fx:id="typeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                    </VBox>
+
+                                    <!-- Dates in a horizontal layout -->
+                                    <HBox spacing="20">
+                                        <!-- Plantation Date -->
+                                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                            <Label text="Plantation Date" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                            <DatePicker fx:id="plantationDatePicker" promptText="Select plantation date"
+                                                        style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                            -fx-padding: 8; -fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
+                                            <Label fx:id="plantationDateError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                        </VBox>
+
+                                        <!-- Harvest Date -->
+                                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                            <Label text="Harvest Date" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                            <DatePicker fx:id="harvestDatePicker" promptText="Select harvest date"
+                                                        style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                            -fx-padding: 8; -fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
+                                            <Label fx:id="harvestDateError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                        </VBox>
+                                    </HBox>
+
+                                    <!-- Quantity -->
+                                    <VBox spacing="5">
+                                        <Label text="Quantity" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                        <TextField fx:id="quantityField" promptText="Enter quantity"
+                                                   style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                        -fx-padding: 8; -fx-font-size: 14px;" />
+                                        <Label fx:id="quantityError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                    </VBox>
+
+                                    <!-- Notes/Description field -->
+                                    <VBox spacing="5">
+                                        <Label text="Notes" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                        <TextArea fx:id="notesField" promptText="Additional information about this plant" prefHeight="100"
+                                                  style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                       -fx-font-size: 14px;" wrapText="true" />
+                                    </VBox>
+
+                                    <!-- Growth Status -->
+                                    <VBox spacing="5">
+                                        <Label text="Growth Status" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                        <ComboBox fx:id="statusComboBox" promptText="Select current status" prefWidth="400"
+                                                  style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                        -fx-padding: 8; -fx-font-size: 14px;" />
+                                    </VBox>
+
+                                    <!-- Buttons -->
+                                    <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20 0 0 0;">
+                                        <Button text="Update Plant" onAction="#updatePlant" styleClass="form-button" />
+                                        <Button text="Cancel" onAction="#cancel" styleClass="form-button"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </StackPane>
+                </center>
+            </BorderPane>
+        </ScrollPane>
+    </AnchorPane>
+</VBox>

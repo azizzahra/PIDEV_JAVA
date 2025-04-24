@@ -501,7 +501,22 @@ public class AddFarmController {
         return isValid;
     }
 
+    @FXML
+    private void cancelAdd() {
+        try {
+            // Utiliser directement le stage principal
+            Stage mainStage = mainPrincipal.getPrimaryStage();
 
+            // Recharger la vue principale
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Farm/ListeFarms.fxml"));
+            Parent root = loader.load();
+
+            // Remplacer le contenu du stage principal
+            mainStage.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

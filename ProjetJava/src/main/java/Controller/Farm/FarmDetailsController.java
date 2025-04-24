@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import model.Farm;
 import model.plante;
@@ -24,6 +23,10 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
+
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+
 
 public class FarmDetailsController {
 
@@ -124,52 +127,6 @@ public class FarmDetailsController {
         }
     }
 
-
-
-
-    @FXML
-    private void openUpdateForm() {
-        try {
-            Stage mainStage = mainPrincipal.getPrimaryStage();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Farm/UpdateFarm.fxml"));
-            Parent root = loader.load();
-
-            UpdateFarmController controller = loader.getController();
-            controller.setFarmId(farmId);
-
-            mainStage.getScene().setRoot(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Erreur",
-                    "Erreur lors de l'ouverture du formulaire de mise à jour: " + e.getMessage(),
-                    Alert.AlertType.ERROR);
-        }
-    }
-
-
-    @FXML
-    private void deleteFarm() {
-        try {
-            Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmDialog.setTitle("Confirmation de suppression");
-            confirmDialog.setHeaderText("Êtes-vous sûr de vouloir supprimer cette ferme ?");
-            confirmDialog.setContentText("Cette action est irréversible.");
-
-            if (confirmDialog.showAndWait().get() == ButtonType.OK) {
-                farmService.delete(currentFarm);
-
-                showAlert("Succès", "Ferme supprimée avec succès", Alert.AlertType.INFORMATION);
-
-                returnToList();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert("Erreur de base de données",
-                    "Une erreur s'est produite lors de la suppression : " + e.getMessage(),
-                    Alert.AlertType.ERROR);
-        }
-    }
     private void loadPlantsForFarm(int farmId) {
         try {
             List<plante> plants = planteService.getPlantesByFarmId(farmId);
@@ -201,7 +158,7 @@ public class FarmDetailsController {
     private BorderPane createPlantCard(plante plant) {
         BorderPane card = new BorderPane();
         card.getStyleClass().add("plant-card");
-        card.setPrefSize(200, 300);
+        card.setPrefSize(250, 350);
 
         // Image de la plante
         ImageView plantImage = createPlantImageView(plant);
@@ -227,11 +184,11 @@ public class FarmDetailsController {
         Label typeIcon = new Label();
         // Ajouter l'icône en fonction du type
         if (plant.getType().equals("Vegetables")) {
-            typeIcon.setText("🥕"); // Emoji légume
+            typeIcon.setText("🥕");
         } else if (plant.getType().equals("Fruits")) {
-            typeIcon.setText("🍎"); // Emoji fruit
+            typeIcon.setText("🍎");
         } else {
-            typeIcon.setText("🌸"); // Emoji fleur
+            typeIcon.setText("🌸");
         }
 
         Label typeLabel = new Label(plant.getType());
@@ -242,16 +199,16 @@ public class FarmDetailsController {
         // Superposer image, date et type
         StackPane imageStack = new StackPane();
         imageStack.getChildren().add(plantImage);
-        imageStack.setPrefHeight(150);
+        imageStack.setPrefHeight(180);
 
         // Positionnement de la date en haut à droite
         StackPane.setAlignment(dateBox, Pos.TOP_RIGHT);
-        StackPane.setMargin(dateBox, new Insets(10, 10, 90, 150)); // Add margin to position it better
+        StackPane.setMargin(dateBox, new Insets(10, 10, 120, 160));
         imageStack.getChildren().add(dateBox);
 
         // Positionnement du type en bas à gauche
         StackPane.setAlignment(typeBox, Pos.BOTTOM_LEFT);
-        StackPane.setMargin(typeBox, new Insets(140, 100, 10, 10));
+        StackPane.setMargin(typeBox, new Insets(160, 100, 10, 10));
         imageStack.getChildren().add(typeBox);
 
         // Zone du titre et quantité
@@ -263,12 +220,13 @@ public class FarmDetailsController {
 
         HBox quantityBox = new HBox(5);
         quantityBox.setAlignment(Pos.CENTER_LEFT);
-        Label quantityIcon = new Label("📊");
+        FontAwesomeIconView quantityIcon = new FontAwesomeIconView(FontAwesomeIcon.TREE);
+        quantityIcon.getStyleClass().add("icon");
         Label quantityLabel = new Label(plant.getQuantity() + " Units");
         quantityLabel.getStyleClass().add("plant-quantity");
         quantityBox.getChildren().addAll(quantityIcon, quantityLabel);
-        infoBox.setAlignment(Pos.CENTER_LEFT);
 
+        infoBox.setAlignment(Pos.CENTER);
         infoBox.getChildren().addAll(nameLabel, quantityBox);
 
         // Zone des boutons
@@ -276,14 +234,16 @@ public class FarmDetailsController {
         buttonsBox.setAlignment(Pos.CENTER);
         buttonsBox.setPadding(new Insets(0, 10, 10, 10));
 
-        Button editButton = new Button();
-        editButton.setText("✏️");
-        editButton.getStyleClass().addAll("card-button", "edit");
+        Button editButton = new Button("Edit");
+        editButton.getStyleClass().addAll("card-button");
+        FontAwesomeIconView editIcon = new FontAwesomeIconView(FontAwesomeIcon.EDIT);
+        editButton.setGraphic(editIcon);
         editButton.setOnAction(e -> openUpdatePlantForm(plant.getId()));
 
-        Button deleteButton = new Button();
-        deleteButton.setText("🗑️");
-        deleteButton.getStyleClass().addAll("card-button", "delete");
+        Button deleteButton = new Button("Delete");
+        deleteButton.getStyleClass().addAll("card-button");
+        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
+        deleteButton.setGraphic(deleteIcon);
         deleteButton.setOnAction(e -> deletePlant(plant.getId()));
 
         buttonsBox.getChildren().addAll(editButton, deleteButton);
@@ -438,6 +398,49 @@ public class FarmDetailsController {
             e.printStackTrace();
             showAlert("Database Error",
                     "An error occurred while deleting the plant: " + e.getMessage(),
+                    Alert.AlertType.ERROR);
+        }
+    }
+    @FXML
+    private void openUpdateForm() {
+        try {
+            Stage mainStage = mainPrincipal.getPrimaryStage();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Farm/UpdateFarm.fxml"));
+            Parent root = loader.load();
+
+            UpdateFarmController controller = loader.getController();
+            controller.setFarmId(farmId);
+
+            mainStage.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur",
+                    "Erreur lors de l'ouverture du formulaire de mise à jour: " + e.getMessage(),
+                    Alert.AlertType.ERROR);
+        }
+    }
+
+
+    @FXML
+    private void deleteFarm() {
+        try {
+            Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmDialog.setTitle("Confirmation de suppression");
+            confirmDialog.setHeaderText("Êtes-vous sûr de vouloir supprimer cette ferme ?");
+            confirmDialog.setContentText("Cette action est irréversible.");
+
+            if (confirmDialog.showAndWait().get() == ButtonType.OK) {
+                farmService.delete(currentFarm);
+
+                showAlert("Succès", "Ferme supprimée avec succès", Alert.AlertType.INFORMATION);
+
+                returnToList();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Erreur de base de données",
+                    "Une erreur s'est produite lors de la suppression : " + e.getMessage(),
                     Alert.AlertType.ERROR);
         }
     }

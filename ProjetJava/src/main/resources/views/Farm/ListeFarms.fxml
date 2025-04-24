@@ -24,18 +24,22 @@
 
             <!-- En-tête avec image de fond -->
             <top>
-                <VBox spacing="10" styleClass="header-background" alignment="CENTER">
-                    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                <VBox spacing="10" styleClass="header-background">
+                    <padding><Insets top="40" right="20" bottom="40" left="20"/></padding>
 
                     <!-- Titre principal -->
-                    <Label text="Farm Management" styleClass="header-title"/>
+                    <HBox alignment="CENTER">
+                        <Label text="Farm Management" styleClass="header-title"/>
+                    </HBox>
 
                     <!-- Sous-titre -->
-                    <Label text="Welcome to the farm management interface, where you can efficiently manage, monitor, and optimize your farms"
-                           styleClass="header-subtitle"/>
+                    <HBox alignment="CENTER">
+                        <Label text="Welcome to the farm management interface, where you can efficiently manage, monitor, and optimize your farms"
+                               styleClass="header-subtitle" textAlignment="CENTER" wrapText="true"/>
+                    </HBox>
 
                     <!-- Fil d'Ariane -->
-                    <HBox spacing="5" alignment="CENTER">
+                    <HBox spacing="5" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
                         <Label text="Home" styleClass="breadcrumb"/>
                         <Label text="/" styleClass="breadcrumb-separator"/>
                         <Label text="Farm" styleClass="breadcrumb-current"/>

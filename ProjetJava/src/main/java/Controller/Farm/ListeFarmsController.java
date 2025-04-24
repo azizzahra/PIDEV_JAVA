@@ -77,12 +77,10 @@ public class ListeFarmsController {
 
             for (Farm f : allFarms) {
                 if (f.getName().toLowerCase().contains(keyword) ||
-                        f.getDescription().toLowerCase().contains(keyword) ||
                         f.getLocation().toLowerCase().contains(keyword)) {
                     filteredFarms.add(f);
                 }
             }
-
             displayFarms(filteredFarms);
         }
     }

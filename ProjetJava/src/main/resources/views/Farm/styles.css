@@ -1,87 +1,28 @@
-/* Styles généraux */
 .root {
     -fx-font-family: "Segoe UI", Arial, sans-serif;
-    /*-fx-background-color: #f8f9fa;*/
 }
-
-/* Styles pour le formulaire d'ajout de ferme */
-.form-panel {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
-}
-
-.form-title {
-    -fx-font-family: 'Segoe UI', Arial, sans-serif;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 1, 1);
-}
-
-.image-container {
-    -fx-border-color: #cccccc;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
-    -fx-padding: 15;
-    -fx-background-color: rgba(255, 255, 255, 0.5);
-}
-
-/* Pour le bouton de sauvegarde */
-.save-button {
-    -fx-background-color: #45722e;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 10 30;
-    -fx-background-radius: 3;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 1, 1);
-}
-
-.save-button:hover {
-    -fx-background-color: #3a5f27;
-    -fx-cursor: hand;
-}
-
-.title-label {
-    -fx-font-family: 'Segoe UI', Arial, sans-serif;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 1, 1);
-}
-
 .main-panel {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);
 }
-
-.text-field, .text-area {
-    -fx-background-color: #e8e8e8;
-    -fx-background-radius: 5;
-    -fx-border-radius: 5;
-    -fx-border-color: transparent;
-    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.1), 3, 0, 1, 1);
-}
-
-.text-field:focused, .text-area:focused {
-    -fx-border-color: #95be76;
-    -fx-background-color: white;
-}
-
-/* Styles de l'en-tête */
+/* /////////////////////////////////     Styles de l'en-tête   ///////////////////////////////////////*/
 .header-background {
     -fx-background-image: url("bg.jpg");
-    -fx-background-size: cover;
+    -fx-background-size: auto;
     -fx-background-position: center;
-    -fx-background-color: rgba(0, 0, 0, 0.4); /* Fond plus sombre comme sur l'image */
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 5);
 }
-
 .header-title {
     -fx-font-size: 42px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 3, 0, 0, 2);
 }
-
 .header-subtitle {
     -fx-font-size: 16px;
     -fx-text-fill: #e9ecef;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 2, 0, 0, 1);
 }
-
-/* Modifier les styles du fil d'Ariane pour correspondre à l'image */
 .breadcrumb {
     -fx-font-size: 14px;
     -fx-text-fill: #e0e0e0;
@@ -97,8 +38,66 @@
     -fx-font-size: 14px;
     -fx-text-fill: #2ecc71;
 }
+/* /////////////////////////////////     Buttons       ///////////////////////////////////////////// */
+.button {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+.button:hover {
+    -fx-background-color: #1b5e20;
+}
+.button:pressed {
+    -fx-opacity: 0.8;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
 
-/* Styles de la barre de recherche et bouton d'ajout */
+
+/* ////////////////////////////////   Styles pour les formulaire  ///////////////////////////////// */
+.form-panel {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+}
+
+.form-title {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 1, 1);
+}
+.form-button {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 30;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+
+.form-button:hover {
+    -fx-background-color: #1b5e20;
+    -fx-cursor: hand;
+}
+.form-button:pressed {
+    -fx-opacity: 0.8;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+.text-field, .text-area {
+    -fx-background-color: #e8e8e8;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: transparent;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.1), 3, 0, 1, 1);
+}
+
+.text-field:focused, .text-area:focused {
+    -fx-border-color: #95be76;
+    -fx-background-color: white;
+}
+
+/* /////////////////////////////////////////////////////////////     list farm      /////////////////////////////////*/
 .search-field {
     -fx-padding: 10px;
     -fx-background-radius: 5px;
@@ -117,28 +116,6 @@
 
 .add-farm-btn:hover {
     -fx-background-color: #1b5e20;
-}
-
-/* Icônes */
-.plus-icon {
-    -fx-shape: "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";
-    -fx-background-color: white;
-    -fx-min-width: 16;
-    -fx-min-height: 16;
-}
-
-.filter-icon {
-    -fx-shape: "M3,2H21V2H21V4H20.92L14,10.92V22.91L10,18.91V10.91L3.08,4H3V2Z";
-    -fx-background-color: white;
-    -fx-min-width: 16;
-    -fx-min-height: 16;
-}
-
-.trash-icon {
-    -fx-shape: "M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z";
-    -fx-background-color: white;
-    -fx-min-width: 16;
-    -fx-min-height: 16;
 }
 
 /* Styles du container des fermes */
@@ -184,314 +161,7 @@
     -fx-font-size: 14px;
     -fx-text-fill: #495057;
 }
-
-.farm-size {
-    -fx-font-size: 14px;
-    -fx-text-fill: #27AE60;
-    -fx-font-weight: bold;
-}
-
-/* Styles pour l'écran de détails de la ferme */
-.farm-details-container {
-    -fx-background-color: white;
-    -fx-background-radius: 5px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
-}
-
-.farm-detail-image {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 3);
-    -fx-background-radius: 5px;
-}
-
-.detail-section-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2e7d32;
-}
-
-.detail-label {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #555555;
-}
-
-.detail-value {
-    -fx-font-size: 14px;
-    -fx-text-fill: #333333;
-}
-
-.farm-description-area {
-    -fx-background-color: #f9f9f9;
-    -fx-border-color: #e0e0e0;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
-}
-
-.nav-button {
-    -fx-background-color: #4CAF50;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 8px 16px;
-    -fx-background-radius: 5px;
-}
-
-.nav-button:hover {
-    -fx-background-color: #388E3C;
-    -fx-cursor: hand;
-}
-
-.action-button {
-    -fx-background-color: #2196F3;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 8px 16px;
-    -fx-background-radius: 5px;
-}
-
-.action-button:hover {
-    -fx-background-color: #1976D2;
-    -fx-cursor: hand;
-}
-
-.search-button {
-    -fx-background-color: #4CAF50;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 6px 12px;
-    -fx-background-radius: 3px;
-}
-
-.file-button {
-    -fx-background-color: #9E9E9E;
-    -fx-text-fill: white;
-    -fx-padding: 6px 12px;
-    -fx-background-radius: 3px;
-}
-
-.detect-button {
-    -fx-background-color: #00796B;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 8px 16px;
-    -fx-background-radius: 3px;
-}
-
-.detect-button:hover {
-    -fx-background-color: #00695C;
-    -fx-cursor: hand;
-}
-
-/* ------------------------------------------Plant card styles ------------------------------------------------*/
-
-.icon-button {
-    -fx-min-width: 40px;
-    -fx-min-height: 40px;
-    -fx-background-radius: 20px;
-    -fx-cursor: hand;
-}
-
-.add-button {
-    -fx-background-color: #2e7d32;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 8px 15px;
-    -fx-background-radius: 5px;
-    -fx-cursor: hand;
-}
-
-.add-button:hover {
-    -fx-background-color: #1b5e20;
-}
-
-.buttonn {
-    -fx-background-color: #2e7d32;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 8px 15px;
-    -fx-background-radius: 5px;
-    -fx-cursor: hand;
-}
-
-/* Styles pour le ScrollPane principal */
-.transparent-scroll-pane {
-    -fx-background-color: transparent;
-    -fx-background: transparent;
-    -fx-border-color: transparent;
-    -fx-padding: 0;
-}
-
-.transparent-scroll-pane > .viewport {
-    -fx-background-color: transparent;
-}
-
-.transparent-scroll-pane .scroll-bar:vertical {
-    -fx-background-color: #f0f0f0;
-    -fx-background-radius: 2;
-}
-
-.transparent-scroll-pane .scroll-bar:vertical .thumb {
-    -fx-background-color: #27AE60;
-    -fx-background-radius: 2;
-}
-
-/* Styles améliorés pour les cartes de plantes */
-.plants-container {
-    -fx-background-color: transparent;
-    -fx-padding: 15px 5px;
-}
-
-.plant-card {
-    -fx-background-color: white;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
-    -fx-background-radius: 8px;
-    -fx-border-radius: 8px;
-    -fx-border-color: #e8e8e8;
-    -fx-border-width: 1px;
-    -fx-pref-width: 220px;
-    -fx-pref-height: 280px;
-}
-
-.plant-card:hover {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 4);
-    -fx-border-color: #27AE60;
-}
-
-.plant-card-tag {
-    -fx-background-color: #27AE60;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 5px 8px;
-    -fx-background-radius: 4px;
-    -fx-font-size: 12px;
-    -fx-alignment: center;
-}
-
-.plant-type {
-    -fx-background-color: #2C3E50;
-    -fx-text-fill: white;
-    -fx-padding: 5px 8px;
-    -fx-background-radius: 12px;
-    -fx-font-size: 12px;
-}
-.plant-title {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2C3E50;
-}
-
-.plant-quantity {
-    -fx-font-size: 14px;
-    -fx-text-fill: #6c757d;
-    -fx-font-weight: normal;
-}
-/* Style pour la date de récolte en haut à droite */
-.plant-date-tag {
-    -fx-background-color: #27AE60;
-    -fx-text-fill: white;
-    /*-fx-padding: 6px 10px;*/
-    -fx-background-radius: 8px;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-}
-
-.month-text {
-    -fx-font-size: 12px;
-}
-
-/* Buttons dans les cards */
-.card-button {
-    -fx-background-color: transparent;
-    -fx-border-color: #dee2e6;
-    -fx-border-width: 1px;
-    -fx-border-radius: 20px;
-    -fx-padding: 5px 10px;
-    -fx-cursor: hand;
-}
-
-.card-button.edit {
-    -fx-border-color: #3498db;
-    -fx-text-fill: #3498db;
-}
-
-.card-button.edit:hover {
-    -fx-background-color: #3498db;
-    -fx-text-fill: white;
-}
-
-.card-button.delete {
-    -fx-border-color: #e74c3c;
-    -fx-text-fill: #e74c3c;
-}
-
-.card-button.delete:hover {
-    -fx-background-color: #e74c3c;
-    -fx-text-fill: white;
-}
-
-.tile-pane {
-    -fx-padding: 20;
-    -fx-hgap: 20;
-    -fx-vgap: 20;
-}
-
-.farm-scroll-pane {
-    -fx-background-color: transparent;
-    -fx-background: transparent;
-}
-
-.farm-scroll-pane > .viewport {
-    -fx-background-color: transparent;
-}
-
-.scroll-pane {
-    -fx-background: transparent;
-    -fx-border-color: transparent;
-}
-
-/* Ajout d'une plante - style du bouton comme sur l'image */
-.add-plant-container {
-    -fx-border-color: #dee2e6;
-    -fx-border-style: dashed;
-    -fx-border-width: 2px;
-    -fx-border-radius: 8px;
-    -fx-background-color: rgba(46, 125, 50, 0.1);
-    -fx-cursor: hand;
-    -fx-alignment: center;
-    -fx-pref-width: 220px;
-    -fx-pref-height: 280px;
-}
-
-
-.add-plant-container:hover {
-    -fx-border-color: #27AE60;
-}
-
-.add-plant-icon {
-    -fx-text-fill: #27AE60;
-    -fx-font-size: 32px;
-}
-
-.add-plant-text {
-    -fx-text-fill: #27AE60;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-}
-
-/* Styles des boutons verts */
-.green-button {
-    -fx-background-color: #2e7d32;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 8px 16px;
-    -fx-background-radius: 3px;
-    -fx-cursor: hand;
-}
-
-.green-button:hover {
-    -fx-background-color: #1b5e20;
-}
-
-/* Styles pour les éléments de la sidebar */
+/* -------------------------s side bar    ----*/
 .sidebar {
     -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);
@@ -499,14 +169,11 @@
     -fx-border-width: 0 0 0 1px;
     -fx-border-color: #f0f0f0;
 }
-
-.section-title {
+.sidebar-header {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: #2C3E50;
-    -fx-padding: 0 0 10px 0;
-    -fx-border-width: 0 0 1px 0;
-    -fx-border-color: #f0f0f0;
+    -fx-padding: 0 0 10 0;
 }
 .filter-category {
     -fx-font-size: 16px;
@@ -542,27 +209,316 @@
 .filter-clear-btn:hover {
     -fx-background-color: #c0392b;
 }
+/* Icônes */
+.plus-icon {
+    -fx-shape: "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";
+    -fx-background-color: white;
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+}
 
-.sidebar-header {
+.filter-icon {
+    -fx-shape: "M3,2H21V2H21V4H20.92L14,10.92V22.91L10,18.91V10.91L3.08,4H3V2Z";
+    -fx-background-color: white;
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+}
+
+.trash-icon {
+    -fx-shape: "M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z";
+    -fx-background-color: white;
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+}
+
+/* /////////////////////////////////////////////    farm details    //////////////////////////////////////////*/
+
+.farm-scroll-pane {
+    -fx-background-color: white;
+    -fx-background: transparent;
+}
+
+.farm-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Styles pour le ScrollPane principal */
+.transparent-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.transparent-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.transparent-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 2;
+}
+
+.transparent-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(46, 125, 50, 0.46);
+    -fx-background-radius: 2;
+}
+/*------------------------------info farm ------*/
+.farm-details-container {
+    -fx-padding: 20px;
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+.farm-detail-image {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 3);
+    -fx-background-radius: 5px;
+}
+
+.detail-section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+}
+
+.detail-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #555555;
+}
+
+.detail-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.farm-description-area {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: white;
+    -fx-border-radius: 5px;
+    -fx-border-width: 0;
+}
+
+
+.search-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 3px;
+}
+
+.file-button {
+    -fx-background-color: #9E9E9E;
+    -fx-text-fill: white;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 3px;
+}
+
+
+/* -------------------------Plant card styles ---------------*/
+.plants-container {
+    -fx-background-color: white;
+    -fx-padding: 15px 5px;
+}
+
+.plant-card {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #e8e8e8;
+    -fx-border-width: 1px;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 280px;
+}
+.plant-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 4);
+    -fx-border-color: #2e7d32;
+}
+.plant-card-tag {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 8px;
+    -fx-background-radius: 4px;
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+}
+.plant-type {
+    -fx-background-color: #2C3E50;
+    -fx-text-fill: white;
+    -fx-padding: 5px 8px;
+    -fx-background-radius: 12px;
+    -fx-font-size: 12px;
+}
+.plant-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+.plant-quantity {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6c757d;
+    -fx-font-weight: normal;
+}
+.plant-date-tag {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    /*-fx-padding: 6px 10px;*/
+    -fx-background-radius: 8px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.month-text {
+    -fx-font-size: 12px;
+}
+/* Buttons dans les cards */
+.card-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #1b5e20;
+    -fx-border-color: #2e7d32;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-padding: 5px 10px;
+    -fx-cursor: hand;
+}
+.card-button:hover{
+    -fx-background-color: #1b5e20;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+}
+
+.tile-pane {
+    -fx-padding: 20;
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+}
+
+.add-plant-container {
+    -fx-border-color: #dee2e6;
+    -fx-border-style: dashed;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-color: rgba(46, 125, 50, 0.1);
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 280px;
+}
+.add-plant-container:hover {
+    -fx-border-color: #2e7d32;
+}
+.add-plant-icon {
+    -fx-text-fill: #2e7d32;
+    -fx-font-size: 32px;
+}
+.add-plant-text {
+    -fx-text-fill: #2e7d32;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* -----------    side bar    ---------------*/
+.section-title {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: #2C3E50;
-    -fx-padding: 0 0 10 0;
+    -fx-padding: 0 0 10px 0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #f0f0f0;
 }
 
-/* Sélecteur .button gardé comme dernière occurrence */
-.button {
-    -fx-background-radius: 5;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 1, 1);
+.todo-container {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-padding: 15px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 1px;
 }
 
-.button:hover {
-    -fx-background-color: #1b5e20;
-    -fx-opacity: 0.9;
+.todo-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 0 0 10px 0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #f0f0f0;
 }
 
-.button:pressed {
-    -fx-opacity: 0.8;
-    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
+.todo-item {
+    -fx-padding: 8px 0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #f5f5f5;
 }
+
+.todo-priority {
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 3px;
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+}
+
+.todo-priority.high {
+    -fx-background-color: #e74c3c;
+}
+
+.todo-priority.medium {
+    -fx-background-color: #f39c12;
+}
+
+.todo-priority.low {
+    -fx-background-color: #3498db;
+}
+
+.todo-priority.done {
+    -fx-background-color: #2ecc71;
+}
+
+.category-item {
+    -fx-padding: 5px 0;
+}
+
+.category-count {
+    -fx-text-fill: #6c757d;
+    -fx-font-size: 12px;
+}
+
+/* //////////////////////////////      Style pour la pagination      ///////////////////////////*/
+.pagination-container {
+    -fx-padding: 20px 0;
+    -fx-spacing: 5px;
+    -fx-alignment: center;
+}
+
+.pagination-button {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dee2e6;
+    -fx-text-fill: #495057;
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-background-radius: 2px;
+    -fx-border-radius: 2px;
+}
+
+.pagination-button:hover {
+    -fx-background-color: #e9ecef;
+}
+
+.pagination-button.active {
+    -fx-background-color: #2e7d32;
+    -fx-border-color: #2e7d32;
+    -fx-text-fill: white;
+}
+
