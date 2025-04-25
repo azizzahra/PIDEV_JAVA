@@ -23,6 +23,8 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 
+import java.util.prefs.Preferences;
+
 public class AddPlanteController {
 
     @FXML
@@ -69,6 +71,8 @@ public class AddPlanteController {
     private FarmService farmService = new FarmService();
     private PlanteService planteService = new PlanteService();
 
+    private Preferences prefs = Preferences.userNodeForPackage(AddFarmController.class);
+
     @FXML
     public void initialize() {
         typeComboBox.getItems().addAll("Vegetables", "Fruits", "Flowers");
@@ -97,12 +101,21 @@ public class AddPlanteController {
         fileChooser.setTitle("Select Plant Image");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+        // Get last directory from preferences
+        String lastDirectoryPath = prefs.get("lastImageDirectory", null);
+        if (lastDirectoryPath != null) {
+            File lastDir = new File(lastDirectoryPath);
+            if (lastDir.exists()) {
+                fileChooser.setInitialDirectory(lastDir);
+            }
+        }
 
         // Show file chooser dialog
         Stage stage = (Stage) chooseImageButton.getScene().getWindow();
         selectedImageFile = fileChooser.showOpenDialog(stage);
 
         if (selectedImageFile != null) {
+            prefs.put("lastImageDirectory", selectedImageFile.getParent());
             imagePathLabel.setText(selectedImageFile.getName());
 
             imageName = System.currentTimeMillis() + "_" + selectedImageFile.getName();

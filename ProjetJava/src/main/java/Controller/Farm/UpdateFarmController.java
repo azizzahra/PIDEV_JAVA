@@ -22,6 +22,8 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
+import java.util.prefs.Preferences;
+
 public class UpdateFarmController {
 
     @FXML
@@ -76,6 +78,7 @@ public class UpdateFarmController {
 
     private final String UPLOAD_DIR = "C:/xampp/htdocs/uploads/farm_image/";
     private final String RELATIVE_PATH = "uploads/farm_image/";
+    private Preferences prefs = Preferences.userNodeForPackage(AddFarmController.class);
 
     private File selectedImageFile;
     private String currentImagePath;
@@ -97,6 +100,14 @@ public class UpdateFarmController {
     private void selectImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
+        // Get last directory from preferences
+        String lastDirectoryPath = prefs.get("lastImageDirectory", null);
+        if (lastDirectoryPath != null) {
+            File lastDir = new File(lastDirectoryPath);
+            if (lastDir.exists()) {
+                fileChooser.setInitialDirectory(lastDir);
+            }
+        }
 
         // Configurer les filtres d'extension pour n'accepter que les images
         FileChooser.ExtensionFilter imageFilter =
@@ -107,6 +118,8 @@ public class UpdateFarmController {
         selectedImageFile = fileChooser.showOpenDialog(btnSelectImage.getScene().getWindow());
 
         if (selectedImageFile != null) {
+            prefs.put("lastImageDirectory", selectedImageFile.getParent());
+
             // Afficher le chemin du fichier dans le champ texte
             fimage.setText(selectedImageFile.getName());
 

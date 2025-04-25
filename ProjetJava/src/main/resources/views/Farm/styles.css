@@ -531,3 +531,30 @@
     -fx-text-fill: white;
 }
 
+/* Styles pour la section de détection de maladies */
+.disease-result-container {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #ced4da;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.disease-result-container .section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Styles pour les statuts de maladie */
+.healthy-status {
+    -fx-text-fill: #2ecc71;
+    -fx-font-weight: bold;
+}
+
+.diseased-status {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+}

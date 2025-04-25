@@ -24,6 +24,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import java.util.prefs.Preferences;
+
 public class UpdatePlanteController {
 
     @FXML
@@ -76,6 +78,8 @@ public class UpdatePlanteController {
     private FarmService farmService = new FarmService();
     private PlanteService planteService = new PlanteService();
     private plante currentPlante;
+
+    private Preferences prefs = Preferences.userNodeForPackage(AddFarmController.class);
 
     @FXML
     public void initialize() {
@@ -166,11 +170,20 @@ public class UpdatePlanteController {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
 
+        // Get last directory from preferences
+        String lastDirectoryPath = prefs.get("lastImageDirectory", null);
+        if (lastDirectoryPath != null) {
+            File lastDir = new File(lastDirectoryPath);
+            if (lastDir.exists()) {
+                fileChooser.setInitialDirectory(lastDir);
+            }
+        }
         // Show file chooser dialog
         Stage stage = (Stage) chooseImageButton.getScene().getWindow();
         selectedImageFile = fileChooser.showOpenDialog(stage);
 
         if (selectedImageFile != null) {
+            prefs.put("lastImageDirectory", selectedImageFile.getParent());
             imagePathLabel.setText(selectedImageFile.getName());
 
             // Generate unique image name to prevent overwriting

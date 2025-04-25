@@ -192,10 +192,10 @@
                                     <Label text="Detect Plants Disease AI" styleClass="section-title"/>
                                     <Label text="Upload Plant Image:"/>
                                     <HBox spacing="5">
-                                        <TextField text="Aucun fichier choisi" editable="false" HBox.hgrow="ALWAYS"/>
-                                        <Button text="Choisir un fichier" styleClass="button"/>
+                                        <TextField fx:id="imagePathField" promptText="No file selected" editable="false" HBox.hgrow="ALWAYS"/>
+                                        <Button fx:id="chooseFileButton" text="Choose File" styleClass="button"/>
                                     </HBox>
-                                    <Button text="Detect Diseases" styleClass="button"/>
+                                    <Button fx:id="detectButton" text="Detect Diseases" styleClass="button"/>
                                 </VBox>
 
                                 <!-- Actions -->

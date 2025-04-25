@@ -1,7 +1,6 @@
 package controller.Farm;
 
 import Main.mainPrincipal;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Farm;
@@ -23,9 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.regex.Pattern;
 
-import javafx.scene.web.WebView;
-import javafx.scene.web.WebEngine;
-import netscape.javascript.JSObject;
+import java.util.prefs.Preferences;
 
 public class AddFarmController {
 
@@ -76,12 +72,12 @@ public class AddFarmController {
     @FXML
     private Label fuserError;
 
-    @FXML
-    private WebView mapWebView;
-    private WebEngine webEngine;
+
 
     private final String UPLOAD_DIR = "C:/xampp/htdocs/uploads/farm_image/";
     private final String RELATIVE_PATH = "uploads/farm_image/";
+
+    private Preferences prefs = Preferences.userNodeForPackage(AddFarmController.class);
 
     private File selectedImageFile;
     private void createUploadDirectory() {
@@ -99,14 +95,22 @@ public class AddFarmController {
     public void initialize() {
         setupValidationListeners();
         createUploadDirectory();
-        initializeMap();
-        setupConsoleMessageHandling();
+
     }
 
     @FXML
     private void selectImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
+
+        // Get last directory from preferences
+        String lastDirectoryPath = prefs.get("lastImageDirectory", null);
+        if (lastDirectoryPath != null) {
+            File lastDir = new File(lastDirectoryPath);
+            if (lastDir.exists()) {
+                fileChooser.setInitialDirectory(lastDir);
+            }
+        }
 
         // Configurer les filtres d'extension pour n'accepter que les images
         FileChooser.ExtensionFilter imageFilter =
@@ -117,6 +121,8 @@ public class AddFarmController {
         selectedImageFile = fileChooser.showOpenDialog(btnSelectImage.getScene().getWindow());
 
         if (selectedImageFile != null) {
+            prefs.put("lastImageDirectory", selectedImageFile.getParent());
+
             // Afficher le chemin du fichier dans le champ texte caché
             fimage.setText(selectedImageFile.getName());
 
@@ -525,179 +531,6 @@ public class AddFarmController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void initializeMap() {
-        webEngine = mapWebView.getEngine();
-
-        // Set explicit dimensions to ensure visibility
-        mapWebView.setPrefHeight(300);
-        mapWebView.setPrefWidth(300);
-        mapWebView.setMinHeight(300);
-        mapWebView.setMinWidth(300);
-        webEngine.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124");
-        System.out.println("WebView dimensions: " + mapWebView.getWidth() + "x" + mapWebView.getHeight());
-        System.out.println("WebView parent: " + (mapWebView.getParent() != null ? "OK" : "NULL"));
-
-// Add listener to track rendering
-        mapWebView.widthProperty().addListener((obs, oldVal, newVal) ->
-                System.out.println("WebView width changed: " + oldVal + " -> " + newVal));
-        mapWebView.heightProperty().addListener((obs, oldVal, newVal) ->
-                System.out.println("WebView height changed: " + oldVal + " -> " + newVal));
-        webEngine.setJavaScriptEnabled(true);
-
-        // Create a more reliable HTML content with better error reporting
-        String htmlContent =
-                "<!DOCTYPE html>" +
-                        "<html>" +
-                        "<head>" +
-                        "    <meta charset=\"UTF-8\">" +
-                        "    <title>Farm Location Map</title>" +
-                        "    <style>" +
-                        "        html, body { height: 100%; margin: 0; padding: 0; }" +
-                        "        #map-container { height: 280px; width: 100%; position: relative; border: 1px solid #ccc; }" +
-                        "        #map { height: 100%; width: 100%; }" +
-                        "        #status { padding: 5px; background: #f8f8f8; border-top: 1px solid #ccc; font-size: 12px; }" +
-                        "        #error-display { color: red; padding: 10px; display: none; }" +
-                        "    </style>" +
-                        "</head>" +
-                        "<body>" +
-                        "    <div id=\"error-display\"></div>" +
-                        "    <div id=\"map-container\">" +
-                        "        <div id=\"map\"></div>" +
-                        "    </div>" +
-                        "    <div id=\"status\">Click on map to set location</div>" +
-                        "    <!-- Load scripts at the end of body -->" +
-                        "    <script>" +
-                        "        // Error handling function" +
-                        "        function showError(message) {" +
-                        "            console.error(message);" +
-                        "            var errorDiv = document.getElementById('error-display');" +
-                        "            errorDiv.textContent = 'Error: ' + message;" +
-                        "            errorDiv.style.display = 'block';" +
-                        "        }" +
-                        "        " +
-                        "        // Initialize map only after scripts are loaded" +
-                        "        function initMap() {" +
-                        "            try {" +
-                        "                if (!L) {" +
-                        "                    showError('Leaflet library not loaded');" +
-                        "                    return;" +
-                        "                }" +
-                        "                " +
-                        "                // Create the map" +
-                        "                var map = L.map('map').setView([36.8065, 10.1815], 7);" +
-                        "                " +
-                        "                // Add the tile layer (use a reliable tile source)" +
-                        "                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {" +
-                        "                    attribution: '© OpenStreetMap contributors'," +
-                        "                    maxZoom: 19" +
-                        "                }).addTo(map);" +
-                        "                " +
-                        "                // Force resize to render properly" +
-                        "                setTimeout(function() { map.invalidateSize(); }, 200);" +
-                        "                " +
-                        "                // Add marker functionality" +
-                        "                var marker;" +
-                        "                map.on('click', function(e) {" +
-                        "                    if (marker) {" +
-                        "                        map.removeLayer(marker);" +
-                        "                    }" +
-                        "                    marker = L.marker(e.latlng).addTo(map);" +
-                        "                    document.getElementById('status').textContent = " +
-                        "                        'Selected: ' + e.latlng.lat.toFixed(6) + ', ' + e.latlng.lng.toFixed(6);" +
-                        "                    " +
-                        "                    // Call Java function if available" +
-                        "                    if (window.javaConnector) {" +
-                        "                        window.javaConnector.updateCoordinates(e.latlng.lat, e.latlng.lng);" +
-                        "                    }" +
-                        "                });" +
-                        "                " +
-                        "                // Success message" +
-                        "                console.log('Map initialized successfully');" +
-                        "            } catch (err) {" +
-                        "                showError('Map initialization failed: ' + err.message);" +
-                        "            }" +
-                        "        }" +
-                        "    </script>" +
-                        "</body>" +
-                        "</html>";
-
-        // Load the HTML content first
-        webEngine.loadContent(htmlContent);
-
-        // Set up JavaScript bridge and load Leaflet after page loads
-        webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == Worker.State.SUCCEEDED) {
-                try {
-                    // Set up the Java bridge
-                    JSObject window = (JSObject) webEngine.executeScript("window");
-                    window.setMember("javaConnector", new JavaConnector());
-                    System.out.println("Java connector set up successfully");
-
-                    // Now dynamically load Leaflet and initialize the map
-                    webEngine.executeScript(
-                            "// Load Leaflet CSS\n" +
-                                    "var leafletCSS = document.createElement('link');\n" +
-                                    "leafletCSS.rel = 'stylesheet';\n" +
-                                    "leafletCSS.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';\n" +
-                                    "document.head.appendChild(leafletCSS);\n" +
-                                    "\n" +
-                                    "// Load Leaflet JS\n" +
-                                    "var leafletScript = document.createElement('script');\n" +
-                                    "leafletScript.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';\n" +
-                                    "leafletScript.onload = function() {\n" +
-                                    "    console.log('Leaflet loaded successfully');\n" +
-                                    "    // Initialize map after Leaflet is loaded\n" +
-                                    "    initMap();\n" +
-                                    "};\n" +
-                                    "leafletScript.onerror = function() {\n" +
-                                    "    document.getElementById('error-display').textContent = 'Failed to load Leaflet library';\n" +
-                                    "    document.getElementById('error-display').style.display = 'block';\n" +
-                                    "};\n" +
-                                    "document.body.appendChild(leafletScript);\n"
-                    );
-                } catch (Exception e) {
-                    System.err.println("Error setting up map: " + e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        // Improved error handling
-        webEngine.setOnAlert(event -> System.out.println("WebView Alert: " + event.getData()));
-        webEngine.setOnError(event -> System.err.println("WebView Error: " + event.getMessage()));
-        webEngine.getLoadWorker().exceptionProperty().addListener((obs, oldExc, newExc) -> {
-            if (newExc != null) {
-                System.err.println("WebView Exception: " + newExc.getMessage());
-            }
-        });
-    }
-
-    // Java bridge for JavaScript communication
-    public class JavaConnector {
-        public void updateCoordinates(final double lat, final double lng) {
-            // Use Platform.runLater to update JavaFX UI elements from JavaScript thread
-            javafx.application.Platform.runLater(() -> {
-                try {
-                    flatitude.setText(String.format("%.6f", lat));
-                    flongitude.setText(String.format("%.6f", lng));
-
-                    // Make coordinates visible and provide feedback
-                    flatitudeError.setVisible(false);
-                    flongitudeError.setVisible(false);
-
-                    System.out.println("Coordinates updated: " + lat + ", " + lng);
-                } catch (Exception e) {
-                    System.err.println("Error updating coordinates: " + e.getMessage());
-                    e.printStackTrace();
-                }
-            });
-        }
-    }
-    private void setupConsoleMessageHandling() {
-        webEngine.setOnAlert(event -> System.out.println("JS Alert: " + event.getData()));
-        webEngine.setOnError(event -> System.err.println("JS Error: " + event.getMessage()));
     }
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);

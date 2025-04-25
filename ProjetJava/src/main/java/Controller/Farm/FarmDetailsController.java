@@ -6,18 +6,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Farm;
 import model.plante;
 import services.FarmService;
 import services.PlanteService;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -25,6 +29,12 @@ import java.util.*;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+
+import javafx.application.Platform;
+import javafx.stage.Modality;
+import javafx.scene.control.ProgressIndicator;
+
+import java.util.prefs.Preferences;
 
 
 public class FarmDetailsController {
@@ -59,6 +69,14 @@ public class FarmDetailsController {
     @FXML
     private Label listOfPlantsLabel;
 
+    @FXML
+    private TextField imagePathField;
+    @FXML
+    private Button chooseFileButton;
+    @FXML
+    private Button detectButton;
+    @FXML
+    private VBox diseaseResultContainer;
 
     @FXML
     private Button prevPageButton;
@@ -70,6 +88,8 @@ public class FarmDetailsController {
     private int currentPage = 1;
     private final int CARDS_PER_PAGE = 6;
     private List<plante> currentFilteredPlants;
+
+    private Preferences prefs = Preferences.userNodeForPackage(AddFarmController.class);
 
     private int farmId;
     private Farm currentFarm;
@@ -121,7 +141,261 @@ public class FarmDetailsController {
                 }
             });
         }
+        if (chooseFileButton != null) {
+            chooseFileButton.setOnAction(e -> chooseImageFile());
+        }
+
+        if (detectButton != null) {
+            detectButton.setOnAction(e -> detectDisease());
+        }
     }
+
+    private void chooseImageFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Plant Image");
+        // Get last directory from preferences
+        String lastDirectoryPath = prefs.get("lastImageDirectory", null);
+        if (lastDirectoryPath != null) {
+            File lastDir = new File(lastDirectoryPath);
+            if (lastDir.exists()) {
+                fileChooser.setInitialDirectory(lastDir);
+            }
+        }
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(mainPrincipal.getPrimaryStage());
+
+        if (selectedFile != null) {
+            prefs.put("lastImageDirectory", selectedFile.getParent());
+            imagePathField.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    private void detectDisease() {
+        String imagePath = imagePathField.getText();
+
+        if (imagePath == null || imagePath.isEmpty()) {
+            showAlert("Error", "Please select an image first", Alert.AlertType.ERROR);
+            return;
+        }
+
+        try {
+            // Vérifier que le fichier existe
+            File imageFile = new File(imagePath);
+            if (!imageFile.exists()) {
+                showAlert("Error", "Image file does not exist", Alert.AlertType.ERROR);
+                return;
+            }
+
+            // Create and show loading dialog
+            Stage loadingStage = createLoadingDialog(imageFile);
+            loadingStage.show();
+
+            // Run prediction in background thread
+            new Thread(() -> {
+                try {
+                    // Appeler le script Python pour la prédiction
+                    ProcessBuilder processBuilder = new ProcessBuilder("plant_disease_env\\\\Scripts\\\\python.exe", "predict.py", imagePath);
+                    processBuilder.redirectErrorStream(true);
+
+                    Process process = processBuilder.start();
+
+                    // Lire la sortie du script Python
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line;
+                    StringBuilder output = new StringBuilder();
+
+                    while ((line = reader.readLine()) != null) {
+                        output.append(line);
+                    }
+
+                    int exitCode = process.waitFor();
+
+                    final String resultOutput = output.toString();
+
+                    // Update UI on JavaFX thread
+                    Platform.runLater(() -> {
+                        // Close loading dialog
+                        loadingStage.close();
+
+                        if (exitCode != 0) {
+                            showAlert("Error", "Error executing prediction script: " + resultOutput, Alert.AlertType.ERROR);
+                            return;
+                        }
+
+                        // Traiter la sortie
+                        String[] result = resultOutput.split(",");
+                        if (result.length >= 2) {
+                            String status = result[0].trim();
+                            double accuracy = Double.parseDouble(result[1].trim());
+
+                            // Show results dialog
+                            showResultsDialog(imageFile, status, accuracy);
+                        } else {
+                            showAlert("Error", "Invalid output format from prediction script", Alert.AlertType.ERROR);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Update UI on JavaFX thread
+                    Platform.runLater(() -> {
+                        loadingStage.close();
+                        showAlert("Error", "Error detecting disease: " + e.getMessage(), Alert.AlertType.ERROR);
+                    });
+                }
+            }).start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Error detecting disease: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private Stage createLoadingDialog(File imageFile) {
+        // Create dialog stage
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.setTitle("Disease Detection");
+        dialogStage.setResizable(false);
+
+        // Create layout
+        VBox root = new VBox(20);
+        root.setPadding(new Insets(30));
+        root.setAlignment(Pos.CENTER);
+        root.setMinWidth(450);
+        root.setMinHeight(350);
+        root.setStyle("-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 1px;");
+
+        // Add image
+        ImageView plantImageView = new ImageView();
+        try {
+            Image image = new Image(imageFile.toURI().toString());
+            plantImageView.setImage(image);
+            plantImageView.setFitWidth(300);
+            plantImageView.setFitHeight(200);
+            plantImageView.setPreserveRatio(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Add loading indicator
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setPrefSize(50, 50);
+
+        // Add title and message
+        Label titleLabel = new Label("Analysis in Progress");
+        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+
+        Label messageLabel = new Label("Please wait while we analyze your plant image...");
+        messageLabel.setStyle("-fx-font-size: 14px;");
+
+        // Add all elements to layout
+        root.getChildren().addAll(titleLabel, plantImageView, progressIndicator, messageLabel);
+
+        // Set scene
+        Scene scene = new Scene(root);
+        dialogStage.setScene(scene);
+
+        return dialogStage;
+    }
+
+    private void showResultsDialog(File imageFile, String status, double accuracy) {
+        // Create dialog stage
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.setTitle("Disease Detection Results");
+        dialogStage.setResizable(false);
+
+        // Create layout
+        VBox root = new VBox(20);
+        root.setPadding(new Insets(30));
+        root.setAlignment(Pos.CENTER);
+        root.setMinWidth(450);
+        root.setMinHeight(400);
+        root.setStyle("-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 1px;");
+
+        // Add title
+        Label titleLabel = new Label("Analysis Result");
+        titleLabel.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
+
+        // Add image
+        ImageView plantImageView = new ImageView();
+        try {
+            Image image = new Image(imageFile.toURI().toString());
+            plantImageView.setImage(image);
+            plantImageView.setFitWidth(300);
+            plantImageView.setFitHeight(200);
+            plantImageView.setPreserveRatio(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Status box
+        HBox statusBox = new HBox(10);
+        statusBox.setAlignment(Pos.CENTER);
+
+        Label statusLabel = new Label("Status:");
+        statusLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+
+        Label statusValue = new Label(status);
+        if ("healthy".equalsIgnoreCase(status)) {
+            statusValue.setStyle("-fx-text-fill: #2ecc71; -fx-font-weight: bold; -fx-font-size: 16px;");
+        } else {
+            statusValue.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-font-size: 16px;");
+        }
+
+        statusBox.getChildren().addAll(statusLabel, statusValue);
+
+        // Confidence box
+        HBox confidenceBox = new HBox(10);
+        confidenceBox.setAlignment(Pos.CENTER);
+
+        Label confidenceLabel = new Label("Confidence:");
+        confidenceLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        Label confidenceValue = new Label(String.format("%.2f%%", accuracy));
+        confidenceValue.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        confidenceBox.getChildren().addAll(confidenceLabel, confidenceValue);
+
+        // Recommendation
+        VBox recommendationBox = new VBox(5);
+        recommendationBox.setAlignment(Pos.CENTER_LEFT);
+        recommendationBox.setPadding(new Insets(10));
+        recommendationBox.setStyle("-fx-background-color: #f8f9fa; -fx-background-radius: 5px;");
+
+        Label recommendationTitle = new Label("Recommendation:");
+        recommendationTitle.setStyle("-fx-font-weight: bold;");
+
+        Label recommendation;
+        if ("healthy".equalsIgnoreCase(status)) {
+            recommendation = new Label("Your plant appears to be healthy. Continue with your current care routine.");
+            recommendation.setStyle("-fx-text-fill: #2ecc71;");
+        } else {
+            recommendation = new Label("Your plant may have a disease. Consider implementing appropriate treatment measures and monitoring its condition closely.");
+            recommendation.setStyle("-fx-text-fill: #e74c3c;");
+        }
+        recommendation.setWrapText(true);
+
+        recommendationBox.getChildren().addAll(recommendationTitle, recommendation);
+
+        // Close button
+        Button closeButton = new Button("Close");
+        closeButton.setStyle("-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 20;");
+        closeButton.setOnAction(e -> dialogStage.close());
+
+        // Add all elements to layout
+        root.getChildren().addAll(titleLabel, plantImageView, statusBox, confidenceBox, recommendationBox, closeButton);
+
+        // Set scene
+        Scene scene = new Scene(root);
+        dialogStage.setScene(scene);
+        dialogStage.show();
+    }
+
+
     private void updatePaginationControls(List<plante> plantsToDisplay) {
         totalPages = (int) Math.ceil((double) plantsToDisplay.size() / CARDS_PER_PAGE);
 
