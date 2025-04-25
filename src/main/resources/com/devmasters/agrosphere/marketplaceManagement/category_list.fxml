@@ -2,24 +2,31 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.devmasters.agrosphere.marketplaceManagement.Controller.CategoryListController"
+      style="-fx-padding: 5;">
 
-<ScrollPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.devmasters.agrosphere.marketplaceManagement.Controller.CategoryListController"
-            fitToWidth="true" prefWidth="800" prefHeight="600">
+    <!-- Container for filtering, sorting, and search -->
+    <HBox style="-fx-background-color: #e6e6e6; -fx-background-radius: 5; -fx-border-color: #b3b3b3; -fx-border-radius: 5; -fx-padding: 10;"
+          spacing="10" alignment="CENTER_LEFT">
 
-    <!-- Outer VBox that holds everything -->
-    <VBox spacing="20" style="-fx-padding: 20px;">
+        <Button text="🔍 Filter" styleClass="button"/>
+        <Button text="↕ Sort" styleClass="button"/>
 
-        <!-- Top Button -->
-        <HBox alignment="CENTER_RIGHT">
-            <Button fx:id="btnAddCategory"
-                    text="+ Add Category"
-                    style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;"
-                    onAction="#handleAddCategory"/>
+        <!-- Search field and button -->
+        <HBox spacing="5" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+            <TextField promptText="Search categories..." HBox.hgrow="ALWAYS"/>
+            <Button text="🔍" styleClass="button"/>
         </HBox>
 
-        <!-- Category Items Container -->
-        <VBox fx:id="categoryContainer" spacing="10" />
+        <Button fx:id="btnAddCategory"
+                text="+ Add Category"
+                style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;"
+                onAction="#handleAddCategory"/>
+    </HBox>
 
-    </VBox>
-</ScrollPane>
+    <!-- Main Category Container with ScrollPane like product list -->
+    <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;" VBox.vgrow="ALWAYS">
+        <VBox fx:id="categoryContainer" spacing="15" style="-fx-padding: 15;"/>
+    </ScrollPane>
+</VBox>

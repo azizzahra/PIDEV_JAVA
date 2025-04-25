@@ -24,8 +24,6 @@
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
 
-            <Button text="🏠 Dashboard"
-                    style="-fx-background-color: #2d7340; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
             <Button text="👨‍🌾 User"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
             <Button text="🌾 Ferme"

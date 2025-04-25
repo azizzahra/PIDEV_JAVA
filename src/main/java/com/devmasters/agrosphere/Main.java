@@ -26,7 +26,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(resourceUrl);
             Parent root = loader.load();
 
-            Scene scene = new Scene(root, 1500, 750);
+            Scene scene = new Scene(root, 1546, 777);
 
             // Updated CSS path
             String cssPath = "/com/devmasters/agrosphere/marketplaceManagement/assets/css/modern.css";

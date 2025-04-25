@@ -45,6 +45,8 @@ public class ProductListController {
         }
     }
 
+    @FXML private StackPane contentArea;
+
     public void editProduct(product p) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
@@ -56,7 +58,11 @@ public class ProductListController {
             ProductController controller = loader.getController();
             controller.setProductToEdit(p);
 
-            root.setCenter(formView); // Show form in center area of DashboardProduct
+            // Find the parent StackPane and replace its content
+            StackPane contentArea = (StackPane) productContainer.getScene().lookup("#contentArea");
+            if (contentArea != null) {
+                contentArea.getChildren().setAll(formView);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

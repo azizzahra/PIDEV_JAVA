@@ -124,7 +124,7 @@ public class ProductController {
     private void selectImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Product Image");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setInitialDirectory(new File("C:/Users/zeine/OneDrive/Pictures/pi"));
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
         );
