@@ -6,6 +6,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.Insets?>
 
+<?import javafx.scene.web.WebView?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.Farm.AddFarmController"
@@ -89,7 +90,8 @@
                            <Label fx:id="imagePathLabel" text="No image selected" styleClass="file-path-label" visible="false"/>
 
                            <!-- Empty Space for Map in Original Design -->
-                           <Pane minHeight="200" />
+                           <WebView fx:id="mapWebView" prefHeight="300" prefWidth="300"
+                                    style="-fx-border-color: #2e7d32; -fx-border-width: 2;"/>
                         </VBox>
 
                         <!-- Right Side - Form Fields -->
@@ -130,18 +132,23 @@
                               <Label fx:id="fsizeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
                            </VBox>
 
-                           <!-- Hidden Fields -->
-                           <HBox spacing="10" visible="false">
+                           <HBox spacing="10">
                               <VBox spacing="5" HBox.hgrow="ALWAYS">
-                                 <Label text="Latitude:" />
-                                 <TextField fx:id="flatitude" text="0.0" />
+                                 <Label text="Latitude:" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                 <TextField fx:id="flatitude" editable="false" promptText="Click on map to set"
+                                            style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3; -fx-padding: 8;" />
                                  <Label fx:id="flatitudeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
                               </VBox>
                               <VBox spacing="5" HBox.hgrow="ALWAYS">
-                                 <Label text="Longitude:" />
-                                 <TextField fx:id="flongitude" text="0.0" />
+                                 <Label text="Longitude:" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                 <TextField fx:id="flongitude" editable="false" promptText="Click on map to set"
+                                            style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3; -fx-padding: 8;" />
                                  <Label fx:id="flongitudeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
                               </VBox>
+                           </HBox>
+
+                           <!-- Hidden Fields -->
+                           <HBox spacing="10" visible="false">
                               <VBox spacing="5" HBox.hgrow="ALWAYS">
                                  <Label text="User ID:" />
                                  <TextField fx:id="fuser" text="1" /> <!-- Default value -->
@@ -149,6 +156,7 @@
                               </VBox>
                               <TextField fx:id="fimage" visible="false" /> <!-- Hidden field for image path -->
                            </HBox>
+
 
                            <!-- Save Button -->
                            <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20 0 0 0;">

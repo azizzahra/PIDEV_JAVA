@@ -99,7 +99,7 @@
                                 <!-- Liste des plantes - Titre et statistiques -->
                                 <VBox spacing="5">
                                     <HBox spacing="10" alignment="CENTER_LEFT">
-                                        <Label text="List of plants" styleClass="detail-section-title"/>
+                                        <Label fx:id="listOfPlantsLabel" text="List of plants" styleClass="detail-section-title"/>
                                         <Region HBox.hgrow="ALWAYS"/>
                                         <Label text="Number of plants : " styleClass="detail-value"/>
                                         <Label fx:id="plantCount" text="5" styleClass="detail-value" style="-fx-font-weight: bold;"/>
@@ -113,11 +113,11 @@
                                           styleClass="plants-container"/>
 
                                 <!-- Pagination -->
-                                <HBox styleClass="pagination-container" alignment="CENTER">
-                                    <Button text="« Previous" styleClass="pagination-button"/>
-                                    <Button text="1" styleClass="pagination-button active"/>
-                                    <Button text="2" styleClass="pagination-button"/>
-                                    <Button text="Next »" styleClass="pagination-button"/>
+                                <!-- Pagination -->
+                                <HBox fx:id="paginationButtons" styleClass="pagination-container" alignment="CENTER">
+                                    <Button fx:id="prevPageButton" text="« Previous" styleClass="pagination-button"/>
+                                    <!-- Page buttons will be dynamically created here -->
+                                    <Button fx:id="nextPageButton" text="Next »" styleClass="pagination-button"/>
                                 </HBox>
                             </VBox>
 
@@ -167,7 +167,6 @@
                                     </VBox>
                                 </VBox>
 
-                                <!-- Rest of sidebar content remains unchanged -->
                                 <!-- Recherche de plantes -->
                                 <VBox spacing="10">
                                     <Label text="Search Plants" styleClass="section-title"/>
@@ -185,18 +184,6 @@
                                 <VBox spacing="10">
                                     <Label text="Categories" styleClass="section-title"/>
                                     <VBox fx:id="categoriesContainer" spacing="8">
-                                        <HBox spacing="5" alignment="CENTER_LEFT" styleClass="category-item">
-                                            <Label text="Vegetables" styleClass="category-name" HBox.hgrow="ALWAYS"/>
-                                            <Label text="(3)" styleClass="category-count"/>
-                                        </HBox>
-                                        <HBox spacing="5" alignment="CENTER_LEFT" styleClass="category-item">
-                                            <Label text="Fruits" styleClass="category-name" HBox.hgrow="ALWAYS"/>
-                                            <Label text="(2)" styleClass="category-count"/>
-                                        </HBox>
-                                        <HBox spacing="5" alignment="CENTER_LEFT" styleClass="category-item">
-                                            <Label text="Flowers" styleClass="category-name" HBox.hgrow="ALWAYS"/>
-                                            <Label text="(1)" styleClass="category-count"/>
-                                        </HBox>
                                     </VBox>
                                 </VBox>
 

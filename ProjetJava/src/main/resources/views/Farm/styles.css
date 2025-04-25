@@ -489,7 +489,16 @@
 .category-item {
     -fx-padding: 5px 0;
 }
-
+.category-name{
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+}
+.category-name:hover{
+    -fx-text-fill: #2e7d32;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 4);
+    -fx-background-color: rgba(208, 214, 218, 0.11);
+    -fx-background-radius:2px ;
+}
 .category-count {
     -fx-text-fill: #6c757d;
     -fx-font-size: 12px;

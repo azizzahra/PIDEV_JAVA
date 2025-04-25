@@ -21,8 +21,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -51,8 +50,26 @@ public class FarmDetailsController {
     @FXML
     private TextArea farmDescription;
 
+    @FXML
+    private TextField searchPlantField;
+    @FXML
+    private Label plantCount;
+    @FXML
+    private VBox categoriesContainer;
+    @FXML
+    private Label listOfPlantsLabel;
 
 
+    @FXML
+    private Button prevPageButton;
+    @FXML
+    private Button nextPageButton;
+    @FXML
+    private HBox paginationButtons;
+    private int totalPages;
+    private int currentPage = 1;
+    private final int CARDS_PER_PAGE = 6;
+    private List<plante> currentFilteredPlants;
 
     private int farmId;
     private Farm currentFarm;
@@ -61,14 +78,98 @@ public class FarmDetailsController {
     @FXML
     private FlowPane plantsContainer;
     private PlanteService planteService = new PlanteService();
-
+    private List<plante> allPlants = new ArrayList<>();
 
 
     public void setFarmId(int id) {
         this.farmId = id;
         loadFarmDetails();
     }
+    @FXML
+    private void initialize() {
+        // Configurer le listener pour le champ de recherche
+        if (searchPlantField != null) {
+            searchPlantField.textProperty().addListener((observable, oldValue, newValue) -> {
+                currentPage = 1; // Reset to first page when searching
+                filterPlants(newValue);
+            });
+        }
+        if (listOfPlantsLabel != null) {
+            listOfPlantsLabel.setOnMouseClicked(event -> {
+                displayFilteredPlants(allPlants);  // Afficher toutes les plantes sans filtre
+                if (searchPlantField != null) {
+                    searchPlantField.clear();  // Vider le champ de recherche
+                }
+            });
 
+            // Changer le curseur pour indiquer que c'est cliquable
+            listOfPlantsLabel.setStyle("-fx-cursor: hand;");
+        }
+        if (prevPageButton != null) {
+            prevPageButton.setOnAction(e -> {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePlantsDisplay();
+                }
+            });
+        }
+        if (nextPageButton != null) {
+            nextPageButton.setOnAction(e -> {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePlantsDisplay();
+                }
+            });
+        }
+    }
+    private void updatePaginationControls(List<plante> plantsToDisplay) {
+        totalPages = (int) Math.ceil((double) plantsToDisplay.size() / CARDS_PER_PAGE);
+
+        // Ensure current page is valid
+        if (currentPage > totalPages && totalPages > 0) {
+            currentPage = totalPages;
+        } else if (currentPage < 1 || totalPages == 0) {
+            currentPage = 1;
+        }
+
+        // Update pagination UI
+        paginationButtons.getChildren().clear();
+
+        // Add previous button
+        prevPageButton.setDisable(currentPage == 1 || totalPages == 0);
+        paginationButtons.getChildren().add(prevPageButton);
+
+        // Add page buttons
+        int startPage = Math.max(1, currentPage - 2);
+        int endPage = Math.min(totalPages, startPage + 4);
+
+        for (int i = startPage; i <= endPage; i++) {
+            Button pageButton = new Button(String.valueOf(i));
+            pageButton.getStyleClass().add("pagination-button");
+            if (i == currentPage) {
+                pageButton.getStyleClass().add("active");
+            }
+
+            final int pageNum = i;
+            pageButton.setOnAction(e -> {
+                currentPage = pageNum;
+                updatePlantsDisplay();
+            });
+
+            paginationButtons.getChildren().add(pageButton);
+        }
+
+        // Add next button
+        nextPageButton.setDisable(currentPage == totalPages || totalPages == 0);
+        paginationButtons.getChildren().add(nextPageButton);
+    }
+    private void updatePlantsDisplay() {
+        if (currentFilteredPlants != null) {
+            displayPagedPlants(currentFilteredPlants);
+        } else if (allPlants != null) {
+            displayPagedPlants(allPlants);
+        }
+    }
 
     private void loadFarmDetails() {
         try {
@@ -97,7 +198,6 @@ public class FarmDetailsController {
                     Alert.AlertType.ERROR);
         }
     }
-
 
     private void loadFarmImage(String imagePath) {
         try {
@@ -129,29 +229,121 @@ public class FarmDetailsController {
 
     private void loadPlantsForFarm(int farmId) {
         try {
-            List<plante> plants = planteService.getPlantesByFarmId(farmId);
+            // Récupérer toutes les plantes et les stocker
+            allPlants = planteService.getPlantesByFarmId(farmId);
 
-            // Effacer le conteneur
-            plantsContainer.getChildren().clear();
-
-            if (plants.isEmpty()) {
-                Label emptyLabel = new Label("No plants found for this farm.");
-                emptyLabel.setStyle("-fx-font-size: 16px;");
-                plantsContainer.getChildren().add(emptyLabel);
-            } else {
-                // Ajouter chaque plante comme une carte
-                for (plante p : plants) {
-                    BorderPane card = createPlantCard(p);
-                    plantsContainer.getChildren().add(card);
-                }
-            }
-
-            // Ajouter le bouton "Ajouter plante" à la fin
-            addAddPlantButton();
+            updatePlantCount();
+            updateCategories();
+            currentPage = 1;  // Start at first page
+            displayPagedPlants(allPlants);
 
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Error", "Failed to load plants for this farm: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+    private void updateCategories() {
+        if (categoriesContainer != null) {
+            categoriesContainer.getChildren().clear();
+
+            // Créer un Map pour compter les types de plantes
+            Map<String, Integer> categoryCount = new HashMap<>();
+
+            // Compter les plantes par type
+            for (plante p : allPlants) {
+                String type = p.getType();
+                categoryCount.put(type, categoryCount.getOrDefault(type, 0) + 1);
+            }
+
+            // Créer les éléments d'interface pour chaque catégorie
+            for (Map.Entry<String, Integer> entry : categoryCount.entrySet()) {
+                HBox categoryItem = new HBox(5);
+                categoryItem.setAlignment(Pos.CENTER_LEFT);
+                categoryItem.getStyleClass().add("category-item");
+
+                Label categoryName = new Label(entry.getKey());
+                categoryName.getStyleClass().add("category-name");
+                HBox.setHgrow(categoryName, Priority.ALWAYS);
+
+                Label categoryCountLabel = new Label("(" + entry.getValue() + ")");
+                categoryCountLabel.getStyleClass().add("category-count");
+
+                categoryItem.getChildren().addAll(categoryName, categoryCountLabel);
+                categoriesContainer.getChildren().add(categoryItem);
+
+                // Ajouter un gestionnaire d'événements pour filtrer par catégorie lors du clic
+                categoryItem.setOnMouseClicked(e -> filterPlantsByCategory(entry.getKey()));
+            }
+        }
+    }
+    private void filterPlantsByCategory(String category) {
+        currentFilteredPlants = allPlants.stream()
+                .filter(p -> p.getType().equals(category))
+                .collect(java.util.stream.Collectors.toList());
+
+        currentPage = 1;  // Reset to first page when filtering
+        displayPagedPlants(currentFilteredPlants);
+    }
+    private void updatePlantCount() {
+        if (plantCount != null) {
+            plantCount.setText(String.valueOf(allPlants.size()));
+        }
+    }
+
+    private void displayFilteredPlants(List<plante> plants) {
+        currentFilteredPlants = plants;
+        currentPage = 1;  // Reset to first page when displaying new list
+        displayPagedPlants(plants);
+    }
+    private void displayPagedPlants(List<plante> plants) {
+        // Clear the container
+        plantsContainer.getChildren().clear();
+
+        if (plants.isEmpty()) {
+            Label emptyLabel = new Label("No plants found for this farm.");
+            emptyLabel.setStyle("-fx-font-size: 16px;");
+            plantsContainer.getChildren().add(emptyLabel);
+            updatePaginationControls(plants);  // Update pagination with empty list
+        } else {
+            // Calculate start and end indices for current page
+            int startIndex = (currentPage - 1) * CARDS_PER_PAGE;
+            int endIndex = Math.min(startIndex + CARDS_PER_PAGE, plants.size());
+
+            // Get plants for current page
+            List<plante> pagedPlants = plants.subList(startIndex, endIndex);
+
+            // Add each plant as a card
+            for (plante p : pagedPlants) {
+                BorderPane card = createPlantCard(p);
+                plantsContainer.getChildren().add(card);
+            }
+
+            // Update pagination controls
+            updatePaginationControls(plants);
+        }
+
+        // Add the "Add Plant" button if we're on the last page or there are few plants
+        if (currentPage == totalPages || plants.size() <= CARDS_PER_PAGE) {
+            addAddPlantButton();
+        }
+    }
+    private void filterPlants(String searchText) {
+        if (searchText == null || searchText.isEmpty()) {
+            // If search field is empty, display all plants
+            currentFilteredPlants = null;  // Reset filtered plants
+            displayPagedPlants(allPlants);
+        } else {
+            // Convert to lowercase for case-insensitive search
+            String searchLower = searchText.toLowerCase();
+
+            // Filter plants whose name or type contains the search text
+            currentFilteredPlants = allPlants.stream()
+                    .filter(p -> p.getName().toLowerCase().contains(searchLower) ||
+                            p.getType().toLowerCase().contains(searchLower))
+                    .collect(java.util.stream.Collectors.toList());
+
+            // Display filtered plants
+            displayPagedPlants(currentFilteredPlants);
         }
     }
 
