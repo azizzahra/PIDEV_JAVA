@@ -1,9 +1,7 @@
 package services.marketPlace;
-
 import com.devmasters.agrosphere.marketplaceManagement.entities.product;
 import services.Iservices;
 import com.devmasters.agrosphere.utils.DBConnection;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,13 +73,6 @@ public class ProductService implements Iservices<product> {
         ps.setInt(1, id);
         ps.executeUpdate();
     }
-    /*public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM product WHERE id = ?";
-        try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-        }
-    }*/
 
     @Override
     public product getOne(int id) throws Exception {
@@ -104,5 +95,25 @@ public class ProductService implements Iservices<product> {
         } else {
             return null;
         }
+    }
+
+    public String getProductName(int productId) {
+        String name = "Unknown Product";
+        try {
+            // Fixed: Use the correct table name "product" and column "name_prod"
+            String sql = "SELECT name_prod FROM product WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                name = rs.getString("name_prod");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching product name: " + e.getMessage());
+            // Return default name in case of error
+        }
+
+        return name;
     }
 }

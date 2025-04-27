@@ -1,14 +1,16 @@
 package services.marketPlace;
 
 import com.devmasters.agrosphere.marketplaceManagement.entities.category;
+import com.devmasters.agrosphere.marketplaceManagement.entities.product;
 import com.devmasters.agrosphere.utils.DBConnection;
+import services.Iservices;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategoryService {
+public class CategoryService implements Iservices<category> {
     private Connection conn;
 
     public CategoryService() {

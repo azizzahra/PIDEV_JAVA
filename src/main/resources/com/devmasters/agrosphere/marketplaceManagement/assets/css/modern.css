@@ -301,3 +301,128 @@
 .form-field, .custom-combo-box {
     -fx-transition: -fx-background-color 0.15s, -fx-border-color 0.15s, -fx-effect 0.15s;
 }
+
+/***---------------------------------------------------------------------------***/
+/* Enhanced Order Card Styles */
+.order-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #e0e0e0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+    -fx-padding: 16px;
+    -fx-margin: 0 0 12px 0;
+    -fx-transition: -fx-background-color 0.2s;
+}
+
+.order-card:hover {
+    -fx-background-color: #f8fff8;
+    -fx-border-color: #4CAF50;
+    -fx-effect: dropshadow(gaussian, rgba(76,175,80,0.2), 10, 0, 0, 2);
+}
+
+.order-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e5631;
+    -fx-padding: 0 0 8px 10;
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+.order-h
+{
+    -fx-font-size: 21px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+.order-status-waiting {
+    -fx-text-fill: #ff9800;
+    -fx-font-weight: bold;
+}
+
+.order-status-completed {
+    -fx-text-fill: #696969;
+    -fx-font-weight: bold;
+}
+
+.order-status-cancelled {
+    -fx-text-fill: #f44336;
+    -fx-font-weight: bold;
+}
+
+.order-item {
+    -fx-font-size: 14px;
+    -fx-padding: 6px 0;
+    -fx-text-fill: #333333;
+}
+
+.order-buyer {
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e5631;
+}
+
+.order-total {
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e5631;
+}
+
+/* Order action buttons */
+.order-action-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 4px;
+    -fx-padding: 6px 12px;
+    -fx-cursor: hand;
+}
+
+.order-action-button:hover {
+    -fx-background-color: #367c39;
+}
+
+.order-container {
+    -fx-spacing: 15;
+    -fx-padding: 15;
+    -fx-background-color: #e8f5e9;
+}
+/* Two-column order card layout */
+.order-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #e0e0e0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+    -fx-padding: 16px;
+    -fx-margin: 0 0 12px 0;
+    -fx-transition: -fx-background-color 0.2s;
+    -fx-max-width: 800px;
+}
+
+.order-card HBox {
+    -fx-padding: 5px;
+}
+
+/* Enhanced styling for the right column */
+.order-total {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e5631;
+    -fx-padding: 10px 0;
+}
+
+/* Make buttons larger and more prominent */
+.order-action-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-min-width: 120px;
+}
+
+.order-action-button:hover {
+    -fx-background-color: #367c39;
+
+}

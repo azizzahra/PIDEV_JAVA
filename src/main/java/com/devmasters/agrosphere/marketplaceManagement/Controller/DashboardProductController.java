@@ -62,35 +62,24 @@ public class DashboardProductController {
         System.out.println("Logging out...");
         // Implement actual logout logic here
     }
+    /*
     @FXML
     private void handleOrdersList() {
         setActiveButton(btnOrders);
-        try {
-            VBox placeholder = new VBox();
-            placeholder.setAlignment(javafx.geometry.Pos.CENTER);
-            placeholder.setSpacing(20);
-            placeholder.setStyle("-fx-padding: 30;");
-
-            Label title = new Label("Orders Feature Coming Soon");
-            title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
-
-            Label subtitle = new Label("This feature is currently under development.");
-            subtitle.setStyle("-fx-font-size: 16px;");
-
-            placeholder.getChildren().addAll(title, subtitle);
-
-            // Use contentArea instead of root
-            contentArea.getChildren().setAll(placeholder);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadView("/com/devmasters/agrosphere/marketplaceManagement/order_list.fxml");
+    }*/
+    @FXML
+    private void handleOrdersList() {
+        setActiveButton(btnOrders);
+        loadView("/com/devmasters/agrosphere/marketplaceManagement/orders_list.fxml");
     }
 
     @FXML
     private void handleCategoryList() {
         setActiveButton(btnCategories);
-        loadView("/com/devmasters/agrosphere/marketplaceManagment/category_list.fxml");
+        loadView("/com/devmasters/agrosphere/marketplaceManagement/category_list.fxml");
     }
+
 
     private void setActiveButton(Button activeButton) {
         List<Button> allButtons = List.of(btnProducts, btnCategories, btnOrders, btnArchived);

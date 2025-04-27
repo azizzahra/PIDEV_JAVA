@@ -7,6 +7,8 @@ public class orderLine {
     private int productId;
     private int orderQuantity;
 
+
+
     // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
