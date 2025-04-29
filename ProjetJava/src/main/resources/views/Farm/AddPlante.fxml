@@ -132,6 +132,11 @@
                                                             -fx-padding: 8; -fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
                                             <Label fx:id="harvestDateError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
                                         </VBox>
+
+                                        <VBox spacing="5" style="-fx-padding: 10 0 0 0;">
+                                            <Label fx:id="predictionLabel" style="-fx-font-size: 14px; -fx-text-fill: #2e7d32;" visible="false" />
+                                            <Label fx:id="recommendationLabel" style="-fx-font-size: 14px; -fx-text-fill: #2e7d32;" wrapText="true" visible="false" />
+                                        </VBox>
                                     </HBox>
 
                                     <!-- Quantity -->

@@ -25,6 +25,10 @@ import java.time.format.DateTimeFormatter;
 
 import java.util.prefs.Preferences;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
+import java.time.LocalDate;
+
 public class AddPlanteController {
 
     @FXML
@@ -65,6 +69,12 @@ public class AddPlanteController {
     @FXML
     private ImageView imagePreview;
 
+    @FXML
+    private Label predictionLabel;
+
+    @FXML
+    private Label recommendationLabel;
+
     private int farmId;
     private File selectedImageFile;
     private String imageName;
@@ -73,6 +83,72 @@ public class AddPlanteController {
 
     private Preferences prefs = Preferences.userNodeForPackage(AddFarmController.class);
 
+    private void setupPredictionListener() {
+        plantationDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !nameField.getText().trim().isEmpty() && typeComboBox.getValue() != null) {
+                predictHarvestDate();
+            }
+        });
+
+        // Also setup listeners for name and type to trigger prediction when all fields are filled
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.trim().isEmpty() && typeComboBox.getValue() != null && plantationDatePicker.getValue() != null) {
+                predictHarvestDate();
+            }
+        });
+
+        typeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !nameField.getText().trim().isEmpty() && plantationDatePicker.getValue() != null) {
+                predictHarvestDate();
+            }
+        });
+    }
+
+    // Add this method to predict harvest date
+    private void predictHarvestDate() {
+        try {
+            String plantName = nameField.getText().trim();
+            String plantType = typeComboBox.getValue();
+            LocalDate plantationDate = plantationDatePicker.getValue();
+
+            if (plantName.isEmpty() || plantType == null || plantationDate == null) {
+                return; // Not all required fields are filled
+            }
+
+            JSONObject prediction = PlantHarvestPredictor.predictHarvestDate(plantType, plantName, plantationDate);
+
+            // Check if prediction was successful
+            if (prediction.containsKey("error")) {
+                predictionLabel.setText("Prediction error: " + prediction.get("error"));
+                predictionLabel.setStyle("-fx-text-fill: red;");
+                return;
+            }
+
+            // Get the predicted harvest date
+            String harvestDateStr = (String) prediction.get("predicted_harvest_date");
+            boolean isRecommendedSeason = (boolean) prediction.get("is_recommended_season");
+            String recommendationMessage = (String) prediction.get("recommendation_message");
+
+            // Set the harvest date in the picker
+            if (harvestDateStr != null) {
+                LocalDate harvestDate = LocalDate.parse(harvestDateStr);
+                harvestDatePicker.setValue(harvestDate);
+            }
+
+            // Display recommendation message
+            recommendationLabel.setText(recommendationMessage);
+            recommendationLabel.setStyle(isRecommendedSeason ?
+                    "-fx-text-fill: green; -fx-font-weight: bold;" :
+                    "-fx-text-fill: orange; -fx-font-weight: bold;");
+            recommendationLabel.setVisible(true);
+
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+            predictionLabel.setText("Error: " + e.getMessage());
+            predictionLabel.setStyle("-fx-text-fill: red;");
+        }
+    }
+
     @FXML
     public void initialize() {
         typeComboBox.getItems().addAll("Vegetables", "Fruits", "Flowers");
@@ -80,6 +156,7 @@ public class AddPlanteController {
         chooseImageButton.setOnAction(e -> chooseImage());
 
         setupValidationListeners();
+        setupPredictionListener(); // Add this line
         hideAllErrorMessages();
     }
 

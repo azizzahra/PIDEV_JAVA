@@ -58,6 +58,37 @@
             <artifactId>ikonli-javafx</artifactId>
             <version>12.3.1</version>
         </dependency>
+
+
+
+
+        <!-- Pour analyser et manipuler les réponses JSON du script Python -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
+        <!-- Pour faciliter l'exécution de processus externes (comme Python) -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-exec</artifactId>
+            <version>1.3</version>
+        </dependency>
+
+        <!-- Pour le traitement des dates et l'interopérabilité entre Java et Python -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.12.5</version>
+        </dependency>
+
+        <!-- Pour les opérations d'entrée/sortie avancées -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
