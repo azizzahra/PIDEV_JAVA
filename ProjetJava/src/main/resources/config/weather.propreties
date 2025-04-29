@@ -1,0 +1,8 @@
+
+# OpenWeatherMap API Configuration
+api.key=0bbc5740643cedddc0837de3c56ca2ac
+api.url=https://api.openweathermap.org/data/2.5/weather
+api.units=metric
+
+# Weather update interval in minutes
+refresh.interval=30

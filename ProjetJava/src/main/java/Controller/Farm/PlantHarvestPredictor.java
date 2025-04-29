@@ -1,59 +1,189 @@
 package controller.Farm;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
+/**
+ * Java implementation of the PlantHarvestPredictor
+ * Replaces the Python script to directly predict harvest dates in Java
+ */
 public class PlantHarvestPredictor {
 
-    private static final String PYTHON_PATH = "plant_disease_env\\\\Scripts\\\\python.exe"; // or "python3" depending on your system
-    private static final String SCRIPT_PATH = "plant_harvest_predictor.py"; // Update with actual path
+    // Plant growth data: maps plant types and names to growing days and recommended planting seasons
+    private static final Map<String, Map<String, Map<String, Object>>> PLANT_DATA = initializePlantData();
+
+    // Default growing days for unknown plants
+    private static final int DEFAULT_GROWING_DAYS = 90;
 
     /**
-     * Predicts harvest date using the Python script
-     *
-     * @param plantType The type of plant (Vegetables, Fruits, Flowers)
-     * @param plantName The name of the plant
-     * @param plantationDate The plantation date in LocalDate format
-     * @return A JSON object containing the prediction results
-     * @throws IOException If there's an error executing the Python script
-     * @throws ParseException If there's an error parsing the JSON response
+     * Initialize the plant data with growing days and recommended planting seasons
+     * @return Map containing plant growth data
      */
-    public static JSONObject predictHarvestDate(String plantType, String plantName, LocalDate plantationDate)
-            throws IOException, ParseException {
+    private static Map<String, Map<String, Map<String, Object>>> initializePlantData() {
+        Map<String, Map<String, Map<String, Object>>> data = new HashMap<>();
 
-        // Format the plantation date to YYYY-MM-DD
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = plantationDate.format(formatter);
+        // Vegetables
+        Map<String, Map<String, Object>> vegetables = new HashMap<>();
+        vegetables.put("Tomato", createPlantInfo(80, Arrays.asList(3, 4, 5)));
+        vegetables.put("Carrot", createPlantInfo(70, Arrays.asList(3, 4, 5, 6, 7)));
+        vegetables.put("Lettuce", createPlantInfo(45, Arrays.asList(3, 4, 5, 9)));
+        vegetables.put("Potato", createPlantInfo(90, Arrays.asList(3, 4)));
+        vegetables.put("Cucumber", createPlantInfo(60, Arrays.asList(4, 5, 6)));
+        vegetables.put("Onion", createPlantInfo(100, Arrays.asList(2, 3, 4)));
+        vegetables.put("Pepper", createPlantInfo(90, Arrays.asList(4, 5)));
+        data.put("Vegetables", vegetables);
 
-        // Build the command to execute the Python script
-        ProcessBuilder pb = new ProcessBuilder(
-                PYTHON_PATH,
-                SCRIPT_PATH,
-                plantType,
-                plantName,
-                formattedDate);
+        // Fruits
+        Map<String, Map<String, Object>> fruits = new HashMap<>();
+        fruits.put("Strawberry", createPlantInfo(90, Arrays.asList(3, 4)));
+        fruits.put("Watermelon", createPlantInfo(100, Arrays.asList(5, 6)));
+        fruits.put("Cantaloupe", createPlantInfo(85, Arrays.asList(5, 6)));
+        fruits.put("Raspberry", createPlantInfo(120, Arrays.asList(3, 4)));
+        fruits.put("Blueberry", createPlantInfo(150, Arrays.asList(3, 4)));
+        data.put("Fruits", fruits);
 
-        // Start the process
-        Process process = pb.start();
+        // Flowers
+        Map<String, Map<String, Object>> flowers = new HashMap<>();
+        flowers.put("Rose", createPlantInfo(180, Arrays.asList(3, 4, 5)));
+        flowers.put("Tulip", createPlantInfo(150, Arrays.asList(9, 10, 11)));
+        flowers.put("Sunflower", createPlantInfo(70, Arrays.asList(4, 5, 6)));
+        flowers.put("Daisy", createPlantInfo(60, Arrays.asList(3, 4, 5, 6)));
+        flowers.put("Lily", createPlantInfo(100, Arrays.asList(3, 4)));
+        data.put("Flowers", flowers);
 
-        // Read the output from the Python script
-        StringBuilder output = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line);
+        return data;
+    }
+
+    /**
+     * Helper method to create a plant info map
+     * @param growingDays Number of days needed for the plant to grow
+     * @param seasons List of recommended planting months (1-12)
+     * @return Map containing plant growth information
+     */
+    private static Map<String, Object> createPlantInfo(int growingDays, List<Integer> seasons) {
+        Map<String, Object> info = new HashMap<>();
+        info.put("growing_days", growingDays);
+        info.put("seasons", seasons);
+        return info;
+    }
+
+    /**
+     * Get growing data for a specific plant
+     * @param plantType Type of plant (Vegetables, Fruits, Flowers)
+     * @param plantName Name of the plant
+     * @return Map containing growing data for the plant
+     */
+    private static Map<String, Object> getGrowingData(String plantType, String plantName) {
+        // Try to find exact match first
+        if (PLANT_DATA.containsKey(plantType) && PLANT_DATA.get(plantType).containsKey(plantName)) {
+            return PLANT_DATA.get(plantType).get(plantName);
+        }
+
+        // If not found, look for partial matches
+        if (PLANT_DATA.containsKey(plantType)) {
+            for (String name : PLANT_DATA.get(plantType).keySet()) {
+                if (plantName.toLowerCase().contains(name.toLowerCase()) ||
+                        name.toLowerCase().contains(plantName.toLowerCase())) {
+                    return PLANT_DATA.get(plantType).get(name);
+                }
             }
         }
 
-        // Parse the JSON output
-        JSONParser parser = new JSONParser();
-        JSONObject result = (JSONObject) parser.parse(output.toString());
+        // Return default values if no match found
+        Map<String, Object> defaultData = new HashMap<>();
+        defaultData.put("growing_days", DEFAULT_GROWING_DAYS);
+
+        // Default to all months (1-12)
+        List<Integer> allMonths = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            allMonths.add(i);
+        }
+        defaultData.put("seasons", allMonths);
+
+        return defaultData;
+    }
+
+    /**
+     * Predict harvest date based on plant type, name and plantation date
+     * @param plantType Type of plant (Vegetables, Fruits, Flowers)
+     * @param plantName Name of the plant
+     * @param plantationDate Plantation date
+     * @return JSONObject with prediction results
+     */
+    @SuppressWarnings("unchecked")  // For JSONObject type safety warnings
+    public static JSONObject predictHarvestDate(String plantType, String plantName, LocalDate plantationDate) {
+        JSONObject result = new JSONObject();
+
+        try {
+            // Get growing data
+            Map<String, Object> growingData = getGrowingData(plantType, plantName);
+            int growingDays = (int) growingData.get("growing_days");
+            List<Integer> recommendedSeasons = (List<Integer>) growingData.get("seasons");
+
+            // Calculate harvest date
+            LocalDate harvestDate = plantationDate.plusDays(growingDays);
+
+            // Check if plantation date is in recommended season
+            boolean isRecommendedSeason = recommendedSeasons.contains(plantationDate.getMonthValue());
+
+            // Find next recommended planting time if current is not recommended
+            LocalDate nextRecommendedDate = null;
+            String recommendationMessage;
+
+            if (!isRecommendedSeason) {
+                int currentYear = plantationDate.getYear();
+                Integer nextMonth = null;
+
+                // Find the next recommended month
+                for (int month : new TreeSet<>(recommendedSeasons)) {
+                    if (month > plantationDate.getMonthValue()) {
+                        nextMonth = month;
+                        break;
+                    }
+                }
+
+                // If no next month found in current year, take the first month of next year
+                if (nextMonth == null) {
+                    nextMonth = Collections.min(recommendedSeasons);
+                    currentYear += 1;
+                }
+
+                nextRecommendedDate = LocalDate.of(currentYear, nextMonth, 1);
+
+                recommendationMessage = String.format(
+                        "Planting in %s is not ideal for %s. Consider planting in %s instead.",
+                        plantationDate.getMonth().toString(),
+                        plantName,
+                        nextRecommendedDate.getMonth().toString()
+                );
+            } else {
+                recommendationMessage = String.format(
+                        "Good choice! %s is an ideal time to plant %s.",
+                        plantationDate.getMonth().toString(),
+                        plantName
+                );
+            }
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            // Build result JSON
+            result.put("predicted_harvest_date", harvestDate.format(formatter));
+            result.put("is_recommended_season", isRecommendedSeason);
+            result.put("recommendation_message", recommendationMessage);
+            result.put("next_recommended_date",
+                    nextRecommendedDate != null ? nextRecommendedDate.format(formatter) : null);
+            result.put("growing_days", growingDays);
+
+        } catch (Exception e) {
+            result.put("error", e.getMessage());
+            result.put("predicted_harvest_date", null);
+            result.put("is_recommended_season", false);
+            result.put("recommendation_message", "Error processing prediction: " + e.getMessage());
+            result.put("next_recommended_date", null);
+            result.put("growing_days", 0);
+        }
 
         return result;
     }

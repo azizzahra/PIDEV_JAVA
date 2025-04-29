@@ -78,6 +78,8 @@ public class FarmDetailsController {
     @FXML
     private VBox diseaseResultContainer;
 
+    @FXML private WeatherWidgetController weatherWidgetController;
+
     @FXML
     private Button prevPageButton;
     @FXML
@@ -147,6 +149,13 @@ public class FarmDetailsController {
 
         if (detectButton != null) {
             detectButton.setOnAction(e -> detectDisease());
+        }
+        // Log that initialization is complete
+        System.out.println("FarmDetailsController initialized");
+        if (weatherWidgetController != null) {
+            System.out.println("WeatherWidgetController is injected properly");
+        } else {
+            System.err.println("WARNING: weatherWidgetController is null during initialization");
         }
     }
 
@@ -300,6 +309,7 @@ public class FarmDetailsController {
 
         return dialogStage;
     }
+
 
     private void showResultsDialog(File imageFile, String status, double accuracy) {
         // Create dialog stage
@@ -460,6 +470,14 @@ public class FarmDetailsController {
 
                 loadFarmImage(currentFarm.getImage());
                 loadPlantsForFarm(farmId);
+
+                // Initialize weather widget with farm location
+                if (weatherWidgetController != null) {
+                    System.out.println("Setting weather location to: " + currentFarm.getLocation());
+                    weatherWidgetController.setLocation(currentFarm.getLocation());
+                } else {
+                    System.err.println("ERROR: weatherWidgetController is null when trying to set location");
+                }
 
             } else {
                 showAlert("Erreur", "Impossible de trouver la ferme avec l'ID: " + farmId, Alert.AlertType.ERROR);

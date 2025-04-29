@@ -12,23 +12,27 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.Farm;
 import services.FarmService;
+import services.WeatherService;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class ListeFarmsController {
 
     private FarmService farmService = new FarmService();
     private List<Farm> allFarms; // Nouvelle variable pour stocker toutes les fermes
+
+    private WeatherService weatherService;
+    private Map<String, Map<String, Object>> weatherCache = new HashMap<>();
 
 
     @FXML
@@ -50,6 +54,7 @@ public class ListeFarmsController {
         }
         loadFarms();
         setupSearchField();
+        weatherService = new WeatherService();
 
         // Ajoutez ce listener pour ajuster les cards lors du redimensionnement
         farmContainer.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -133,7 +138,7 @@ public class ListeFarmsController {
     private BorderPane createFarmCard(Farm farm) {
         BorderPane card = new BorderPane();
         card.getStyleClass().add("farm-card");
-        card.setPrefSize(400, 380);
+        card.setPrefSize(400, 420); // Increased height for weather info
         card.setMaxWidth(Double.MAX_VALUE);
 
         // Création de l'image
@@ -163,6 +168,14 @@ public class ListeFarmsController {
         contentBox.getChildren().add(descriptionLabel);
         contentBox.setPadding(new Insets(5, 15, 10, 15));
 
+        // Weather information section
+        HBox weatherBox = createWeatherBox(farm.getLocation());
+        weatherBox.getStyleClass().add("farm-card-weather");
+        weatherBox.setPadding(new Insets(5, 15, 10, 15));
+
+        // Container for both content and weather
+        VBox fullContentBox = new VBox(0);
+        fullContentBox.getChildren().addAll(titleBox, contentBox, weatherBox);
 
         // Mise en place des éléments dans la carte
         StackPane imageContainer = new StackPane();
@@ -174,11 +187,101 @@ public class ListeFarmsController {
         imageContainer.getChildren().add(sizeTag);
 
         card.setTop(imageContainer);
-        card.setCenter(new VBox(titleBox, contentBox));
+        card.setCenter(fullContentBox);
         card.setOnMouseClicked(event -> openFarmDetails(farm.getId()));
 
-
         return card;
+    }
+    private HBox createWeatherBox(String location) {
+        HBox weatherBox = new HBox(10);
+        weatherBox.setAlignment(Pos.CENTER_LEFT);
+
+        // Weather icon placeholder
+        ImageView weatherIcon = new ImageView();
+        weatherIcon.setFitWidth(24);
+        weatherIcon.setFitHeight(24);
+
+        // Labels for temperature and condition
+        Label tempLabel = new Label("--°C");
+        tempLabel.getStyleClass().add("weather-temp");
+
+        Label conditionLabel = new Label("Loading...");
+        conditionLabel.getStyleClass().add("weather-condition");
+
+        // Add components to box
+        weatherBox.getChildren().addAll(weatherIcon, tempLabel, conditionLabel);
+
+        // Load weather data asynchronously
+        loadWeatherData(location, weatherIcon, tempLabel, conditionLabel);
+
+        return weatherBox;
+    }
+
+    /**
+     * Loads weather data asynchronously for a farm card
+     */
+    private void loadWeatherData(String location, ImageView iconView, Label tempLabel, Label conditionLabel) {
+        // Create temporary cache key based on location
+        String cacheKey = location.toLowerCase().trim();
+
+        // Check weather cache first
+        if (weatherCache.containsKey(cacheKey)) {
+            // Use cached data
+            Map<String, Object> cachedData = weatherCache.get(cacheKey);
+            updateWeatherUI(cachedData, iconView, tempLabel, conditionLabel);
+        } else {
+            // Load data in background
+            CompletableFuture.supplyAsync(() -> {
+                try {
+                    // Create service instance if not exists
+                    if (weatherService == null) {
+                        weatherService = new WeatherService();
+                    }
+                    return weatherService.getWeatherForLocation(location);
+                } catch (Exception e) {
+                    System.err.println("Error fetching weather: " + e.getMessage());
+                    return null;
+                }
+            }).thenAccept(weatherData -> {
+                if (weatherData != null) {
+                    // Cache the data
+                    weatherCache.put(cacheKey, weatherData);
+
+                    // Update UI on JavaFX thread
+                    Platform.runLater(() -> {
+                        updateWeatherUI(weatherData, iconView, tempLabel, conditionLabel);
+                    });
+                } else {
+                    Platform.runLater(() -> {
+                        tempLabel.setText("--°C");
+                        conditionLabel.setText("Weather unavailable");
+                    });
+                }
+            });
+        }
+    }
+
+    /**
+     * Updates weather UI elements with data
+     */
+    private void updateWeatherUI(Map<String, Object> weatherData, ImageView iconView, Label tempLabel, Label conditionLabel) {
+        try {
+            // Get temperature and format it
+            double temperature = (double) weatherData.get("temperature");
+            tempLabel.setText(String.format("%.1f°C", temperature));
+
+            // Get description
+            String description = (String) weatherData.get("description");
+            conditionLabel.setText(description);
+
+            // Load weather icon
+            String iconUrl = (String) weatherData.get("icon");
+            iconView.setImage(new Image(iconUrl));
+        } catch (Exception e) {
+            System.err.println("Error updating weather UI: " + e.getMessage());
+            tempLabel.setText("--°C");
+            conditionLabel.setText("Weather error");
+        }
     }
 
     private ImageView createFarmImageView(Farm farm) {
@@ -231,7 +334,6 @@ public class ListeFarmsController {
 
 
 
-    // Nouvelle méthode pour ouvrir les détails d'une ferme
     private void openFarmDetails(int farmId) {
         try {
             // Utiliser directement le stage principal

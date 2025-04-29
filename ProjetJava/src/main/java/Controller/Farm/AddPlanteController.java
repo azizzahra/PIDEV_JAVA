@@ -115,6 +115,7 @@ public class AddPlanteController {
                 return; // Not all required fields are filled
             }
 
+            // Appel direct à la méthode Java au lieu d'exécuter le script Python
             JSONObject prediction = PlantHarvestPredictor.predictHarvestDate(plantType, plantName, plantationDate);
 
             // Check if prediction was successful
@@ -142,7 +143,7 @@ public class AddPlanteController {
                     "-fx-text-fill: orange; -fx-font-weight: bold;");
             recommendationLabel.setVisible(true);
 
-        } catch (IOException | ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             predictionLabel.setText("Error: " + e.getMessage());
             predictionLabel.setStyle("-fx-text-fill: red;");
