@@ -2,12 +2,18 @@ package test;
 
 import entities.Place;
 import services.PlaceService;
+import services.SmsSender;
 
 import java.sql.SQLException;
 
 public class Main {
 
     public static void main(String[] args) {
+        String myNumber = "+216 96628518";
+        String message = "Hello from Java!";
+
+        SmsSender.sendSms(myNumber, message);
+        System.out.println("Message sent successfully!");
         PlaceService ps = new PlaceService();
         try {
             // Uncomment to modify a place
@@ -25,5 +31,6 @@ public class Main {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+
     }
 }

@@ -2,28 +2,30 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.OwnerController">
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.OwnerController"
+      stylesheets="@style.css">
 
-    <HBox spacing="10">
-        <TextField fx:id="nameField" promptText="Name"/>
-        <TextField fx:id="emailField" promptText="Email"/>
-        <TextField fx:id="numberField" promptText="Phone Number"/>
-        <ComboBox fx:id="loanComboBox" promptText="Select Formation"/>
+    <HBox spacing="10" styleClass="form-container">
+        <TextField fx:id="nameField" promptText="Name" styleClass="agriculture-field"/>
+        <TextField fx:id="emailField" promptText="Email" styleClass="agriculture-field"/>
+        <TextField fx:id="numberField" promptText="Phone Number" styleClass="agriculture-field"/>
+        <ComboBox fx:id="loanComboBox" promptText="Select Formation" styleClass="agriculture-combo"/>
     </HBox>
 
-    <TableView fx:id="ownerTable" prefHeight="200">
+    <TableView fx:id="ownerTable" prefHeight="200" styleClass="agriculture-table">
         <columns>
-            <TableColumn fx:id="nameCol" text="Name" />
-            <TableColumn fx:id="emailCol" text="Email" />
-            <TableColumn fx:id="numberCol" text="Number" />
-            <TableColumn fx:id="formationCol" text="Formation" />
+            <TableColumn fx:id="nameCol" text="Name" styleClass="table-column"/>
+            <TableColumn fx:id="emailCol" text="Email" styleClass="table-column"/>
+            <TableColumn fx:id="numberCol" text="Number" styleClass="table-column"/>
+            <TableColumn fx:id="formationCol" text="Formation" styleClass="table-column"/>
         </columns>
     </TableView>
 
-    <HBox spacing="10">
-        <Button text="Add" onAction="#handleAdd"/>
-        <Button text="Edit" onAction="#handleEdit"/>
-        <Button text="Delete" onAction="#handleDelete"/>
+    <HBox spacing="10" styleClass="button-container">
+        <Button text="Add" onAction="#handleAdd" styleClass="agriculture-button"/>
+        <Button text="Edit" onAction="#handleEdit" styleClass="agriculture-button"/>
+        <Button text="Delete" onAction="#handleDelete" styleClass="agriculture-button"/>
     </HBox>
 
 </VBox>

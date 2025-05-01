@@ -10,19 +10,36 @@
             fx:controller="controller.PlaceController">
 
     <top>
-        <HBox style="-fx-padding: 10;">
-            <Button text="Add New Place" onAction="#handleAdd"/>
-            <Button text="Go to Loans" onAction="#handleGoToLoans" fx:id="goToLoansBtn"/>
+        <VBox spacing="15" alignment="CENTER">
+            <!-- Top Section with buttons -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+                <Button text="Add New Place" onAction="#handleAdd" styleClass="button"/>
+                <Button text="Go to Loans" onAction="#handleGoToLoans" fx:id="goToLoansBtn" styleClass="button"/>
+            </HBox>
 
-        </HBox>
+            <!-- Filter Section -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+                <TextField fx:id="searchField" promptText="Search by name" styleClass="text-field"/>
+                <TextField fx:id="minPriceField" promptText="Min price" styleClass="text-field"/>
+                <TextField fx:id="maxPriceField" promptText="Max price" styleClass="text-field"/>
+                <Button text="Filter" onAction="#handleFilter" styleClass="button"/>
+            </HBox>
+        </VBox>
     </top>
 
     <center>
-        <TableView fx:id="placeTable">
+        <TableView fx:id="placeTable" styleClass="table-view">
             <columns>
-                <TableColumn text="Name" fx:id="nameCol"/>
-                <TableColumn text="Price" fx:id="priceCol"/>
-                <TableColumn text="Capacity" fx:id="capacityCol"/>
+                <TableColumn text="Name" fx:id="nameCol" />
+                <TableColumn text="Price" fx:id="priceCol" />
+                <TableColumn text="Capacity" fx:id="capacityCol" />
+                <TableColumn text="Image" fx:id="imageCol"/> <!-- Image Column -->
                 <TableColumn text="Actions" fx:id="actionsCol"/>
             </columns>
         </TableView>

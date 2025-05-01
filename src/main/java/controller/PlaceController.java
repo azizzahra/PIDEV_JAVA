@@ -15,17 +15,25 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import services.PlaceService;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class PlaceController {
+
     @FXML private TableView<Place> placeTable;
     @FXML private TableColumn<Place, Integer> idCol;
     @FXML private TableColumn<Place, String> nameCol;
     @FXML private TableColumn<Place, Double> priceCol;
     @FXML private TableColumn<Place, Integer> capacityCol;
+    @FXML private TableColumn<Place, String> imageCol; // Image column
+
+    @FXML private TextField searchField;
+    @FXML private TextField minPriceField;
+    @FXML private TextField maxPriceField;
 
     private final PlaceService placeService = new PlaceService();
     private final ObservableList<Place> places = FXCollections.observableArrayList();
@@ -36,6 +44,29 @@ public class PlaceController {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
         capacityCol.setCellValueFactory(new PropertyValueFactory<>("capacity"));
+
+        // Configure the image column to display an image
+        imageCol.setCellValueFactory(new PropertyValueFactory<>("imagePath")); // Assuming imagePath is a String
+
+        // Set the cell factory for the image column to use ImageView
+        imageCol.setCellFactory(param -> new TableCell<Place, String>() {
+            private final ImageView imageView = new ImageView();
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    Image image = new Image("file:" + item); // Load image from the path
+                    imageView.setImage(image);
+                    imageView.setFitHeight(50);  // Set size of the image
+                    imageView.setFitWidth(50);
+                    setGraphic(imageView); // Set the image in the cell
+                }
+            }
+        });
 
         // Add action buttons column
         TableColumn<Place, Void> actionsCol = new TableColumn<>("Actions");
@@ -146,6 +177,29 @@ public class PlaceController {
         }
     }
 
+    @FXML
+    private void handleFilter() {
+        // Get the search text and filter values
+        String keyword = searchField.getText().toLowerCase().trim();
+        String minText = minPriceField.getText().trim();
+        String maxText = maxPriceField.getText().trim();
+
+        // Parse the min and max price, or use default values
+        double min = minText.isEmpty() ? 0 : Double.parseDouble(minText);
+        double max = maxText.isEmpty() ? Double.MAX_VALUE : Double.parseDouble(maxText);
+
+        // Apply filter
+        ObservableList<Place> filtered = places.filtered(place -> {
+            boolean matchesName = place.getName().toLowerCase().contains(keyword);
+            boolean inPriceRange = place.getPrice() >= min && place.getPrice() <= max;
+
+            return matchesName && inPriceRange;
+        });
+
+        // Update the table with the filtered data
+        placeTable.setItems(filtered);
+    }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -157,20 +211,16 @@ public class PlaceController {
     @FXML
     public void handleGoToLoans(ActionEvent actionEvent) {
         try {
-            // Load the loans management layout
             Parent loansRoot = FXMLLoader.load(
                     getClass().getResource("/loan_management.fxml")
             );
-            // Get current window (stage) from the event’s source node
             Stage stage = (Stage) ((Node) actionEvent.getSource())
                     .getScene()
                     .getWindow();
-            // Replace the scene
             stage.setScene(new Scene(loansRoot));
             stage.setTitle("Loan Management");
         } catch (IOException e) {
             showAlert("Error", "Failed to load loans screen: " + e.getMessage());
         }
     }
-
 }

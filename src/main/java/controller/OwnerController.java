@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import services.LoanService;
 import services.LoanServiceImpl;
 import services.OwnerService;
+import services.CertificateService;  // Import CertificateService
+import services.EmailVerificationService;
 
 import java.sql.SQLException;
 
@@ -25,8 +27,9 @@ public class OwnerController {
     @FXML private TableColumn<Owner, String> formationCol;
 
     private final OwnerService ownerService = new OwnerService();
-    private final LoanService loanService = new LoanServiceImpl(); // you should implement this if not already done
-
+    private final LoanService loanService = new LoanServiceImpl();
+    private final CertificateService certificateService = new CertificateService();
+    private final EmailVerificationService emailVerificationService = EmailVerificationService.getInstance();
 
     @FXML
     public void initialize() throws SQLException {
@@ -53,6 +56,27 @@ public class OwnerController {
             ownerService.addOwner(owner);
             ownerTable.setItems(ownerService.getAllOwners()); // refresh list
             clearFields();
+
+            try {
+                // Generate certificate for the owner
+                certificateService.generateCertificate(owner);
+                showAlert("Certificate generated successfully!");
+
+                // Send email confirmation after certificate generation
+                String subject = "Formation Registration Confirmation";
+                String content = "Hello " + owner.getName() + ",\n\n" +
+                        "You have successfully joined the formation: " + selectedLoan.getFormation() + ".\n" +
+                        "A certificate has been generated for your registration.\n\n" +
+                        "Best regards,\nYour Training Team";
+
+                // Send the email confirmation
+                emailVerificationService.sendEmail(owner.getEmail(), subject, content);
+
+                showAlert("Confirmation email sent to: " + owner.getEmail());
+
+            } catch (Exception e) {
+                showAlert("Error generating certificate: " + e.getMessage());
+            }
         } else {
             showAlert("Please select a formation.");
         }

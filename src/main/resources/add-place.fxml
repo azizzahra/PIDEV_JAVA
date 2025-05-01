@@ -24,7 +24,9 @@
         <TextField fx:id="capacityField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
         <Label text="Image:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <TextField fx:id="imageField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <TextField fx:id="imageField" GridPane.rowIndex="3" GridPane.columnIndex="1" editable="false"/>
+        <Button fx:id="selectImageButton" text="Select Image" onAction="#handleSelectImage" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+
     </GridPane>
 
     <HBox spacing="10">
