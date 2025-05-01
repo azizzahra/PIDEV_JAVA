@@ -20,9 +20,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
-import java.util.regex.Pattern;
-
 import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 
 public class UpdateFarmController {
 

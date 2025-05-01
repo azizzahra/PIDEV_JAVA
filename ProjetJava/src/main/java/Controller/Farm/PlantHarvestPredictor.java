@@ -1,9 +1,10 @@
 package controller.Farm;
 
+import org.json.simple.JSONObject;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import org.json.simple.JSONObject;
 
 /**
  * Java implementation of the PlantHarvestPredictor

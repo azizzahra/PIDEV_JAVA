@@ -130,41 +130,26 @@
                                 <VBox styleClass="todo-container" spacing="10">
                                     <Label text="To-Do List" styleClass="section-title"/>
 
-                                    <HBox spacing="10" alignment="CENTER_LEFT">
-                                        <TextField promptText="What do you need to do?" HBox.hgrow="ALWAYS"/>
-                                        <Button text="+" styleClass="button"/>
+                                    <!-- Input container with improved styling -->
+                                    <HBox styleClass="todo-input-container" spacing="10" alignment="CENTER_LEFT">
+                                        <TextField fx:id="todoInputField"
+                                                   promptText="Add a new task..."
+                                                   HBox.hgrow="ALWAYS"
+                                                   styleClass="todo-input-field"/>
+
+                                        <ComboBox fx:id="priorityComboBox"
+                                                  prefWidth="100"
+                                                  styleClass="priority-combo"/>
+
+                                        <Button fx:id="addTodoButton"
+                                                text="+"
+                                                styleClass="add-todo-button"/>
                                     </HBox>
 
-                                    <VBox spacing="8">
-                                        <!-- Todo items examples -->
-                                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="todo-item">
-                                            <Label text="qsdsqd" HBox.hgrow="ALWAYS"/>
-                                            <Label text="24 Feb 2025"/>
-                                            <Label text="High priority" styleClass="todo-priority high"/>
-                                            <Label text="×" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-cursor: hand;"/>
-                                        </HBox>
-
-                                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="todo-item">
-                                            <Label text="azze" HBox.hgrow="ALWAYS"/>
-                                            <Label text="24 Feb 2025"/>
-                                            <Label text="Middle priority" styleClass="todo-priority medium"/>
-                                            <Label text="×" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-cursor: hand;"/>
-                                        </HBox>
-
-                                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="todo-item">
-                                            <Label text="scqcdscs" HBox.hgrow="ALWAYS"/>
-                                            <Label text="24 Feb 2025"/>
-                                            <Label text="Low priority" styleClass="todo-priority low"/>
-                                            <Label text="×" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-cursor: hand;"/>
-                                        </HBox>
-
-                                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="todo-item">
-                                            <Label text="sqvsd" HBox.hgrow="ALWAYS"/>
-                                            <Label text="24 Feb 2025"/>
-                                            <Label text="Done" styleClass="todo-priority done"/>
-                                            <Label text="×" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-cursor: hand;"/>
-                                        </HBox>
-                                    </VBox>
+                                    <!-- Todo items container with scroll capability -->
+                                    <ScrollPane fitToWidth="true" maxHeight="300" styleClass="transparent-scroll-pane">
+                                        <VBox fx:id="todoItemsContainer" spacing="10" styleClass="todo-items-container"/>
+                                    </ScrollPane>
                                 </VBox>
 
                                 <!-- Recherche de plantes -->

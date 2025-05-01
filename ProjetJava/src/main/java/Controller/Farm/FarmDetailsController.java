@@ -1,21 +1,34 @@
 package controller.Farm;
 
 import Main.mainPrincipal;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.animation.FadeTransition;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Farm;
+import model.Note;
 import model.plante;
 import services.FarmService;
+import services.NoteService;
 import services.PlanteService;
 
 import java.io.BufferedReader;
@@ -24,17 +37,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
-
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-
-import javafx.application.Platform;
-import javafx.stage.Modality;
-import javafx.scene.control.ProgressIndicator;
-
 import java.util.prefs.Preferences;
+
 
 
 public class FarmDetailsController {
@@ -75,10 +83,6 @@ public class FarmDetailsController {
     private Button chooseFileButton;
     @FXML
     private Button detectButton;
-    @FXML
-    private VBox diseaseResultContainer;
-
-    @FXML private WeatherWidgetController weatherWidgetController;
 
     @FXML
     private Button prevPageButton;
@@ -90,6 +94,22 @@ public class FarmDetailsController {
     private int currentPage = 1;
     private final int CARDS_PER_PAGE = 6;
     private List<plante> currentFilteredPlants;
+
+    @FXML
+    private TextField todoInputField;
+    @FXML
+    private ComboBox<String> priorityComboBox;
+    @FXML
+    private Button addTodoButton;
+    @FXML
+    private VBox todoItemsContainer;
+    @FXML
+    private HBox emptyStateContainer;
+
+
+    // Add this to your existing service declarations
+    private NoteService noteService = new NoteService();
+    private List<Note> farmNotes = new ArrayList<>();
 
     private Preferences prefs = Preferences.userNodeForPackage(AddFarmController.class);
 
@@ -150,13 +170,264 @@ public class FarmDetailsController {
         if (detectButton != null) {
             detectButton.setOnAction(e -> detectDisease());
         }
-        // Log that initialization is complete
-        System.out.println("FarmDetailsController initialized");
-        if (weatherWidgetController != null) {
-            System.out.println("WeatherWidgetController is injected properly");
-        } else {
-            System.err.println("WARNING: weatherWidgetController is null during initialization");
+        if (priorityComboBox != null) {
+            ObservableList<String> priorities = FXCollections.observableArrayList("High", "Medium", "Low");
+            priorityComboBox.setItems(priorities);
+            priorityComboBox.setValue("Medium"); // Default value
+
+            // Set cell factory for custom styling of combobox items
+            priorityComboBox.setCellFactory(listView -> new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        setText(item);
+                        getStyleClass().removeAll("priority-item-high", "priority-item-medium", "priority-item-low");
+                        switch (item.toLowerCase()) {
+                            case "high":
+                                getStyleClass().add("priority-item-high");
+                                break;
+                            case "medium":
+                                getStyleClass().add("priority-item-medium");
+                                break;
+                            case "low":
+                                getStyleClass().add("priority-item-low");
+                                break;
+                        }
+                    }
+                }
+            });
+
+            // Apply same styling to the button cell
+            priorityComboBox.setButtonCell(new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item);
+                        getStyleClass().removeAll("priority-item-high", "priority-item-medium", "priority-item-low");
+                        switch (item.toLowerCase()) {
+                            case "high":
+                                getStyleClass().add("priority-item-high");
+                                break;
+                            case "medium":
+                                getStyleClass().add("priority-item-medium");
+                                break;
+                            case "low":
+                                getStyleClass().add("priority-item-low");
+                                break;
+                        }
+                    }
+                }
+            });
         }
+
+        if (addTodoButton != null) {
+            addTodoButton.setOnAction(e -> addNewTodo());
+
+            // Allow Enter key to add task
+            todoInputField.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    addNewTodo();
+                }
+            });
+        }
+    }
+    private void loadNotesForFarm(int farmId) {
+        try {
+            farmNotes = noteService.getNotesByFarmId(farmId);
+            displayNotes();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load notes for this farm: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private void displayNotes() {
+        if (todoItemsContainer != null) {
+            todoItemsContainer.getChildren().clear();
+
+            if (farmNotes.isEmpty()) {
+                // Show empty state message
+                if (emptyStateContainer != null) {
+                    emptyStateContainer.setVisible(true);
+                }
+            } else {
+                // Hide empty state when we have tasks
+                if (emptyStateContainer != null) {
+                    emptyStateContainer.setVisible(false);
+                }
+
+                // Sort notes by priority (High > Medium > Low)
+                farmNotes.sort((note1, note2) -> {
+                    int priorityValue1 = getPriorityValue(note1.getStatus());
+                    int priorityValue2 = getPriorityValue(note2.getStatus());
+                    return Integer.compare(priorityValue1, priorityValue2);
+                });
+
+                for (Note note : farmNotes) {
+                    HBox todoItem = createTodoItem(note);
+                    todoItemsContainer.getChildren().add(todoItem);
+                }
+            }
+        }
+    }
+    private int getPriorityValue(String priority) {
+        switch (priority.toLowerCase()) {
+            case "high": return 1;
+            case "medium": return 2;
+            case "low": return 3;
+            default: return 4;
+        }
+    }
+    private HBox createTodoItem(Note note) {
+        HBox todoItem = new HBox(10);
+        todoItem.setAlignment(Pos.CENTER_LEFT);
+        todoItem.setPadding(new Insets(5));
+        todoItem.getStyleClass().addAll("todo-item");
+
+        // Priority indicator with enhanced styling
+        Circle priorityCircle = new Circle(6);
+        priorityCircle.getStyleClass().add("priority-circle");
+
+        String priority = note.getStatus().toLowerCase();
+        switch (priority) {
+            case "high":
+                priorityCircle.getStyleClass().add("priority-high");
+                break;
+            case "medium":
+                priorityCircle.getStyleClass().add("priority-medium");
+                break;
+            case "low":
+                priorityCircle.getStyleClass().add("priority-low");
+                break;
+            default:
+                priorityCircle.setFill(javafx.scene.paint.Color.valueOf("#3498db"));
+        }
+
+        // Content container (task & date)
+        VBox contentBox = new VBox(2);
+        HBox.setHgrow(contentBox, Priority.ALWAYS);
+
+        // Task text
+        Label contentLabel = new Label(note.getTask());
+        contentLabel.getStyleClass().add("task-content");
+        contentLabel.setWrapText(true);
+
+        // Formatted date with additional styling
+        String formattedDate = formatNoteDate(note.getCreatedAt());
+        Label dateLabel = new Label(formattedDate);
+        dateLabel.getStyleClass().add("task-date");
+
+        contentBox.getChildren().addAll(contentLabel, dateLabel);
+
+        // Delete button with improved styling
+        Button deleteButton = new Button("×");
+        deleteButton.getStyleClass().add("delete-todo-button");
+        deleteButton.setOnAction(e -> {
+            // Add confirmation dialog
+            Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmDelete.setTitle("Delete Task");
+            confirmDelete.setHeaderText("Delete \"" + note.getTask() + "\"?");
+            confirmDelete.setContentText("Are you sure you want to delete this task?");
+
+            confirmDelete.showAndWait().ifPresent(result -> {
+                if (result == ButtonType.OK) {
+                    deleteTodo(note.getId());
+                }
+            });
+        });
+
+        todoItem.getChildren().addAll(priorityCircle, contentBox, deleteButton);
+
+        // Add hover effect to indicate task can be marked as complete (for future implementation)
+        todoItem.setOnMouseEntered(e -> todoItem.setStyle("-fx-background-color: #f5f5f5;"));
+        todoItem.setOnMouseExited(e -> todoItem.setStyle(""));
+
+        return todoItem;
+    }
+
+    private void addNewTodo() {
+        String content = todoInputField.getText().trim();
+        String priority = priorityComboBox.getValue();
+
+        if (content.isEmpty()) {
+            showAlert("Invalid Input", "Please enter a task description", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            // Get the farm object first
+            Farm farm = farmService.getone(farmId);
+            if (farm == null) {
+                showAlert("Error", "Farm not found with ID: " + farmId, Alert.AlertType.ERROR);
+                return;
+            }
+
+            Note newNote = new Note();
+            newNote.setTask(content);
+            newNote.setStatus(priority);
+            newNote.setFarm(farm);
+            newNote.setCreatedAt(LocalDateTime.now());
+
+            // Add animation effect for better user experience
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(500));
+            fadeIn.setFromValue(0.0);
+            fadeIn.setToValue(1.0);
+
+            noteService.add(newNote);
+            todoInputField.clear();
+
+            // Reload notes
+            loadNotesForFarm(farmId);
+
+            // If this was the first task, make sure to hide empty state
+            if (emptyStateContainer != null) {
+                emptyStateContainer.setVisible(false);
+            }
+
+            // Apply animation to the first item (which should be our new task if sorted by priority)
+            if (!todoItemsContainer.getChildren().isEmpty()) {
+                Node firstItem = todoItemsContainer.getChildren().get(0);
+                fadeIn.setNode(firstItem);
+                fadeIn.play();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to add new task: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private void deleteTodo(int noteId) {
+        try {
+            Note noteToDelete = noteService.getone(noteId);
+
+            if (noteToDelete != null) {
+                noteService.delete(noteToDelete);
+
+                // Refresh notes
+                loadNotesForFarm(farmId);
+
+                showAlert("Success", "Task deleted successfully", Alert.AlertType.INFORMATION);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to delete task: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+    private String formatNoteDate(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return "No date";
+        }
+
+        // More user-friendly date format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy");
+        return dateTime.format(formatter);
     }
 
     private void chooseImageFile() {
@@ -470,14 +741,7 @@ public class FarmDetailsController {
 
                 loadFarmImage(currentFarm.getImage());
                 loadPlantsForFarm(farmId);
-
-                // Initialize weather widget with farm location
-                if (weatherWidgetController != null) {
-                    System.out.println("Setting weather location to: " + currentFarm.getLocation());
-                    weatherWidgetController.setLocation(currentFarm.getLocation());
-                } else {
-                    System.err.println("ERROR: weatherWidgetController is null when trying to set location");
-                }
+                loadNotesForFarm(farmId);
 
             } else {
                 showAlert("Erreur", "Impossible de trouver la ferme avec l'ID: " + farmId, Alert.AlertType.ERROR);
@@ -490,7 +754,6 @@ public class FarmDetailsController {
                     Alert.AlertType.ERROR);
         }
     }
-
     private void loadFarmImage(String imagePath) {
         try {
             if (imagePath != null && !imagePath.isEmpty()) {

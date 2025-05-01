@@ -1,44 +1,90 @@
 package model;
 
-public class note {
-    private int id;
-    private int userId;
-    private String content;
-    private String createdAt;
+import java.time.LocalDateTime;
 
-    // Constructeurs
-    public note() {}
+public class Note {
+    private Integer id;
+    private String task;
+    private String status;
+    private LocalDateTime createdAt;
+    private Farm farm;
 
-    public note(int id, int userId, String content, String createdAt) {
-        this.id = id;
-        this.userId = userId;
-        this.content = content;
-        this.createdAt = createdAt;
+    // Constructors
+    public Note() {
+        this.createdAt = LocalDateTime.now(); // Automatically set the creation date
+        this.status = "pending"; // Set default status
+
     }
-    public note(int userId, String content, String createdAt) {
 
-        this.userId = userId;
-        this.content = content;
+    public Note(Integer id, String task, String status, LocalDateTime createdAt, Farm farm) {
+        this.id = id;
+        this.task = task;
+        this.status = status;
         this.createdAt = createdAt;
+        this.farm = farm;
+    }
+
+    public Note(String task, String status, Farm farm) {
+        this.task = task;
+        this.status = status;
+        this.farm = farm;
+        this.createdAt = LocalDateTime.now(); // Automatically set the creation date
     }
 
     // Getters
-    public int getId() { return id; }
-    public int getUserId() { return userId; }
-    public String getContent() { return content; }
-    public String getCreatedAt() { return createdAt; }
+    public Integer getId() {
+        return id;
+    }
+
+    public String getTask() {
+        return task;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public Farm getFarm() {
+        return farm;
+    }
 
     // Setters
-    public void setId(int id) { this.id = id; }
-    public void setUserId(int userId) { this.userId = userId; }
-    public void setContent(String content) { this.content = content; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Note setTask(String task) {
+        this.task = task;
+        return this;
+    }
+
+    public Note setStatus(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public Note setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public Note setFarm(Farm farm) {
+        this.farm = farm;
+        return this;
+    }
 
     @Override
     public String toString() {
         return "Note{" +
                 "id=" + id +
-                ", content='" + content + '\'' +
+                ", task='" + task + '\'' +
+                ", status='" + status + '\'' +
+                ", createdAt=" + createdAt +
+                ", farm=" + (farm != null ? farm.getId() : null) +
                 '}';
     }
 }

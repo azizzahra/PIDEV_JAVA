@@ -23,7 +23,6 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 import java.util.prefs.Preferences;
 
 public class UpdatePlanteController {

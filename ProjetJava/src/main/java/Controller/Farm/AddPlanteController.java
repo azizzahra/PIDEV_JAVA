@@ -11,6 +11,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Farm;
 import model.plante;
+import org.json.simple.JSONObject;
 import services.FarmService;
 import services.PlanteService;
 
@@ -21,13 +22,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
-
-import java.util.prefs.Preferences;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.prefs.Preferences;
 
 public class AddPlanteController {
 

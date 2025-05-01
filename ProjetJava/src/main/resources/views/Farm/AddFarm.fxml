@@ -6,6 +6,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.Insets?>
 
+<?import javafx.scene.web.WebView?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.Farm.AddFarmController"
@@ -89,7 +90,7 @@
                            <Label fx:id="imagePathLabel" text="No image selected" styleClass="file-path-label" visible="false"/>
 
                            <!-- Empty Space for Map in Original Design -->
-                           <Pane minHeight="200" />
+                           <WebView fx:id="mapView"  prefHeight="300" prefWidth="300" />
                         </VBox>
 
                         <!-- Right Side - Form Fields -->
@@ -131,15 +132,15 @@
                            </VBox>
 
                            <!-- Hidden Fields -->
-                           <HBox spacing="10" visible="false">
+                           <HBox spacing="10" >
                               <VBox spacing="5" HBox.hgrow="ALWAYS">
                                  <Label text="Latitude:" />
-                                 <TextField fx:id="flatitude" text="0.0" />
+                                 <TextField fx:id="flatitude"  />
                                  <Label fx:id="flatitudeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
                               </VBox>
                               <VBox spacing="5" HBox.hgrow="ALWAYS">
                                  <Label text="Longitude:" />
-                                 <TextField fx:id="flongitude" text="0.0" />
+                                 <TextField fx:id="flongitude"  />
                                  <Label fx:id="flongitudeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
                               </VBox>
                               <VBox spacing="5" HBox.hgrow="ALWAYS">

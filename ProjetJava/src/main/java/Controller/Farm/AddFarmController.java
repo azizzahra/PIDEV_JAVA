@@ -8,20 +8,23 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Farm;
+import netscape.javascript.JSObject;
 import services.FarmService;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.regex.Pattern;
-
 import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 
 public class AddFarmController {
 
@@ -72,6 +75,9 @@ public class AddFarmController {
     @FXML
     private Label fuserError;
 
+    @FXML
+    private WebView mapView;
+    private static JavaFXCallback callbackInstance;
 
 
     private final String UPLOAD_DIR = "C:/xampp/htdocs/uploads/farm_image/";
@@ -95,7 +101,159 @@ public class AddFarmController {
     public void initialize() {
         setupValidationListeners();
         createUploadDirectory();
+        initializeMap();
 
+    }
+    public class JavaFXCallback {
+        public void call(double lat, double lng, String cityName) {
+            System.out.println("Callback received from OpenStreetMap: Lat=" + lat + ", Lng=" + lng + ", City=" + cityName);
+
+            javafx.application.Platform.runLater(() -> {
+                try {
+                    flatitude.setText(String.format("%.6f", lat).replace(',', '.')); // Remplacer la virgule par un point
+                    flongitude.setText(String.format("%.6f", lng).replace(',', '.')); // Remplacer la virgule par un point
+
+                    if (cityName != null && !cityName.isEmpty()) {
+                        flocation.setText(cityName);
+                        flocationError.setVisible(false);
+                        System.out.println("Location field updated with city name: " + cityName);
+                    } else {
+                        flocation.setText("");
+                        flocation.setPromptText("Ville (saisie manuelle)");
+                        System.out.println("Empty city name received, placeholder updated for manual input");
+                    }
+
+                    flatitudeError.setVisible(false);
+                    flongitudeError.setVisible(false);
+
+                    System.out.println("UI updated with new coordinates and city: " + lat + ", " + lng + ", " + cityName);
+                } catch (Exception e) {
+                    System.err.println("Error updating UI with coordinates and city: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        // Overload for backward compatibility (if needed)
+        public void call(double lat, double lng) {
+            call(lat, lng, "");
+        }
+    }
+    private void initializeMap() {
+        try {
+            // Get the WebEngine
+            WebEngine engine = mapView.getEngine();
+
+            // Activer explicitement JavaScript
+            engine.setJavaScriptEnabled(true);
+
+            // Créer une seule instance de callback qui persistera
+            if (callbackInstance == null) {
+                callbackInstance = new JavaFXCallback();
+            }
+
+            // Charger la page HTML
+            URL mapResource = getClass().getResource("/views/Farm/map.html");
+            if (mapResource != null) {
+                String mapUrl = mapResource.toExternalForm();
+                System.out.println("Loading map from: " + mapUrl);
+                engine.load(mapUrl);
+            } else {
+                // Essayer les alternatives comme dans votre code original
+                mapResource = getClass().getClassLoader().getResource("views/Farm/map.html");
+                if (mapResource != null) {
+                    String mapUrl = mapResource.toExternalForm();
+                    System.out.println("Loading map from alternate path: " + mapUrl);
+                    engine.load(mapUrl);
+                } else {
+                    // Essayer de charger depuis le système de fichiers
+                    String projectPath = System.getProperty("user.dir");
+                    File mapFile = new File(projectPath + "/src/main/resources/views/Farm/map.html");
+                    if (mapFile.exists()) {
+                        System.out.println("Loading map from file system: " + mapFile.toURI().toString());
+                        engine.load(mapFile.toURI().toString());
+                    } else {
+                        System.err.println("Could not find map.html resource!");
+                        showAlert(Alert.AlertType.ERROR, "Error", "Could not find map.html resource");
+                    }
+                }
+            }
+
+            // Configurer le pont JavaScript une fois la page chargée
+            engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                    setupJavaScriptBridge(engine);
+                } else if (newState == javafx.concurrent.Worker.State.FAILED) {
+                    System.err.println("Failed to load map: " + engine.getLoadWorker().getException());
+                    if (engine.getLoadWorker().getException() != null) {
+                        engine.getLoadWorker().getException().printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            System.err.println("Error initializing map: " + e.getMessage());
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to initialize map: " + e.getMessage());
+        }
+    }
+
+    // Nouvelle méthode pour configurer le pont JavaScript - peut être appelée plusieurs fois
+    private void setupJavaScriptBridge(WebEngine engine) {
+        try {
+            // Get the JavaScript window object
+            JSObject window = (JSObject) engine.executeScript("window");
+
+            // Debug: Vérifier que window est bien obtenu
+            System.out.println("JavaScript window object: " + (window != null ? "obtained" : "null"));
+
+            // Installer le callback existant
+            window.setMember("javafxCallback", callbackInstance);
+
+            // Debug: Confirmer que le callback est bien installé
+            System.out.println("JavaFX callback installed");
+
+            // Vérifier le bridge avec un script de test
+            engine.executeScript(
+                    "console.log('Testing JavaFX bridge');" +
+                            "if (window.javafxCallback) {" +
+                            "  console.log('Bridge available');" +
+                            "  window.bridgeAvailable = true;" +
+                            "} else {" +
+                            "  console.log('Bridge NOT available');" +
+                            "  window.bridgeAvailable = false;" +
+                            "}"
+            );
+
+            // Réparer le bridge dans l'iframe OpenStreetMap
+            engine.executeScript(
+                    "document.getElementById('osm-iframe').onload = function() {" +
+                            "  console.log('iframe reloaded, reestablishing callback');" +
+                            "  setTimeout(function() {" +
+                            "    console.log('Bridge available in parent: ' + window.bridgeAvailable);" +
+                            "  }, 500);" +
+                            "};"
+            );
+
+            System.out.println("Map initialized successfully with OpenStreetMap");
+
+            // Définir la position initiale
+            try {
+                String latStr = flatitude.getText().trim();
+                String lonStr = flongitude.getText().trim();
+
+                double lat = latStr.isEmpty() ? 36.8065 : Double.parseDouble(latStr);
+                double lon = lonStr.isEmpty() ? 10.1815 : Double.parseDouble(lonStr);
+
+                System.out.println("Setting initial marker at: " + lat + ", " + lon);
+                engine.executeScript("setMarker(" + lat + ", " + lon + ")");
+            } catch (NumberFormatException e) {
+                System.out.println("Using default coordinates due to invalid values: " + e.getMessage());
+                engine.executeScript("setMarker(36.8065, 10.1815)");
+            }
+        } catch (Exception e) {
+            System.err.println("Error in setting up JavaScript bridge: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -187,6 +345,7 @@ public class AddFarmController {
                 fname.requestFocus();
                 return;
             }
+
             String imagePath = "";
             if (selectedImageFile != null) {
                 imagePath = saveImage();
@@ -211,7 +370,6 @@ public class AddFarmController {
 
             service.add(farm);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Ferme ajoutée avec succès !");
-
 
             Stage mainStage = mainPrincipal.getPrimaryStage();
 
@@ -485,7 +643,7 @@ public class AddFarmController {
             try {
                 double lat = Double.parseDouble(longStr);
                 if (lat < -180 || lat > 180) {
-                    flongitudeError.setText("La longitude doit être entre -90 et 90");
+                    flongitudeError.setText("La longitude doit être entre -180 et 180");
                     flongitudeError.setVisible(true);
                     if (isValid) {
                         flatitude.requestFocus();

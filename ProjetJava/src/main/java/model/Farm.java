@@ -1,5 +1,6 @@
 package model;
 
+
 public class Farm {
     private int id;
     private String name;
@@ -11,7 +12,8 @@ public class Farm {
     private double longitude;
     private int userId;
 
-    public Farm() {}
+    public Farm() {
+    }
 
     public Farm(int id, String name, int size, String location, String image, String description, double latitude, double longitude, int userId) {
         this.id = id;
