@@ -43,7 +43,7 @@
             <graphic>
                 <HBox spacing="5" alignment="CENTER">
                     <FontIcon iconLiteral="fa-user" iconSize="14" />
-                    <Label text="Lajmi" />
+                    <Label text="Aziz" />
                 </HBox>
             </graphic>
         </Button>

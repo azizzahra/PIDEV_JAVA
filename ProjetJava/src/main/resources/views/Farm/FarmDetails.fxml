@@ -10,6 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 
+<?import javafx.scene.web.WebView?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.Farm.FarmDetailsController"
@@ -126,6 +127,12 @@
                             <VBox spacing="25" prefWidth="350" styleClass="sidebar">
                                 <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
 
+                                <!-- Farm Location Map - Nouvelle section ajoutée -->
+                                <VBox styleClass="map-container" spacing="10">
+                                    <Label text="Farm Location" styleClass="section-title"/>
+                                    <!-- WebView pour afficher la carte OpenStreetMap -->
+                                    <WebView fx:id="locationMapView" prefHeight="250" prefWidth="310" styleClass="location-map-view"/>
+                                </VBox>
                                 <!-- To-Do List - Nouvelle section comme sur l'image -->
                                 <VBox styleClass="todo-container" spacing="10">
                                     <Label text="To-Do List" styleClass="section-title"/>
@@ -193,6 +200,7 @@
                                                 styleClass="button" HBox.hgrow="ALWAYS"/>
                                     </HBox>
                                 </VBox>
+                                <!-- <Button fx:id="optimizeCropsButton" text="Optimize Crops" styleClass="button" onAction="#openCropOptimization"/>-->
                             </VBox>
                         </HBox>
                     </HBox>

@@ -20,6 +20,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -27,6 +29,7 @@ import javafx.util.Duration;
 import model.Farm;
 import model.Note;
 import model.plante;
+import netscape.javascript.JSObject;
 import services.FarmService;
 import services.NoteService;
 import services.PlanteService;
@@ -35,6 +38,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -103,9 +107,9 @@ public class FarmDetailsController {
     private Button addTodoButton;
     @FXML
     private VBox todoItemsContainer;
-    @FXML
-    private HBox emptyStateContainer;
 
+    @FXML
+    private WebView locationMapView;
 
     // Add this to your existing service declarations
     private NoteService noteService = new NoteService();
@@ -170,63 +174,16 @@ public class FarmDetailsController {
         if (detectButton != null) {
             detectButton.setOnAction(e -> detectDisease());
         }
+
         if (priorityComboBox != null) {
-            ObservableList<String> priorities = FXCollections.observableArrayList("High", "Medium", "Low");
+            ObservableList<String> priorities = FXCollections.observableArrayList("High", "Medium", "Low", "Done");
             priorityComboBox.setItems(priorities);
             priorityComboBox.setValue("Medium"); // Default value
 
             // Set cell factory for custom styling of combobox items
-            priorityComboBox.setCellFactory(listView -> new ListCell<String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        setText(item);
-                        getStyleClass().removeAll("priority-item-high", "priority-item-medium", "priority-item-low");
-                        switch (item.toLowerCase()) {
-                            case "high":
-                                getStyleClass().add("priority-item-high");
-                                break;
-                            case "medium":
-                                getStyleClass().add("priority-item-medium");
-                                break;
-                            case "low":
-                                getStyleClass().add("priority-item-low");
-                                break;
-                        }
-                    }
-                }
-            });
-
-            // Apply same styling to the button cell
-            priorityComboBox.setButtonCell(new ListCell<String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item);
-                        getStyleClass().removeAll("priority-item-high", "priority-item-medium", "priority-item-low");
-                        switch (item.toLowerCase()) {
-                            case "high":
-                                getStyleClass().add("priority-item-high");
-                                break;
-                            case "medium":
-                                getStyleClass().add("priority-item-medium");
-                                break;
-                            case "low":
-                                getStyleClass().add("priority-item-low");
-                                break;
-                        }
-                    }
-                }
-            });
+            priorityComboBox.setCellFactory(listView -> createPriorityListCell());
+            priorityComboBox.setButtonCell(createPriorityListCell());
         }
-
         if (addTodoButton != null) {
             addTodoButton.setOnAction(e -> addNewTodo());
 
@@ -237,6 +194,515 @@ public class FarmDetailsController {
                 }
             });
         }
+
+        // Initialize map
+        initializeMap();
+    }
+
+    private void loadFarmDetails() {
+        try {
+            currentFarm = farmService.getone(farmId);
+
+            if (currentFarm != null) {
+                farmNameBreadcrumb.setText(currentFarm.getName());
+
+                farmName.setText(currentFarm.getName());
+                farmSize.setText(currentFarm.getSize() + " KM²");
+                farmLocation.setText(currentFarm.getLocation());
+                farmCoordinates.setText("Lat: " + currentFarm.getLatitude() + ", Long: " + currentFarm.getLongitude());
+                farmDescription.setText(currentFarm.getDescription());
+
+                loadFarmImage(currentFarm.getImage());
+                loadPlantsForFarm(farmId);
+                loadNotesForFarm(farmId);
+
+            } else {
+                showAlert("Erreur", "Impossible de trouver la ferme avec l'ID: " + farmId, Alert.AlertType.ERROR);
+                returnToList();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Erreur de chargement",
+                    "Une erreur s'est produite lors du chargement des détails de la ferme: " + e.getMessage(),
+                    Alert.AlertType.ERROR);
+        }
+    }
+    private void loadFarmImage(String imagePath) {
+        try {
+            if (imagePath != null && !imagePath.isEmpty()) {
+                String fullPath = "C:/xampp/htdocs/" + imagePath;
+                File imageFile = new File(fullPath);
+
+                if (imageFile.exists()) {
+                    Image image = new Image(imageFile.toURI().toString());
+                    farmImage.setImage(image);
+                } else {
+                    Image defaultImage = new Image("C:/xampp/htdocs/uploads/farm_image/default-farm.jpg");
+                    farmImage.setImage(defaultImage);
+                }
+            } else {
+                Image defaultImage = new Image("C:/xampp/htdocs/uploads/farm_image/default-farm.jpg");
+                farmImage.setImage(defaultImage);
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
+            try {
+                Image defaultImage = new Image("C:/xampp/htdocs/uploads/farm_image/default-farm.jpg");
+                farmImage.setImage(defaultImage);
+            } catch (Exception ex) {
+                System.err.println("Impossible de charger l'image par défaut: " + ex.getMessage());
+            }
+        }
+    }
+
+    /* //////////////////////////////////////////////////////////////////////////////////////////////////////     plant     //////////////////////////////*/
+    private void loadPlantsForFarm(int farmId) {
+        try {
+            // Récupérer toutes les plantes et les stocker
+            allPlants = planteService.getPlantesByFarmId(farmId);
+
+            updatePlantCount();
+            updateCategories();
+            currentPage = 1;  // Start at first page
+            displayPagedPlants(allPlants);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load plants for this farm: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+    private BorderPane createPlantCard(plante plant) {
+        BorderPane card = new BorderPane();
+        card.getStyleClass().add("plant-card");
+        card.setPrefSize(250, 350);
+
+        // Image de la plante
+        ImageView plantImage = createPlantImageView(plant);
+
+        // Zone de date et mois (en haut à droite)
+        VBox dateBox = new VBox(2);
+        dateBox.getStyleClass().add("plant-date-tag");
+        dateBox.setAlignment(Pos.CENTER);
+
+        // Extraire le jour et le mois de la date de récolte
+        String[] dateParts = formatDate(plant.getHarvestDate()).split("\n");
+        Label dayLabel = new Label(dateParts[0]);
+        dayLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+
+        Label monthLabel = new Label(dateParts.length > 1 ? dateParts[1] : "");
+        monthLabel.getStyleClass().add("month-text");
+
+        dateBox.getChildren().addAll(dayLabel, monthLabel);
+
+        // Type de plante avec icône (en bas à gauche de l'image)
+        HBox typeBox = new HBox(5);
+        typeBox.setAlignment(Pos.CENTER_LEFT);
+        Label typeIcon = new Label();
+        // Ajouter l'icône en fonction du type
+        if (plant.getType().equals("Vegetables")) {
+            typeIcon.setText("🥕");
+        } else if (plant.getType().equals("Fruits")) {
+            typeIcon.setText("🍎");
+        } else {
+            typeIcon.setText("🌸");
+        }
+
+        Label typeLabel = new Label(plant.getType());
+        typeBox.getChildren().addAll(typeIcon, typeLabel);
+        typeBox.getStyleClass().add("plant-type");
+
+
+        // Superposer image, date et type
+        StackPane imageStack = new StackPane();
+        imageStack.getChildren().add(plantImage);
+        imageStack.setPrefHeight(180);
+
+        // Positionnement de la date en haut à droite
+        StackPane.setAlignment(dateBox, Pos.TOP_RIGHT);
+        StackPane.setMargin(dateBox, new Insets(10, 10, 120, 160));
+        imageStack.getChildren().add(dateBox);
+
+        // Positionnement du type en bas à gauche
+        StackPane.setAlignment(typeBox, Pos.BOTTOM_LEFT);
+        StackPane.setMargin(typeBox, new Insets(160, 100, 10, 10));
+        imageStack.getChildren().add(typeBox);
+
+        // Zone du titre et quantité
+        VBox infoBox = new VBox(5);
+        infoBox.setPadding(new Insets(10));
+
+        Label nameLabel = new Label(plant.getName());
+        nameLabel.getStyleClass().add("plant-title");
+
+        HBox quantityBox = new HBox(5);
+        quantityBox.setAlignment(Pos.CENTER_LEFT);
+        FontAwesomeIconView quantityIcon = new FontAwesomeIconView(FontAwesomeIcon.TREE);
+        quantityIcon.getStyleClass().add("icon");
+        Label quantityLabel = new Label(plant.getQuantity() + " Units");
+        quantityLabel.getStyleClass().add("plant-quantity");
+        quantityBox.getChildren().addAll(quantityIcon, quantityLabel);
+
+        infoBox.setAlignment(Pos.CENTER);
+        infoBox.getChildren().addAll(nameLabel, quantityBox);
+
+        // Zone des boutons
+        HBox buttonsBox = new HBox(10);
+        buttonsBox.setAlignment(Pos.CENTER);
+        buttonsBox.setPadding(new Insets(0, 10, 10, 10));
+
+        Button editButton = new Button("Edit");
+        editButton.getStyleClass().addAll("card-button");
+        FontAwesomeIconView editIcon = new FontAwesomeIconView(FontAwesomeIcon.EDIT);
+        editButton.setGraphic(editIcon);
+        editButton.setOnAction(e -> openUpdatePlantForm(plant.getId()));
+
+        Button deleteButton = new Button("Delete");
+        deleteButton.getStyleClass().addAll("card-button");
+        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
+        deleteButton.setGraphic(deleteIcon);
+        deleteButton.setOnAction(e -> deletePlant(plant.getId()));
+
+        buttonsBox.getChildren().addAll(editButton, deleteButton);
+
+        // Assemblage final
+        card.setTop(imageStack);
+        card.setCenter(infoBox);
+        card.setBottom(buttonsBox);
+        card.setPadding(new Insets(0, 0, 10, 0));
+
+        return card;
+    }
+
+    private String formatDate(String dateString) {
+        // Simple implementation - adjust based on your date format
+        if (dateString == null || dateString.isEmpty()) {
+            return "No date";
+        }
+
+        try {
+            // Parse the date string
+            LocalDate date = LocalDate.parse(dateString);
+
+            // Format day and month
+            int day = date.getDayOfMonth();
+            String month = date.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+
+            return day + "\n" + month;
+        } catch (Exception e) {
+            return dateString;
+        }
+    }
+    private ImageView createPlantImageView(plante plant) {
+        ImageView plantImage = new ImageView();
+        try {
+            if (plant.getImage() != null && !plant.getImage().isEmpty()) {
+                String imagePath = "file:C:/xampp/htdocs/uploads/plant_image/" + plant.getImage();
+                Image image = new Image(imagePath, 220, 150, true, true);
+                plantImage.setImage(image);
+            } else {
+                // Default image if none available
+                Image defaultImage = new Image("C:/xampp/htdocs/uploads/plant_image/default-plant.jpg", 220, 150, true, true);
+                plantImage.setImage(defaultImage);
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading image: " + e.getMessage());
+            try {
+                Image defaultImage = new Image("C:/xampp/htdocs/uploads/plant_image/default-plant.jpg", 220, 150, true, true);
+                plantImage.setImage(defaultImage);
+            } catch (Exception ex) {
+                System.err.println("Unable to load default image: " + ex.getMessage());
+            }
+        }
+
+        plantImage.setFitWidth(220);
+        plantImage.setFitHeight(150);
+        plantImage.setPreserveRatio(false);
+
+        return plantImage;
+    }
+
+    private void updatePlantCount() {
+        if (plantCount != null) {
+            plantCount.setText(String.valueOf(allPlants.size()));
+        }
+    }
+    private void updateCategories() {
+        if (categoriesContainer != null) {
+            categoriesContainer.getChildren().clear();
+
+            // Créer un Map pour compter les types de plantes
+            Map<String, Integer> categoryCount = new HashMap<>();
+
+            // Compter les plantes par type
+            for (plante p : allPlants) {
+                String type = p.getType();
+                categoryCount.put(type, categoryCount.getOrDefault(type, 0) + 1);
+            }
+
+            // Créer les éléments d'interface pour chaque catégorie
+            for (Map.Entry<String, Integer> entry : categoryCount.entrySet()) {
+                HBox categoryItem = new HBox(5);
+                categoryItem.setAlignment(Pos.CENTER_LEFT);
+                categoryItem.getStyleClass().add("category-item");
+
+                Label categoryName = new Label(entry.getKey());
+                categoryName.getStyleClass().add("category-name");
+                HBox.setHgrow(categoryName, Priority.ALWAYS);
+
+                Label categoryCountLabel = new Label("(" + entry.getValue() + ")");
+                categoryCountLabel.getStyleClass().add("category-count");
+
+                categoryItem.getChildren().addAll(categoryName, categoryCountLabel);
+                categoriesContainer.getChildren().add(categoryItem);
+
+                // Ajouter un gestionnaire d'événements pour filtrer par catégorie lors du clic
+                categoryItem.setOnMouseClicked(e -> filterPlantsByCategory(entry.getKey()));
+            }
+        }
+    }
+
+    private void filterPlantsByCategory(String category) {
+        currentFilteredPlants = allPlants.stream()
+                .filter(p -> p.getType().equals(category))
+                .collect(java.util.stream.Collectors.toList());
+
+        currentPage = 1;  // Reset to first page when filtering
+        displayPagedPlants(currentFilteredPlants);
+    }
+
+    private void displayFilteredPlants(List<plante> plants) {
+        currentFilteredPlants = plants;
+        currentPage = 1;  // Reset to first page when displaying new list
+        displayPagedPlants(plants);
+    }
+
+    private void filterPlants(String searchText) {
+        if (searchText == null || searchText.isEmpty()) {
+            // If search field is empty, display all plants
+            currentFilteredPlants = null;  // Reset filtered plants
+            displayPagedPlants(allPlants);
+        } else {
+            // Convert to lowercase for case-insensitive search
+            String searchLower = searchText.toLowerCase();
+
+            // Filter plants whose name or type contains the search text
+            currentFilteredPlants = allPlants.stream()
+                    .filter(p -> p.getName().toLowerCase().contains(searchLower) ||
+                            p.getType().toLowerCase().contains(searchLower))
+                    .collect(java.util.stream.Collectors.toList());
+
+            // Display filtered plants
+            displayPagedPlants(currentFilteredPlants);
+        }
+    }
+
+    private void addAddPlantButton() {
+        VBox addPlantBox = new VBox(10);
+        addPlantBox.getStyleClass().add("add-plant-container");
+        addPlantBox.setAlignment(Pos.CENTER);
+        addPlantBox.setPrefSize(200, 280);
+
+        Label plusIcon = new Label("+");
+        plusIcon.getStyleClass().add("add-plant-icon");
+
+        Label addText = new Label("Add Plant");
+        addText.getStyleClass().add("add-plant-text");
+
+        addPlantBox.getChildren().addAll(plusIcon, addText);
+        addPlantBox.setOnMouseClicked(e -> openAddPlantForm());
+
+        plantsContainer.getChildren().add(addPlantBox);
+    }
+
+    private void deletePlant(int planteId) {
+        try {
+            // Show confirmation dialog
+            Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmDialog.setTitle("Confirm Deletion");
+            confirmDialog.setHeaderText("Are you sure you want to delete this plant?");
+            confirmDialog.setContentText("This action cannot be undone.");
+
+            // If user confirms
+            if (confirmDialog.showAndWait().get() == ButtonType.OK) {
+                // Get the plant by ID
+                plante plantToDelete = planteService.getone(planteId);
+
+                if (plantToDelete != null) {
+                    // Delete the plant
+                    planteService.delete(plantToDelete);
+
+                    // Show success message
+                    showAlert("Success", "Plant deleted successfully", Alert.AlertType.INFORMATION);
+
+                    // Refresh the plant list
+                    loadPlantsForFarm(farmId);
+                } else {
+                    showAlert("Error", "Could not find plant to delete", Alert.AlertType.ERROR);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Database Error",
+                    "An error occurred while deleting the plant: " + e.getMessage(),
+                    Alert.AlertType.ERROR);
+        }
+    }
+
+    private void displayPagedPlants(List<plante> plants) {
+        // Clear the container
+        plantsContainer.getChildren().clear();
+
+        if (plants.isEmpty()) {
+            Label emptyLabel = new Label("No plants found for this farm.");
+            emptyLabel.setStyle("-fx-font-size: 16px;");
+            plantsContainer.getChildren().add(emptyLabel);
+            updatePaginationControls(plants);  // Update pagination with empty list
+        } else {
+            // Calculate start and end indices for current page
+            int startIndex = (currentPage - 1) * CARDS_PER_PAGE;
+            int endIndex = Math.min(startIndex + CARDS_PER_PAGE, plants.size());
+
+            // Get plants for current page
+            List<plante> pagedPlants = plants.subList(startIndex, endIndex);
+
+            // Add each plant as a card
+            for (plante p : pagedPlants) {
+                BorderPane card = createPlantCard(p);
+                plantsContainer.getChildren().add(card);
+            }
+
+            // Update pagination controls
+            updatePaginationControls(plants);
+        }
+
+        // Add the "Add Plant" button if we're on the last page or there are few plants
+        if (currentPage == totalPages || plants.size() <= CARDS_PER_PAGE) {
+            addAddPlantButton();
+        }
+    }
+    private void updatePaginationControls(List<plante> plantsToDisplay) {
+        totalPages = (int) Math.ceil((double) plantsToDisplay.size() / CARDS_PER_PAGE);
+
+        // Ensure current page is valid
+        if (currentPage > totalPages && totalPages > 0) {
+            currentPage = totalPages;
+        } else if (currentPage < 1 || totalPages == 0) {
+            currentPage = 1;
+        }
+
+        // Update pagination UI
+        paginationButtons.getChildren().clear();
+
+        // Add previous button
+        prevPageButton.setDisable(currentPage == 1 || totalPages == 0);
+        paginationButtons.getChildren().add(prevPageButton);
+
+        // Add page buttons
+        int startPage = Math.max(1, currentPage - 2);
+        int endPage = Math.min(totalPages, startPage + 4);
+
+        for (int i = startPage; i <= endPage; i++) {
+            Button pageButton = new Button(String.valueOf(i));
+            pageButton.getStyleClass().add("pagination-button");
+            if (i == currentPage) {
+                pageButton.getStyleClass().add("active");
+            }
+
+            final int pageNum = i;
+            pageButton.setOnAction(e -> {
+                currentPage = pageNum;
+                updatePlantsDisplay();
+            });
+
+            paginationButtons.getChildren().add(pageButton);
+        }
+
+        // Add next button
+        nextPageButton.setDisable(currentPage == totalPages || totalPages == 0);
+        paginationButtons.getChildren().add(nextPageButton);
+    }
+    private void updatePlantsDisplay() {
+        if (currentFilteredPlants != null) {
+            displayPagedPlants(currentFilteredPlants);
+        } else if (allPlants != null) {
+            displayPagedPlants(allPlants);
+        }
+    }
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////     /plant     ///////////////////////////// */
+/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////     Map     ////////////////////////////////*/
+    private void initializeMap() {
+        try {
+            WebEngine engine = locationMapView.getEngine();
+            engine.setJavaScriptEnabled(true);
+
+            URL mapResource = getClass().getResource("/views/Farm/map.html");
+            if (mapResource != null) {
+                String mapUrl = mapResource.toExternalForm();
+                System.out.println("Loading map from: " + mapUrl);
+                engine.load(mapUrl);
+            } else {
+                String projectPath = System.getProperty("user.dir");
+                File mapFile = new File(projectPath + "/src/main/resources/views/Farm/map.html");
+                if (mapFile.exists()) {
+                    System.out.println("Loading map from file system: " + mapFile.toURI().toString());
+                    engine.load(mapFile.toURI().toString());
+                } else {
+                    System.err.println("Could not find map.html resource!");
+                    showAlert("Error", "Could not find map.html resource", Alert.AlertType.ERROR);
+                }
+            }
+
+            engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                    // Set initial marker after map loads
+                    if (currentFarm != null) {
+                        try {
+                            engine.executeScript("setMarker(" + currentFarm.getLatitude() + ", " + currentFarm.getLongitude() + ")");
+                        } catch (Exception e) {
+                            System.err.println("Error setting initial marker: " + e.getMessage());
+                        }
+                    }
+                } else if (newState == javafx.concurrent.Worker.State.FAILED) {
+                    System.err.println("Failed to load map: " + engine.getLoadWorker().getException());
+                }
+            });
+        } catch (Exception e) {
+            System.err.println("Error initializing map: " + e.getMessage());
+            showAlert("Error", "Failed to initialize map: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+    /*/////////////////////////////////////////////////////////////////////////////////////////////////////     /Map     //////////////////////////////*/
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////     todo list     ///////////////////////////*/
+
+    private ListCell<String> createPriorityListCell() {
+        return new ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(item);
+                    getStyleClass().removeAll("priority-item-high", "priority-item-medium", "priority-item-low", "priority-item-done");
+                    switch (item.toLowerCase()) {
+                        case "high":
+                            getStyleClass().add("priority-item-high");
+                            break;
+                        case "medium":
+                            getStyleClass().add("priority-item-medium");
+                            break;
+                        case "low":
+                            getStyleClass().add("priority-item-low");
+                            break;
+                        case "done":
+                            getStyleClass().add("priority-item-done");
+                            break;
+                    }
+                }
+            }
+        };
     }
     private void loadNotesForFarm(int farmId) {
         try {
@@ -251,29 +717,15 @@ public class FarmDetailsController {
     private void displayNotes() {
         if (todoItemsContainer != null) {
             todoItemsContainer.getChildren().clear();
+            farmNotes.sort((note1, note2) -> {
+                int priorityValue1 = getPriorityValue(note1.getStatus());
+                int priorityValue2 = getPriorityValue(note2.getStatus());
+                return Integer.compare(priorityValue1, priorityValue2);
+            });
 
-            if (farmNotes.isEmpty()) {
-                // Show empty state message
-                if (emptyStateContainer != null) {
-                    emptyStateContainer.setVisible(true);
-                }
-            } else {
-                // Hide empty state when we have tasks
-                if (emptyStateContainer != null) {
-                    emptyStateContainer.setVisible(false);
-                }
-
-                // Sort notes by priority (High > Medium > Low)
-                farmNotes.sort((note1, note2) -> {
-                    int priorityValue1 = getPriorityValue(note1.getStatus());
-                    int priorityValue2 = getPriorityValue(note2.getStatus());
-                    return Integer.compare(priorityValue1, priorityValue2);
-                });
-
-                for (Note note : farmNotes) {
-                    HBox todoItem = createTodoItem(note);
-                    todoItemsContainer.getChildren().add(todoItem);
-                }
+            for (Note note : farmNotes) {
+                HBox todoItem = createTodoItem(note);
+                todoItemsContainer.getChildren().add(todoItem);
             }
         }
     }
@@ -282,7 +734,8 @@ public class FarmDetailsController {
             case "high": return 1;
             case "medium": return 2;
             case "low": return 3;
-            default: return 4;
+            case "done": return 4;
+            default: return 5;
         }
     }
     private HBox createTodoItem(Note note) {
@@ -291,26 +744,7 @@ public class FarmDetailsController {
         todoItem.setPadding(new Insets(5));
         todoItem.getStyleClass().addAll("todo-item");
 
-        // Priority indicator with enhanced styling
-        Circle priorityCircle = new Circle(6);
-        priorityCircle.getStyleClass().add("priority-circle");
-
-        String priority = note.getStatus().toLowerCase();
-        switch (priority) {
-            case "high":
-                priorityCircle.getStyleClass().add("priority-high");
-                break;
-            case "medium":
-                priorityCircle.getStyleClass().add("priority-medium");
-                break;
-            case "low":
-                priorityCircle.getStyleClass().add("priority-low");
-                break;
-            default:
-                priorityCircle.setFill(javafx.scene.paint.Color.valueOf("#3498db"));
-        }
-
-        // Content container (task & date)
+        // Content container (task text & date)
         VBox contentBox = new VBox(2);
         HBox.setHgrow(contentBox, Priority.ALWAYS);
 
@@ -325,6 +759,28 @@ public class FarmDetailsController {
         dateLabel.getStyleClass().add("task-date");
 
         contentBox.getChildren().addAll(contentLabel, dateLabel);
+
+        // Priority selection dropdown - replaces the circle indicator
+        ComboBox<String> statusCombo = new ComboBox<>();
+        ObservableList<String> priorities = FXCollections.observableArrayList("High", "Medium", "Low", "Done");
+        statusCombo.setItems(priorities);
+        statusCombo.setValue(note.getStatus());
+
+        // Style the combobox based on the current status
+        statusCombo.setCellFactory(listView -> createPriorityListCell());
+        statusCombo.setButtonCell(createPriorityListCell());
+
+        // Add change listener to update the task priority
+        statusCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && !newVal.equals(oldVal)) {
+                updateNotePriority(note.getId(), newVal);
+            }
+        });
+
+        // Add style classes to combobox based on selected value
+        String priorityClass = "priority-combo-" + note.getStatus().toLowerCase();
+        statusCombo.getStyleClass().add(priorityClass);
+        statusCombo.setMinWidth(70);
 
         // Delete button with improved styling
         Button deleteButton = new Button("×");
@@ -343,14 +799,15 @@ public class FarmDetailsController {
             });
         });
 
-        todoItem.getChildren().addAll(priorityCircle, contentBox, deleteButton);
+        todoItem.getChildren().addAll(contentBox, statusCombo, deleteButton);
 
-        // Add hover effect to indicate task can be marked as complete (for future implementation)
+        // Add hover effect
         todoItem.setOnMouseEntered(e -> todoItem.setStyle("-fx-background-color: #f5f5f5;"));
         todoItem.setOnMouseExited(e -> todoItem.setStyle(""));
 
         return todoItem;
     }
+
 
     private void addNewTodo() {
         String content = todoInputField.getText().trim();
@@ -386,11 +843,6 @@ public class FarmDetailsController {
             // Reload notes
             loadNotesForFarm(farmId);
 
-            // If this was the first task, make sure to hide empty state
-            if (emptyStateContainer != null) {
-                emptyStateContainer.setVisible(false);
-            }
-
             // Apply animation to the first item (which should be our new task if sorted by priority)
             if (!todoItemsContainer.getChildren().isEmpty()) {
                 Node firstItem = todoItemsContainer.getChildren().get(0);
@@ -402,7 +854,21 @@ public class FarmDetailsController {
             showAlert("Error", "Failed to add new task: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
+    private void updateNotePriority(int noteId, String newPriority) {
+        try {
+            Note noteToUpdate = noteService.getone(noteId);
+            if (noteToUpdate != null) {
+                noteToUpdate.setStatus(newPriority);
+                noteService.update(noteToUpdate);
 
+                // Reload or refresh display to reflect the changes
+                loadNotesForFarm(farmId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to update task priority: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
     private void deleteTodo(int noteId) {
         try {
             Note noteToDelete = noteService.getone(noteId);
@@ -424,35 +890,12 @@ public class FarmDetailsController {
         if (dateTime == null) {
             return "No date";
         }
-
         // More user-friendly date format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy");
         return dateTime.format(formatter);
     }
-
-    private void chooseImageFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose Plant Image");
-        // Get last directory from preferences
-        String lastDirectoryPath = prefs.get("lastImageDirectory", null);
-        if (lastDirectoryPath != null) {
-            File lastDir = new File(lastDirectoryPath);
-            if (lastDir.exists()) {
-                fileChooser.setInitialDirectory(lastDir);
-            }
-        }
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
-        );
-
-        File selectedFile = fileChooser.showOpenDialog(mainPrincipal.getPrimaryStage());
-
-        if (selectedFile != null) {
-            prefs.put("lastImageDirectory", selectedFile.getParent());
-            imagePathField.setText(selectedFile.getAbsolutePath());
-        }
-    }
-
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////    /todo list     //////////////////////////*/
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////    Disease detection     /////////////////////*/
     private void detectDisease() {
         String imagePath = imagePathField.getText();
 
@@ -530,6 +973,28 @@ public class FarmDetailsController {
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Error detecting disease: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+    private void chooseImageFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Plant Image");
+        // Get last directory from preferences
+        String lastDirectoryPath = prefs.get("lastImageDirectory", null);
+        if (lastDirectoryPath != null) {
+            File lastDir = new File(lastDirectoryPath);
+            if (lastDir.exists()) {
+                fileChooser.setInitialDirectory(lastDir);
+            }
+        }
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(mainPrincipal.getPrimaryStage());
+
+        if (selectedFile != null) {
+            prefs.put("lastImageDirectory", selectedFile.getParent());
+            imagePathField.setText(selectedFile.getAbsolutePath());
         }
     }
 
@@ -675,479 +1140,9 @@ public class FarmDetailsController {
         dialogStage.setScene(scene);
         dialogStage.show();
     }
+    /* ///////////////////////////////////////////////////////////////////////////////////////////       /Disease detection   /////////////////////////////*/
 
-
-    private void updatePaginationControls(List<plante> plantsToDisplay) {
-        totalPages = (int) Math.ceil((double) plantsToDisplay.size() / CARDS_PER_PAGE);
-
-        // Ensure current page is valid
-        if (currentPage > totalPages && totalPages > 0) {
-            currentPage = totalPages;
-        } else if (currentPage < 1 || totalPages == 0) {
-            currentPage = 1;
-        }
-
-        // Update pagination UI
-        paginationButtons.getChildren().clear();
-
-        // Add previous button
-        prevPageButton.setDisable(currentPage == 1 || totalPages == 0);
-        paginationButtons.getChildren().add(prevPageButton);
-
-        // Add page buttons
-        int startPage = Math.max(1, currentPage - 2);
-        int endPage = Math.min(totalPages, startPage + 4);
-
-        for (int i = startPage; i <= endPage; i++) {
-            Button pageButton = new Button(String.valueOf(i));
-            pageButton.getStyleClass().add("pagination-button");
-            if (i == currentPage) {
-                pageButton.getStyleClass().add("active");
-            }
-
-            final int pageNum = i;
-            pageButton.setOnAction(e -> {
-                currentPage = pageNum;
-                updatePlantsDisplay();
-            });
-
-            paginationButtons.getChildren().add(pageButton);
-        }
-
-        // Add next button
-        nextPageButton.setDisable(currentPage == totalPages || totalPages == 0);
-        paginationButtons.getChildren().add(nextPageButton);
-    }
-    private void updatePlantsDisplay() {
-        if (currentFilteredPlants != null) {
-            displayPagedPlants(currentFilteredPlants);
-        } else if (allPlants != null) {
-            displayPagedPlants(allPlants);
-        }
-    }
-
-    private void loadFarmDetails() {
-        try {
-            currentFarm = farmService.getone(farmId);
-
-            if (currentFarm != null) {
-                farmNameBreadcrumb.setText(currentFarm.getName());
-
-                farmName.setText(currentFarm.getName());
-                farmSize.setText(currentFarm.getSize() + " KM²");
-                farmLocation.setText(currentFarm.getLocation());
-                farmCoordinates.setText("Lat: " + currentFarm.getLatitude() + ", Long: " + currentFarm.getLongitude());
-                farmDescription.setText(currentFarm.getDescription());
-
-                loadFarmImage(currentFarm.getImage());
-                loadPlantsForFarm(farmId);
-                loadNotesForFarm(farmId);
-
-            } else {
-                showAlert("Erreur", "Impossible de trouver la ferme avec l'ID: " + farmId, Alert.AlertType.ERROR);
-                returnToList();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert("Erreur de chargement",
-                    "Une erreur s'est produite lors du chargement des détails de la ferme: " + e.getMessage(),
-                    Alert.AlertType.ERROR);
-        }
-    }
-    private void loadFarmImage(String imagePath) {
-        try {
-            if (imagePath != null && !imagePath.isEmpty()) {
-                String fullPath = "C:/xampp/htdocs/" + imagePath;
-                File imageFile = new File(fullPath);
-
-                if (imageFile.exists()) {
-                    Image image = new Image(imageFile.toURI().toString());
-                    farmImage.setImage(image);
-                } else {
-                    Image defaultImage = new Image("C:/xampp/htdocs/uploads/farm_image/default-farm.jpg");
-                    farmImage.setImage(defaultImage);
-                }
-            } else {
-                Image defaultImage = new Image("C:/xampp/htdocs/uploads/farm_image/default-farm.jpg");
-                farmImage.setImage(defaultImage);
-            }
-        } catch (Exception e) {
-            System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
-            try {
-                Image defaultImage = new Image("C:/xampp/htdocs/uploads/farm_image/default-farm.jpg");
-                farmImage.setImage(defaultImage);
-            } catch (Exception ex) {
-                System.err.println("Impossible de charger l'image par défaut: " + ex.getMessage());
-            }
-        }
-    }
-
-    private void loadPlantsForFarm(int farmId) {
-        try {
-            // Récupérer toutes les plantes et les stocker
-            allPlants = planteService.getPlantesByFarmId(farmId);
-
-            updatePlantCount();
-            updateCategories();
-            currentPage = 1;  // Start at first page
-            displayPagedPlants(allPlants);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert("Error", "Failed to load plants for this farm: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-    private void updateCategories() {
-        if (categoriesContainer != null) {
-            categoriesContainer.getChildren().clear();
-
-            // Créer un Map pour compter les types de plantes
-            Map<String, Integer> categoryCount = new HashMap<>();
-
-            // Compter les plantes par type
-            for (plante p : allPlants) {
-                String type = p.getType();
-                categoryCount.put(type, categoryCount.getOrDefault(type, 0) + 1);
-            }
-
-            // Créer les éléments d'interface pour chaque catégorie
-            for (Map.Entry<String, Integer> entry : categoryCount.entrySet()) {
-                HBox categoryItem = new HBox(5);
-                categoryItem.setAlignment(Pos.CENTER_LEFT);
-                categoryItem.getStyleClass().add("category-item");
-
-                Label categoryName = new Label(entry.getKey());
-                categoryName.getStyleClass().add("category-name");
-                HBox.setHgrow(categoryName, Priority.ALWAYS);
-
-                Label categoryCountLabel = new Label("(" + entry.getValue() + ")");
-                categoryCountLabel.getStyleClass().add("category-count");
-
-                categoryItem.getChildren().addAll(categoryName, categoryCountLabel);
-                categoriesContainer.getChildren().add(categoryItem);
-
-                // Ajouter un gestionnaire d'événements pour filtrer par catégorie lors du clic
-                categoryItem.setOnMouseClicked(e -> filterPlantsByCategory(entry.getKey()));
-            }
-        }
-    }
-    private void filterPlantsByCategory(String category) {
-        currentFilteredPlants = allPlants.stream()
-                .filter(p -> p.getType().equals(category))
-                .collect(java.util.stream.Collectors.toList());
-
-        currentPage = 1;  // Reset to first page when filtering
-        displayPagedPlants(currentFilteredPlants);
-    }
-    private void updatePlantCount() {
-        if (plantCount != null) {
-            plantCount.setText(String.valueOf(allPlants.size()));
-        }
-    }
-
-    private void displayFilteredPlants(List<plante> plants) {
-        currentFilteredPlants = plants;
-        currentPage = 1;  // Reset to first page when displaying new list
-        displayPagedPlants(plants);
-    }
-    private void displayPagedPlants(List<plante> plants) {
-        // Clear the container
-        plantsContainer.getChildren().clear();
-
-        if (plants.isEmpty()) {
-            Label emptyLabel = new Label("No plants found for this farm.");
-            emptyLabel.setStyle("-fx-font-size: 16px;");
-            plantsContainer.getChildren().add(emptyLabel);
-            updatePaginationControls(plants);  // Update pagination with empty list
-        } else {
-            // Calculate start and end indices for current page
-            int startIndex = (currentPage - 1) * CARDS_PER_PAGE;
-            int endIndex = Math.min(startIndex + CARDS_PER_PAGE, plants.size());
-
-            // Get plants for current page
-            List<plante> pagedPlants = plants.subList(startIndex, endIndex);
-
-            // Add each plant as a card
-            for (plante p : pagedPlants) {
-                BorderPane card = createPlantCard(p);
-                plantsContainer.getChildren().add(card);
-            }
-
-            // Update pagination controls
-            updatePaginationControls(plants);
-        }
-
-        // Add the "Add Plant" button if we're on the last page or there are few plants
-        if (currentPage == totalPages || plants.size() <= CARDS_PER_PAGE) {
-            addAddPlantButton();
-        }
-    }
-    private void filterPlants(String searchText) {
-        if (searchText == null || searchText.isEmpty()) {
-            // If search field is empty, display all plants
-            currentFilteredPlants = null;  // Reset filtered plants
-            displayPagedPlants(allPlants);
-        } else {
-            // Convert to lowercase for case-insensitive search
-            String searchLower = searchText.toLowerCase();
-
-            // Filter plants whose name or type contains the search text
-            currentFilteredPlants = allPlants.stream()
-                    .filter(p -> p.getName().toLowerCase().contains(searchLower) ||
-                            p.getType().toLowerCase().contains(searchLower))
-                    .collect(java.util.stream.Collectors.toList());
-
-            // Display filtered plants
-            displayPagedPlants(currentFilteredPlants);
-        }
-    }
-
-    private BorderPane createPlantCard(plante plant) {
-        BorderPane card = new BorderPane();
-        card.getStyleClass().add("plant-card");
-        card.setPrefSize(250, 350);
-
-        // Image de la plante
-        ImageView plantImage = createPlantImageView(plant);
-
-        // Zone de date et mois (en haut à droite)
-        VBox dateBox = new VBox(2);
-        dateBox.getStyleClass().add("plant-date-tag");
-        dateBox.setAlignment(Pos.CENTER);
-
-        // Extraire le jour et le mois de la date de récolte
-        String[] dateParts = formatDate(plant.getHarvestDate()).split("\n");
-        Label dayLabel = new Label(dateParts[0]);
-        dayLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-
-        Label monthLabel = new Label(dateParts.length > 1 ? dateParts[1] : "");
-        monthLabel.getStyleClass().add("month-text");
-
-        dateBox.getChildren().addAll(dayLabel, monthLabel);
-
-        // Type de plante avec icône (en bas à gauche de l'image)
-        HBox typeBox = new HBox(5);
-        typeBox.setAlignment(Pos.CENTER_LEFT);
-        Label typeIcon = new Label();
-        // Ajouter l'icône en fonction du type
-        if (plant.getType().equals("Vegetables")) {
-            typeIcon.setText("🥕");
-        } else if (plant.getType().equals("Fruits")) {
-            typeIcon.setText("🍎");
-        } else {
-            typeIcon.setText("🌸");
-        }
-
-        Label typeLabel = new Label(plant.getType());
-        typeBox.getChildren().addAll(typeIcon, typeLabel);
-        typeBox.getStyleClass().add("plant-type");
-
-
-        // Superposer image, date et type
-        StackPane imageStack = new StackPane();
-        imageStack.getChildren().add(plantImage);
-        imageStack.setPrefHeight(180);
-
-        // Positionnement de la date en haut à droite
-        StackPane.setAlignment(dateBox, Pos.TOP_RIGHT);
-        StackPane.setMargin(dateBox, new Insets(10, 10, 120, 160));
-        imageStack.getChildren().add(dateBox);
-
-        // Positionnement du type en bas à gauche
-        StackPane.setAlignment(typeBox, Pos.BOTTOM_LEFT);
-        StackPane.setMargin(typeBox, new Insets(160, 100, 10, 10));
-        imageStack.getChildren().add(typeBox);
-
-        // Zone du titre et quantité
-        VBox infoBox = new VBox(5);
-        infoBox.setPadding(new Insets(10));
-
-        Label nameLabel = new Label(plant.getName());
-        nameLabel.getStyleClass().add("plant-title");
-
-        HBox quantityBox = new HBox(5);
-        quantityBox.setAlignment(Pos.CENTER_LEFT);
-        FontAwesomeIconView quantityIcon = new FontAwesomeIconView(FontAwesomeIcon.TREE);
-        quantityIcon.getStyleClass().add("icon");
-        Label quantityLabel = new Label(plant.getQuantity() + " Units");
-        quantityLabel.getStyleClass().add("plant-quantity");
-        quantityBox.getChildren().addAll(quantityIcon, quantityLabel);
-
-        infoBox.setAlignment(Pos.CENTER);
-        infoBox.getChildren().addAll(nameLabel, quantityBox);
-
-        // Zone des boutons
-        HBox buttonsBox = new HBox(10);
-        buttonsBox.setAlignment(Pos.CENTER);
-        buttonsBox.setPadding(new Insets(0, 10, 10, 10));
-
-        Button editButton = new Button("Edit");
-        editButton.getStyleClass().addAll("card-button");
-        FontAwesomeIconView editIcon = new FontAwesomeIconView(FontAwesomeIcon.EDIT);
-        editButton.setGraphic(editIcon);
-        editButton.setOnAction(e -> openUpdatePlantForm(plant.getId()));
-
-        Button deleteButton = new Button("Delete");
-        deleteButton.getStyleClass().addAll("card-button");
-        FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
-        deleteButton.setGraphic(deleteIcon);
-        deleteButton.setOnAction(e -> deletePlant(plant.getId()));
-
-        buttonsBox.getChildren().addAll(editButton, deleteButton);
-
-        // Assemblage final
-        card.setTop(imageStack);
-        card.setCenter(infoBox);
-        card.setBottom(buttonsBox);
-        card.setPadding(new Insets(0, 0, 10, 0));
-
-        return card;
-    }
-    // Ajouter un bouton "Ajouter Plante" à la fin du conteneur de plantes
-    private void addAddPlantButton() {
-        VBox addPlantBox = new VBox(10);
-        addPlantBox.getStyleClass().add("add-plant-container");
-        addPlantBox.setAlignment(Pos.CENTER);
-        addPlantBox.setPrefSize(200, 280);
-
-        Label plusIcon = new Label("+");
-        plusIcon.getStyleClass().add("add-plant-icon");
-
-        Label addText = new Label("Add Plant");
-        addText.getStyleClass().add("add-plant-text");
-
-        addPlantBox.getChildren().addAll(plusIcon, addText);
-        addPlantBox.setOnMouseClicked(e -> openAddPlantForm());
-
-        plantsContainer.getChildren().add(addPlantBox);
-    }
-
-    private ImageView createPlantImageView(plante plant) {
-        ImageView plantImage = new ImageView();
-        try {
-            if (plant.getImage() != null && !plant.getImage().isEmpty()) {
-                String imagePath = "file:C:/xampp/htdocs/uploads/plant_image/" + plant.getImage();
-                Image image = new Image(imagePath, 220, 150, true, true);
-                plantImage.setImage(image);
-            } else {
-                // Default image if none available
-                Image defaultImage = new Image("C:/xampp/htdocs/uploads/plant_image/default-plant.jpg", 220, 150, true, true);
-                plantImage.setImage(defaultImage);
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading image: " + e.getMessage());
-            try {
-                Image defaultImage = new Image("C:/xampp/htdocs/uploads/plant_image/default-plant.jpg", 220, 150, true, true);
-                plantImage.setImage(defaultImage);
-            } catch (Exception ex) {
-                System.err.println("Unable to load default image: " + ex.getMessage());
-            }
-        }
-
-        plantImage.setFitWidth(220);
-        plantImage.setFitHeight(150);
-        plantImage.setPreserveRatio(false);
-
-        return plantImage;
-    }
-
-    private String formatDate(String dateString) {
-        // Simple implementation - adjust based on your date format
-        if (dateString == null || dateString.isEmpty()) {
-            return "No date";
-        }
-
-        try {
-            // Parse the date string
-            LocalDate date = LocalDate.parse(dateString);
-
-            // Format day and month
-            int day = date.getDayOfMonth();
-            String month = date.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-
-            return day + "\n" + month;
-        } catch (Exception e) {
-            return dateString;
-        }
-    }
-
-    @FXML
-    private void openAddPlantForm() {
-        try {
-            // Use the main stage
-            Stage mainStage = mainPrincipal.getPrimaryStage();
-
-            // Load the add plant view
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Farm/AddPlante.fxml"));
-            Parent root = loader.load();
-
-            // Configure the controller with the farm ID
-            AddPlanteController controller = loader.getController();
-            controller.setFarmId(farmId);
-
-            // Replace the content of the main stage
-            mainStage.getScene().setRoot(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Error opening add plant form: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    private void openUpdatePlantForm(int planteId) {
-        try {
-            // Use the main stage
-            Stage mainStage = mainPrincipal.getPrimaryStage();
-
-            // Load the update plant view
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Farm/UpdatePlante.fxml"));
-            Parent root = loader.load();
-
-            // Configure the controller with the plant ID and farm ID
-            UpdatePlanteController controller = loader.getController();
-            controller.setPlanteId(planteId);
-            controller.setFarmId(farmId);
-
-            // Replace the content of the main stage
-            mainStage.getScene().setRoot(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Error opening update plant form: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    private void deletePlant(int planteId) {
-        try {
-            // Show confirmation dialog
-            Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmDialog.setTitle("Confirm Deletion");
-            confirmDialog.setHeaderText("Are you sure you want to delete this plant?");
-            confirmDialog.setContentText("This action cannot be undone.");
-
-            // If user confirms
-            if (confirmDialog.showAndWait().get() == ButtonType.OK) {
-                // Get the plant by ID
-                plante plantToDelete = planteService.getone(planteId);
-
-                if (plantToDelete != null) {
-                    // Delete the plant
-                    planteService.delete(plantToDelete);
-
-                    // Show success message
-                    showAlert("Success", "Plant deleted successfully", Alert.AlertType.INFORMATION);
-
-                    // Refresh the plant list
-                    loadPlantsForFarm(farmId);
-                } else {
-                    showAlert("Error", "Could not find plant to delete", Alert.AlertType.ERROR);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert("Database Error",
-                    "An error occurred while deleting the plant: " + e.getMessage(),
-                    Alert.AlertType.ERROR);
-        }
-    }
+    /*  //////////////////////////////////////////////////////////////////////////////////////      redirection to other pages    ///////////////////////////////*/
     @FXML
     private void openUpdateForm() {
         try {
@@ -1191,7 +1186,49 @@ public class FarmDetailsController {
                     Alert.AlertType.ERROR);
         }
     }
+    @FXML
+    private void openAddPlantForm() {
+        try {
+            // Use the main stage
+            Stage mainStage = mainPrincipal.getPrimaryStage();
 
+            // Load the add plant view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Farm/AddPlante.fxml"));
+            Parent root = loader.load();
+
+            // Configure the controller with the farm ID
+            AddPlanteController controller = loader.getController();
+            controller.setFarmId(farmId);
+
+            // Replace the content of the main stage
+            mainStage.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Error opening add plant form: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private void openUpdatePlantForm(int planteId) {
+        try {
+            // Use the main stage
+            Stage mainStage = mainPrincipal.getPrimaryStage();
+
+            // Load the update plant view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Farm/UpdatePlante.fxml"));
+            Parent root = loader.load();
+
+            // Configure the controller with the plant ID and farm ID
+            UpdatePlanteController controller = loader.getController();
+            controller.setPlanteId(planteId);
+            controller.setFarmId(farmId);
+
+            // Replace the content of the main stage
+            mainStage.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Error opening update plant form: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
     @FXML
     private void returnToList() {
         try {
@@ -1220,4 +1257,18 @@ public class FarmDetailsController {
         alert.showAndWait();
     }
 
+        /*@FXML
+    private void openCropOptimization() {
+        try {
+            Stage mainStage = mainPrincipal.getPrimaryStage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Farm/CropOptimization.fxml"));
+            Parent root = loader.load();
+            CropOptimizationController controller = loader.getController();
+            controller.setFarmId(farmId);
+            mainStage.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Error opening crop optimization: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }*/
 }

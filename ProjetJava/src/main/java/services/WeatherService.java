@@ -1,5 +1,6 @@
 package services;
 
+import controller.Farm.CropOptimizationController;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,8 +14,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
+import java.util.logging.Logger;
 public class WeatherService {
+    private static final Logger LOGGER = Logger.getLogger(CropOptimizationController.class.getName());
 
     // Weather data cache with timestamp for expiration
     private static final Map<String, CachedWeatherData> cache = new HashMap<>();
@@ -26,6 +28,7 @@ public class WeatherService {
      * @throws Exception If an error occurs during API call
      */
     public Map<String, Object> getWeatherForLocation(String location) throws Exception {
+        LOGGER.info("Fetching weather for: " + location);
         // Check cache first
         String cacheKey = location.toLowerCase().trim();
         CachedWeatherData cachedData = cache.get(cacheKey);

@@ -57,52 +57,38 @@
 
                     <!-- Section de filtre par emplacement -->
                     <Label text="Location" styleClass="filter-category"/>
-                    <VBox spacing="5">
-                        <CheckBox text="Nabeul" selected="false">
-                            <graphic>
-                                <Label text="(1)" styleClass="filter-count"/>
-                            </graphic>
-                        </CheckBox>
-                        <CheckBox text="Bizerte" selected="false">
-                            <graphic>
-                                <Label text="(1)" styleClass="filter-count"/>
-                            </graphic>
-                        </CheckBox>
-                        <CheckBox text="Monastir" selected="false">
-                            <graphic>
-                                <Label text="(1)" styleClass="filter-count"/>
-                            </graphic>
-                        </CheckBox>
+                    <VBox fx:id="locationFilters" spacing="5">
+                        <!-- Les checkboxes seront générées dynamiquement -->
                     </VBox>
 
                     <!-- Section de filtre par taille -->
                     <Label text="Size" styleClass="filter-category"/>
                     <VBox spacing="5">
-                        <CheckBox text="&lt; 1000 KM²" selected="false">
+                        <CheckBox fx:id="sizeSmall" text="&lt; 1000 KM²" selected="false">
                             <graphic>
-                                <Label text="(2)" styleClass="filter-count"/>
+                                <Label text="(0)" styleClass="filter-count" fx:id="smallSizeCount"/>
                             </graphic>
                         </CheckBox>
-                        <CheckBox text="1000 - 2000 KM²" selected="false">
+                        <CheckBox fx:id="sizeMedium" text="1000 - 2000 KM²" selected="false">
                             <graphic>
-                                <Label text="(1)" styleClass="filter-count"/>
+                                <Label text="(0)" styleClass="filter-count" fx:id="mediumSizeCount"/>
                             </graphic>
                         </CheckBox>
-                        <CheckBox text="&gt; 2000 KM²" selected="false">
+                        <CheckBox fx:id="sizeLarge" text="&gt; 2000 KM²" selected="false">
                             <graphic>
-                                <Label text="(0)" styleClass="filter-count"/>
+                                <Label text="(0)" styleClass="filter-count" fx:id="largeSizeCount"/>
                             </graphic>
                         </CheckBox>
                     </VBox>
 
                     <!-- Boutons d'action pour les filtres -->
                     <HBox spacing="10" alignment="CENTER">
-                        <Button text="Apply Filters" styleClass="filter-apply-btn">
+                        <Button fx:id="applyFiltersBtn" text="Apply Filters" styleClass="filter-apply-btn">
                             <graphic>
                                 <Region styleClass="filter-icon"/>
                             </graphic>
                         </Button>
-                        <Button styleClass="filter-clear-btn">
+                        <Button fx:id="clearFiltersBtn" styleClass="filter-clear-btn">
                             <graphic>
                                 <Region styleClass="trash-icon"/>
                             </graphic>

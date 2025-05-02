@@ -1,6 +1,7 @@
 package controller.Farm;
 
 import Main.mainPrincipal;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,13 +9,17 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Farm;
+import netscape.javascript.JSObject;
 import services.FarmService;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -75,31 +80,93 @@ public class UpdateFarmController {
     @FXML
     private Label fuserError;
 
+    @FXML
+    private WebView mapView;
+
     private final String UPLOAD_DIR = "C:/xampp/htdocs/uploads/farm_image/";
     private final String RELATIVE_PATH = "uploads/farm_image/";
-    private Preferences prefs = Preferences.userNodeForPackage(AddFarmController.class);
+    private Preferences prefs = Preferences.userNodeForPackage(UpdateFarmController.class);
 
     private File selectedImageFile;
     private String currentImagePath;
+    private int FarmId;
 
     @FXML
     public void initialize() {
-        // Vérifier si les composants FXML sont bien chargés
         if (btnUpdateFarm == null) {
-            System.out.println("Erreur : modifierButton est null !");
+            System.out.println("Erreur : btnUpdateFarm est null !");
         } else {
             btnUpdateFarm.setDisable(false);
         }
 
         setupValidationListeners();
         btnSelectImage.setOnAction(event -> selectImage());
+        initializeMap();
+    }
+
+    private void initializeMap() {
+        try {
+            WebEngine engine = mapView.getEngine();
+            engine.setJavaScriptEnabled(true);
+
+            URL mapResource = getClass().getResource("/views/Farm/map.html");
+            if (mapResource != null) {
+                String mapUrl = mapResource.toExternalForm();
+                System.out.println("Loading map from: " + mapUrl);
+                engine.load(mapUrl);
+            } else {
+                String projectPath = System.getProperty("user.dir");
+                File mapFile = new File(projectPath + "/src/main/resources/views/Farm/map.html");
+                if (mapFile.exists()) {
+                    System.out.println("Loading map from file system: " + mapFile.toURI().toString());
+                    engine.load(mapFile.toURI().toString());
+                } else {
+                    System.err.println("Could not find map.html resource!");
+                    showAlert(Alert.AlertType.ERROR, "Error", "Could not find map.html resource");
+                }
+            }
+
+            engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                    JSObject window = (JSObject) engine.executeScript("window");
+                    window.setMember("javafxCallback", new JavaFXCallback());
+                    System.out.println("JavaFX callback installed for UpdateFarm map");
+                } else if (newState == javafx.concurrent.Worker.State.FAILED) {
+                    System.err.println("Failed to load map: " + engine.getLoadWorker().getException());
+                }
+            });
+        } catch (Exception e) {
+            System.err.println("Error initializing map: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to initialize map: " + e.getMessage());
+        }
+    }
+
+    public class JavaFXCallback {
+        public void call(double lat, double lng, String cityName) {
+            Platform.runLater(() -> {
+                try {
+                    flatitude.setText(String.format("%.6f", lat).replace(',', '.')); // Remplacer la virgule par un point
+                    flongitude.setText(String.format("%.6f", lng).replace(',', '.')); // Remplacer la virgule par un point
+
+                    if (cityName != null && !cityName.isEmpty()) {
+                        flocation.setText(cityName);
+                    }
+                    System.out.println("Map callback received: Lat=" + lat + ", Lng=" + lng + ", City=" + cityName);
+                } catch (Exception e) {
+                    System.err.println("Error in map callback: " + e.getMessage());
+                }
+            });
+        }
+
+        public void call(double lat, double lng) {
+            call(lat, lng, "");
+        }
     }
 
     @FXML
     private void selectImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
-        // Get last directory from preferences
         String lastDirectoryPath = prefs.get("lastImageDirectory", null);
         if (lastDirectoryPath != null) {
             File lastDir = new File(lastDirectoryPath);
@@ -108,21 +175,16 @@ public class UpdateFarmController {
             }
         }
 
-        // Configurer les filtres d'extension pour n'accepter que les images
         FileChooser.ExtensionFilter imageFilter =
                 new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif");
         fileChooser.getExtensionFilters().add(imageFilter);
 
-        // Ouvrir le sélecteur de fichier
         selectedImageFile = fileChooser.showOpenDialog(btnSelectImage.getScene().getWindow());
 
         if (selectedImageFile != null) {
             prefs.put("lastImageDirectory", selectedImageFile.getParent());
-
-            // Afficher le chemin du fichier dans le champ texte
             fimage.setText(selectedImageFile.getName());
 
-            // Afficher l'aperçu de l'image
             try {
                 Image image = new Image(selectedImageFile.toURI().toString());
                 imagePreview.setImage(image);
@@ -130,8 +192,6 @@ public class UpdateFarmController {
                 imagePreview.setFitHeight(150);
                 imagePreview.setPreserveRatio(true);
                 imagePreview.setVisible(true);
-
-                // Validation ok - masquer message d'erreur
                 fimageError.setVisible(false);
             } catch (Exception e) {
                 fimageError.setText("Impossible de charger l'image");
@@ -140,33 +200,25 @@ public class UpdateFarmController {
         }
     }
 
-    // Méthode pour sauvegarder l'image sélectionnée
     private String saveImage() throws IOException {
         if (selectedImageFile == null) {
-            return currentImagePath; // Retourner le chemin actuel si aucune nouvelle image n'est sélectionnée
+            return currentImagePath;
         }
 
-        // Générer un nom de fichier unique (timestamp + nom original)
         String timestamp = String.valueOf(System.currentTimeMillis());
         String originalFileName = selectedImageFile.getName();
         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf('.'));
         String newFileName = timestamp + fileExtension;
 
-        // Chemin de destination
         Path destPath = Paths.get(UPLOAD_DIR + newFileName);
-
-        // Copier le fichier vers le répertoire d'upload
         Files.copy(selectedImageFile.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
 
-        // Retourner le chemin relatif pour l'accès via l'application
         return RELATIVE_PATH + newFileName;
     }
 
-
-    private int FarmId;
     public void setFarmId(int id) {
         this.FarmId = id;
-        loadFarmData(); // Charger les données quand l'ID est défini
+        loadFarmData();
     }
 
     private void loadFarmData() {
@@ -175,21 +227,20 @@ public class UpdateFarmController {
             Farm farm = service.getone(FarmId);
 
             if (farm != null) {
-                this.FarmId = farm.getId(); // stocke en interne
+                this.FarmId = farm.getId();
                 fname.setText(farm.getName());
                 fsize.setText(String.valueOf(farm.getSize()));
                 flocation.setText(farm.getLocation());
                 fimage.setText(farm.getImage());
-                currentImagePath = farm.getImage(); // Stocke le chemin de l'image actuelle
+                currentImagePath = farm.getImage();
                 fdescription.setText(farm.getDescription());
                 flatitude.setText(String.valueOf(farm.getLatitude()));
                 flongitude.setText(String.valueOf(farm.getLongitude()));
                 fuser.setText(String.valueOf(farm.getUserId()));
 
-                // Charger l'aperçu de l'image existante si disponible
+                // Load image preview
                 if (currentImagePath != null && !currentImagePath.isEmpty()) {
                     try {
-                        // Construire le chemin complet vers l'image
                         String fullPath = "C:/xampp/htdocs/" + currentImagePath;
                         File imageFile = new File(fullPath);
                         if (imageFile.exists()) {
@@ -201,48 +252,56 @@ public class UpdateFarmController {
                         System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
                     }
                 }
+
+                // Set initial marker on map
+                if (mapView != null && flatitude.getText() != null && !flatitude.getText().isEmpty() &&
+                        flongitude.getText() != null && !flongitude.getText().isEmpty()) {
+                    try {
+                        WebEngine engine = mapView.getEngine();
+                        if (engine.getLoadWorker().getState() == javafx.concurrent.Worker.State.SUCCEEDED) {
+                            double lat = Double.parseDouble(flatitude.getText());
+                            double lng = Double.parseDouble(flongitude.getText());
+                            engine.executeScript("setMarker(" + lat + ", " + lng + ")");
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error setting initial marker in loadFarmData: " + e.getMessage());
+                    }
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to load farm data: " + e.getMessage());
         }
     }
 
     @FXML
     void UpdateFarmAction(ActionEvent event) {
         try {
-            // Masquer tous les messages d'erreur existants
             hideAllErrorMessages();
-
-            // Validation des champs
             boolean isValid = validateFields();
             if (!isValid) {
                 return;
             }
 
-            // Vérifier l'ID de l'événement
-            Integer idfarm = this.FarmId;
-            if (idfarm==null) {
-                showWarningAlert("Veuillez entrer l'ID de l'événement.");
+            if (FarmId == 0) {
+                showWarningAlert("Veuillez spécifier un ID de ferme valide.");
                 return;
             }
 
-
-            // Récupérer les autres champs
             String name = fname.getText().trim();
             String description = fdescription.getText().trim();
             String location = flocation.getText().trim();
             int size = Integer.parseInt(fsize.getText().trim());
             String image = fimage.getText().trim();
-            Double latitude = Double.parseDouble(flatitude.getText().trim());
-            Double longitude = Double.parseDouble(flongitude.getText().trim());
-            Integer userid = Integer.parseInt(fuser.getText().trim());
+            double latitude = Double.parseDouble(flatitude.getText().trim());
+            double longitude = Double.parseDouble(flongitude.getText().trim());
+            int userid = Integer.parseInt(fuser.getText().trim());
 
-            // Vérifier que les champs obligatoires sont remplis
-            if (name.isEmpty() || description.isEmpty() || location.isEmpty() || size < 1 || image.isEmpty() || latitude.isNaN() || longitude.isNaN()) {
+            if (name.isEmpty() || description.isEmpty() || location.isEmpty() || size < 1 || image.isEmpty()) {
                 showWarningAlert("Veuillez remplir tous les champs obligatoires.");
                 return;
             }
-            // Sauvegarder l'image sélectionnée et récupérer son chemin
+
             String imagePath;
             if (selectedImageFile != null) {
                 imagePath = saveImage();
@@ -252,38 +311,24 @@ public class UpdateFarmController {
                     return;
                 }
             } else {
-                // Conserver l'image existante
                 imagePath = currentImagePath;
             }
 
-
-            // Créer l'événement mis à jour
-            Farm farm = new Farm(
-                    idfarm, name, size, location, imagePath, description, latitude, longitude, userid
-            );
-
-            // Mettre à jour l'événement
+            Farm farm = new Farm(FarmId, name, size, location, imagePath, description, latitude, longitude, userid);
             FarmService service = new FarmService();
             int rowsAffected = service.update(farm);
 
             if (rowsAffected > 0) {
                 showInfoAlert("La ferme a été mise à jour avec succès !");
 
-                // Ne pas fermer le stage, juste charger la vue ListeFarms
                 Stage mainStage = mainPrincipal.getPrimaryStage();
-
-                /// Charger la vue de détails de la ferme
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Farm/FarmDetails.fxml"));
                 Parent root = loader.load();
-
-                // Configurer le contrôleur avec l'ID de la ferme
                 FarmDetailsController controller = loader.getController();
-                controller.setFarmId(idfarm);
-
-                // Remplacer le contenu du stage principal
+                controller.setFarmId(FarmId);
                 mainStage.getScene().setRoot(root);
             } else {
-                showErrorAlert("Aucun ferme trouvé avec cet ID.");
+                showErrorAlert("Aucune ferme trouvée avec cet ID.");
             }
         } catch (NumberFormatException e) {
             showErrorAlert("Les champs numériques doivent contenir des nombres valides.");
@@ -294,14 +339,7 @@ public class UpdateFarmController {
         }
     }
 
-
-
-
-
-
-
     private void setupValidationListeners() {
-        // Validation en temps réel pour le nom
         fname.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty() || newValue.trim().length() < 3) {
                 fnameError.setText("Le nom doit contenir au moins 3 caractères");
@@ -311,7 +349,6 @@ public class UpdateFarmController {
             }
         });
 
-        // Validation en temps réel pour la taille
         fsize.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 if (newValue.trim().isEmpty()) {
@@ -332,7 +369,6 @@ public class UpdateFarmController {
             }
         });
 
-        // Validation en temps réel pour l'emplacement
         flocation.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
                 flocationError.setText("L'emplacement est requis");
@@ -342,7 +378,6 @@ public class UpdateFarmController {
             }
         });
 
-        // Validation en temps réel pour l'URL de l'image
         fimage.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.trim().isEmpty()) {
                 String urlRegex = "^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?$";
@@ -357,7 +392,6 @@ public class UpdateFarmController {
             }
         });
 
-        // Validation en temps réel pour la description
         fdescription.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty() || newValue.trim().length() < 10) {
                 fdescriptionError.setText("La description doit contenir au moins 10 caractères");
@@ -367,7 +401,6 @@ public class UpdateFarmController {
             }
         });
 
-        // Validation en temps réel pour la latitude
         flatitude.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 if (newValue.trim().isEmpty()) {
@@ -388,7 +421,6 @@ public class UpdateFarmController {
             }
         });
 
-        // Validation en temps réel pour la longitude
         flongitude.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 if (newValue.trim().isEmpty()) {
@@ -409,7 +441,6 @@ public class UpdateFarmController {
             }
         });
 
-        // Validation en temps réel pour l'ID utilisateur
         fuser.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 if (newValue.trim().isEmpty()) {
@@ -445,7 +476,6 @@ public class UpdateFarmController {
     private boolean validateFields() {
         boolean isValid = true;
 
-        // Validation du nom (obligatoire, min 3 caractères)
         String name = fname.getText().trim();
         if (name.isEmpty() || name.length() < 3) {
             fnameError.setText("Le nom doit contenir au moins 3 caractères");
@@ -454,7 +484,6 @@ public class UpdateFarmController {
             isValid = false;
         }
 
-        // Validation de la taille (obligatoire, doit être un nombre positif)
         String sizeStr = fsize.getText().trim();
         if (sizeStr.isEmpty()) {
             fsizeError.setText("La superficie est requise");
@@ -484,7 +513,6 @@ public class UpdateFarmController {
             }
         }
 
-        // Validation de l'emplacement (obligatoire)
         String location = flocation.getText().trim();
         if (location.isEmpty()) {
             flocationError.setText("L'emplacement est requis");
@@ -495,7 +523,6 @@ public class UpdateFarmController {
             }
         }
 
-        // Validation de l'URL de l'image (format URL)
         if (selectedImageFile == null && (currentImagePath == null || currentImagePath.isEmpty())) {
             fimageError.setText("Une image est requise");
             fimageError.setVisible(true);
@@ -505,7 +532,6 @@ public class UpdateFarmController {
             }
         }
 
-        // Validation de la description (obligatoire, min 10 caractères)
         String description = fdescription.getText().trim();
         if (description.isEmpty() || description.length() < 10) {
             fdescriptionError.setText("La description doit contenir au moins 10 caractères");
@@ -516,7 +542,6 @@ public class UpdateFarmController {
             }
         }
 
-        // Validation de la latitude (format numérique entre -90 et 90)
         String latStr = flatitude.getText().trim();
         if (latStr.isEmpty()) {
             flatitudeError.setText("La latitude est requise");
@@ -528,7 +553,7 @@ public class UpdateFarmController {
         } else {
             try {
                 double lat = Double.parseDouble(latStr);
-                if (lat < -180 || lat > 180) {
+                if (lat < -90 || lat > 90) {
                     flatitudeError.setText("La latitude doit être entre -90 et 90");
                     flatitudeError.setVisible(true);
                     if (isValid) {
@@ -546,7 +571,6 @@ public class UpdateFarmController {
             }
         }
 
-        // Validation de la longitude (format numérique entre -180 et 180)
         String longStr = flongitude.getText().trim();
         if (longStr.isEmpty()) {
             flongitudeError.setText("La longitude est requise");
@@ -576,7 +600,6 @@ public class UpdateFarmController {
             }
         }
 
-        // Validation de l'ID utilisateur (obligatoire, nombre positif)
         String userStr = fuser.getText().trim();
         if (userStr.isEmpty()) {
             fuserError.setText("L'ID utilisateur est requis");
@@ -609,21 +632,16 @@ public class UpdateFarmController {
         return isValid;
     }
 
-
     @FXML
     private void cancelUpdate() {
         try {
-            // Utiliser directement le stage principal
             Stage mainStage = mainPrincipal.getPrimaryStage();
-
-            // Recharger la vue principale
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Farm/ListeFarms.fxml"));
             Parent root = loader.load();
-
-            // Remplacer le contenu du stage principal
             mainStage.getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to load farm list: " + e.getMessage());
         }
     }
 
@@ -646,5 +664,4 @@ public class UpdateFarmController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 }
