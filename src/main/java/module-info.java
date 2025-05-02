@@ -12,4 +12,6 @@ module com.devmasters.agrosphere {
     exports com.devmasters.agrosphere;
     exports com.devmasters.agrosphere.marketplaceManagement.Controller;
     exports com.devmasters.agrosphere.shared;
+
+
 }

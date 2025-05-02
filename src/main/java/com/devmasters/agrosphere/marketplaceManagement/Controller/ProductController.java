@@ -2,7 +2,7 @@ package com.devmasters.agrosphere.marketplaceManagement.Controller;
 
 import com.devmasters.agrosphere.marketplaceManagement.entities.product;
 import com.devmasters.agrosphere.marketplaceManagement.entities.category;
-import com.devmasters.agrosphere.userManagament.entities.user;
+import com.devmasters.agrosphere.userManagement.entities.user;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

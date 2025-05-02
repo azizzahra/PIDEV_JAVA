@@ -40,14 +40,6 @@
             </VBox>
         </VBox>
     </top>
-    <!--<top>
-        <VBox alignment="CENTER" styleClass="marketplace-banner">
-            <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
-            <Label text="Marketplace" styleClass="marketplace-title"/>
-            <Label text="Providing Fresh Produce Every Single Day" styleClass="marketplace-subtitle"/>
-
-        </VBox>
-    </top>-->
 
     <center>
         <HBox spacing="20" styleClass="marketplace-content">

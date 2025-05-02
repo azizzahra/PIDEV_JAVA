@@ -62,7 +62,7 @@ public class OrderItemController {
         try {
             // Use the UserService to get the user name
             try {
-                com.devmasters.agrosphere.userManagament.entities.user user = userService.getOne(userId);
+                com.devmasters.agrosphere.userManagement.entities.user user = userService.getOne(userId);
                 if (user != null) {
                     return user.getPrenom() + " " + user.getNom();
                 }

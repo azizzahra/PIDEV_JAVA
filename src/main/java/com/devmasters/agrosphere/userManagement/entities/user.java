@@ -1,4 +1,4 @@
-package com.devmasters.agrosphere.userManagament.entities;
+package com.devmasters.agrosphere.userManagement.entities;
 
 
 import java.sql.Date;

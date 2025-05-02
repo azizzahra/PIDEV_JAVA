@@ -1,6 +1,6 @@
 package services.user;
 
-import com.devmasters.agrosphere.userManagament.entities.user;
+import com.devmasters.agrosphere.userManagement.entities.user;
 import services.Iservices;
 import com.devmasters.agrosphere.utils.DBConnection;
 
@@ -144,6 +144,20 @@ public class UserService implements Iservices<user> {
         }
 
         return name;
+    }
+    private user mapResultSetToUser(ResultSet rs) throws Exception {
+        user u = new user();
+        u.setId(rs.getInt("id"));
+        u.setNom(rs.getString("nom"));
+        u.setPrenom(rs.getString("prenom"));
+        u.setMail(rs.getString("mail"));
+        u.setNumTel(rs.getString("num_tel"));
+        u.setRole(rs.getString("role"));
+        u.setMotDePasse(rs.getString("motdepasse"));
+        u.setStatus(rs.getString("status"));
+        u.setBirthDate(rs.getDate("birth_date"));
+        return u;
+
     }
 }
 

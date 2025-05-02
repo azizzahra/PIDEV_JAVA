@@ -1,5 +1,6 @@
 package services.marketPlace;
 import com.devmasters.agrosphere.marketplaceManagement.entities.product;
+import com.devmasters.agrosphere.userManagement.entities.user;
 import services.Iservices;
 import com.devmasters.agrosphere.utils.DBConnection;
 import java.sql.*;
@@ -134,6 +135,28 @@ public class ProductService implements Iservices<product> {
             p.setCategoryProdId(rs.getInt("category_prod_id"));
             p.setFarmerId(rs.getInt("farmer_id_id"));
             list.add(p);
+        }
+        return list;
+    }
+    public List<user> getAllByRole(String role) throws Exception {
+        List<user> list = new ArrayList<>();
+        String sql = "SELECT * FROM user WHERE role=?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, role);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            user u = new user();
+            u.setId(rs.getInt("id"));
+            u.setNom(rs.getString("nom"));
+            u.setPrenom(rs.getString("prenom"));
+            u.setRole(rs.getString("role"));
+            u.setMail(rs.getString("mail"));
+            u.setMotDePasse(rs.getString("motdepasse"));
+            u.setStatus(rs.getString("status"));
+            u.setNumTel(rs.getString("num_tel"));
+            u.setBirthDate(rs.getDate("birth_date"));
+            list.add(u);
         }
         return list;
     }

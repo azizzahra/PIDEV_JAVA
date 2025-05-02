@@ -30,7 +30,7 @@
             <Label fx:id="lblTVA" text="TVA (7%): 0.0 TND"/>
             <Label fx:id="lblTotal" text="Total: 0.0 TND" style="-fx-font-size: 18px; -fx-font-weight: bold"/>
 
-            <Button fx:id="btnPurchase" text="🛒 MAKE PURCHASE" style="-fx-background-color: green; -fx-text-fill: white;"/>
+            <Button fx:id="btnPurchase" text="🛒 MAKE PURCHASE" onAction="#goBack" style="-fx-background-color: green; -fx-text-fill: white;"/>
             <Button text="← BACK TO SHOP" onAction="#goBack"/>
         </VBox>
     </right>
