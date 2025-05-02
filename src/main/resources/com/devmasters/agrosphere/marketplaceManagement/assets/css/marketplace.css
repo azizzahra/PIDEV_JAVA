@@ -1,0 +1,199 @@
+/* Main Styles */
+.root {
+    -fx-background-color: #f0f5ea;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Navigation Bar */
+.nav-bar {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-padding: 5 10;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-text-fill: #5a8f3b;
+}
+
+.cart-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+/* Marketplace Banner */
+.marketplace-banner {
+    -fx-background-color: white;
+    -fx-padding: 25 15;
+}
+
+.marketplace-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c5070;
+}
+
+.marketplace-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #555555;
+}
+
+/* Filter Panel */
+.filter-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-padding: 15;
+}
+
+.filter-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 0 0 10 0;
+}
+
+.filter-subtitle {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #555555;
+    -fx-padding: 10 0 5 0;
+}
+
+/* Product Grid */
+.product-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.product-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.product-grid {
+    -fx-background-color: transparent;
+    -fx-padding: 15;
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+}
+
+/* Product Card Styling */
+.product-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 3);
+    -fx-pref-width: 280px;
+    -fx-min-height: 380px;
+    -fx-max-height: 420px;
+    -fx-alignment: center;
+    -fx-padding: 0;
+    -fx-border-radius: 12px;
+}
+
+/* Image Container */
+.image-container {
+    -fx-alignment: center;
+    -fx-background-color: #f8f8f8;
+    -fx-background-radius: 12px 12px 0 0;
+    -fx-min-height: 200px;
+    -fx-max-height: 200px;
+    -fx-padding: 10;
+}
+
+.product-image {
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+}
+
+.product-details {
+    -fx-padding: 15 15 20 15;
+    -fx-spacing: 8;
+    -fx-alignment: center;
+}
+
+.product-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-alignment: center;
+    -fx-padding: 5 0;
+}
+
+.product-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: #666666;
+    -fx-alignment: center;
+    -fx-wrap-text: true;
+    -fx-max-height: 40px;
+    -fx-max-width: 250px;
+}
+
+.product-price {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5a8f3b;
+    -fx-alignment: center;
+    -fx-padding: 5 0;
+}
+
+.product-stock {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+    -fx-alignment: center;
+}
+
+.category-button {
+    -fx-background-color: #e8f4e0;
+    -fx-text-fill: #5a8f3b;
+    -fx-background-radius: 50px;
+    -fx-padding: 5 15;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+
+.button-container {
+    -fx-spacing: 10;
+    -fx-alignment: center;
+    -fx-padding: 10 0 0 0;
+}
+
+.view-button {
+    -fx-background-color: #333333;
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
+
+.view-button:hover {
+    -fx-background-color: #444444;
+}
+
+.add-cart-button {
+    -fx-background-color: #5a8f3b;
+    -fx-text-fill: white;
+    -fx-background-radius: 50px;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-content-display: left;
+    -fx-graphic-text-gap: 8;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.add-cart-button:hover {
+    -fx-background-color: #4a7f2b;
+}

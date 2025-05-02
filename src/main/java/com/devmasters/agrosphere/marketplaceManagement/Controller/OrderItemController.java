@@ -3,6 +3,7 @@ package com.devmasters.agrosphere.marketplaceManagement.Controller;
 import com.devmasters.agrosphere.marketplaceManagement.entities.order;
 import com.devmasters.agrosphere.marketplaceManagement.entities.orderLine;
 import services.marketPlace.OrderLineService;
+import services.marketPlace.OrderService;
 import services.marketPlace.ProductService;
 import services.user.UserService;
 import javafx.fxml.FXML;
@@ -90,7 +91,7 @@ public class OrderItemController {
                 String productName = productService.getProductName(ol.getProductId());
 
                 // Use actual product name instead of ID
-                Label productLabel = new Label("📦 " + productName);
+                Label productLabel = new Label( productName);
                 Label quantityLabel = new Label("Quantity: " + ol.getOrderQuantity());
                 quantityLabel.setStyle("-fx-font-weight: bold;");
 
@@ -110,11 +111,29 @@ public class OrderItemController {
 
     @FXML
     private void handleProcessOrder(ActionEvent event) {
-        // Implement order processing logic here
-        System.out.println("Processing order #" + currentOrder.getId());
-        // You might want to call a service method to update the order status
-        // and then refresh the UI
+        try {
+            // Update the status of the current order
+            currentOrder.setStatus("delivered");
+
+            // Save changes into the database
+            OrderService orderService = new OrderService();
+            orderService.update(currentOrder);
+
+            // Update the label in the UI
+            lblOrderStatus.setText("Status: delivered");
+
+            // Optional: Update style class too
+            lblOrderStatus.getStyleClass().clear();
+            lblOrderStatus.getStyleClass().add(getStatusStyleClass("delivered"));
+
+            System.out.println("✅ Order #" + currentOrder.getId() + " status updated to 'delivered'.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("❌ Failed to process order #" + currentOrder.getId() + ": " + e.getMessage());
+        }
     }
+
 
     @FXML
     private void handleViewDetails(ActionEvent event) {
@@ -127,15 +146,16 @@ public class OrderItemController {
         if (status == null) return "order-status-waiting";
 
         switch (status.toLowerCase()) {
-            case "completed":
-                return "order-status-completed";
-            case "cancelled":
-                return "order-status-cancelled";
+            case "confirmed":
+                return "order-status-confirmed";
             case "on wait":
-            case "waiting":
+                return "order-status-wait";
             case "pending":
+                return "order-status-pending";
+            case "delivred":
+                return "order-status-delivred";
             default:
-                return "order-status-waiting";
+                return "order-status-cancelled";
         }
     }
 }

@@ -1,29 +1,60 @@
 package com.devmasters.agrosphere.marketplaceManagement.Controller;
 
 import com.devmasters.agrosphere.marketplaceManagement.entities.product;
+import com.devmasters.agrosphere.marketplaceManagement.entities.category;
+import javafx.scene.control.Label;
+import services.marketPlace.CategoryService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.util.StringConverter;
 import services.marketPlace.ProductService;
 import javafx.event.ActionEvent;
 import java.io.IOException;
-
 import java.util.List;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.ComboBox;
+
 
 public class ProductListController {
 
     @FXML private VBox productContainer;
     @FXML private BorderPane root;
     @FXML private Button btnToggleView;
-    private boolean inFormView = false;
+    //private boolean inFormView = false;
+    @FXML private TextField searchField;
+    @FXML private ComboBox<category> productFilterCombo;
 
     private final ProductService productService = new ProductService();
+    private int currentCategoryFilter = -1;  // -1 means "All Categories"
+    private String currentSearchKeyword = "";
 
     @FXML
     public void initialize() {
+        // Load categories first
+        loadCategoriesForFilter();
+
+        // Load all products initially
         loadProducts();
+
+        // Setup search field listener
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            currentSearchKeyword = newValue;
+            performFilteredSearch();
+        });
+
+        // Setup category filter change listener
+        productFilterCombo.setOnAction(e -> {
+            category selected = productFilterCombo.getValue();
+            currentCategoryFilter = (selected != null) ? selected.getId() : -1;
+            performFilteredSearch();
+        });
     }
 
     public void loadProducts() {
@@ -68,16 +99,14 @@ public class ProductListController {
         }
     }
 
-
     public void deleteProduct(int id) {
         try {
             ProductService ps = new ProductService();
             ps.delete(id);
-        } catch (Exception e) { // Catch the generic Exception, not just IOException
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     private void handleCategoryNav() {
@@ -115,5 +144,89 @@ public class ProductListController {
             parent = parent.getParent();
         }
         return null;
+    }
+
+    /**
+     * Combined search and filter functionality
+     */
+    private void performFilteredSearch() {
+        try {
+            List<product> results;
+
+            // Using the combined search and filter method from ProductService
+            if (currentCategoryFilter == -1 && (currentSearchKeyword == null || currentSearchKeyword.trim().isEmpty())) {
+                results = productService.getAll(); // Get all products if no filters applied
+            } else {
+                results = productService.searchWithCategoryFilter(
+                        currentSearchKeyword != null ? currentSearchKeyword : "",
+                        currentCategoryFilter
+                );
+            }
+
+            // Clear and rebuild product list
+            updateProductDisplay(results);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateProductDisplay(List<product> products) {
+        try {
+            productContainer.getChildren().clear();
+
+            if (products.isEmpty()) {
+                // Display "No products found" message
+                Label noProductsLabel = new Label("No products found matching your criteria");
+                noProductsLabel.getStyleClass().add("no-results-label");
+                productContainer.getChildren().add(noProductsLabel);
+                return;
+            }
+
+            for (product p : products) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/devmasters/agrosphere/marketplaceManagement/product_item.fxml"));
+                AnchorPane productItem = loader.load();
+                ProductItemController controller = loader.getController();
+                controller.setData(p, this);
+                productContainer.getChildren().add(productItem);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadCategoriesForFilter() {
+        try {
+            CategoryService cs = new CategoryService();
+            List<category> categories = cs.getAll();
+
+            // Create a special "All Categories" item
+            category allCategories = new category();
+            allCategories.setId(-1);
+            allCategories.setNameCategory("All Categories");
+
+            ObservableList<category> categoryOptions = FXCollections.observableArrayList();
+            categoryOptions.add(allCategories); // Add "All Categories" as first option
+            categoryOptions.addAll(categories);
+
+            productFilterCombo.setItems(categoryOptions);
+            productFilterCombo.getSelectionModel().selectFirst(); // Select "All Categories" by default
+
+            // Set up converter for display
+            productFilterCombo.setConverter(new StringConverter<category>() {
+                @Override
+                public String toString(category c) {
+                    return c != null ? c.getNameCategory() : "All Categories";
+                }
+
+                @Override
+                public category fromString(String s) {
+                    return null; // Not needed for ComboBox
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

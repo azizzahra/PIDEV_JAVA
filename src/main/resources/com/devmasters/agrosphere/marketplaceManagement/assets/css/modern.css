@@ -320,11 +320,17 @@
     -fx-border-color: #4CAF50;
     -fx-effect: dropshadow(gaussian, rgba(76,175,80,0.2), 10, 0, 0, 2);
 }
-
+.order-pill {
+    -fx-background-color: #cdecc5;
+    -fx-text-fill: #1a3d1f;
+    -fx-background-radius: 12;
+    -fx-padding: 3 10;
+    -fx-font-size: 14px;
+}
 .order-header {
-    -fx-font-size: 16px;
+    -fx-font-size: 21px;
     -fx-font-weight: bold;
-    -fx-text-fill: #1e5631;
+    -fx-text-fill: black;
     -fx-padding: 0 0 8px 10;
     -fx-border-color: transparent transparent #e0e0e0 transparent;
     -fx-border-width: 0 0 1px 0;
@@ -335,18 +341,21 @@
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }
-.order-status-waiting {
+.order-status-pending {
     -fx-text-fill: #ff9800;
     -fx-font-weight: bold;
 }
-
-.order-status-completed {
+.order-status-confirmed {
+    -fx-text-fill: #7ed46a;
+    -fx-font-weight: bold;
+}
+.order-status-delivred {
     -fx-text-fill: #696969;
     -fx-font-weight: bold;
 }
 
-.order-status-cancelled {
-    -fx-text-fill: #f44336;
+.order-status-wait {
+    -fx-text-fill: #732d4a;
     -fx-font-weight: bold;
 }
 
@@ -425,4 +434,144 @@
 .order-action-button:hover {
     -fx-background-color: #367c39;
 
+}
+
+/* Filter ComboBox styles */
+.filter-combo {
+    -fx-background-color: #f5f7fa;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 5;
+    -fx-min-height: 38px;
+}
+
+.filter-combo .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.filter-combo .arrow {
+    -fx-background-color: #64748b;
+}
+
+/* Button styles */
+.button {
+    -fx-cursor: hand;
+    -fx-background-radius: 6;
+    -fx-transition: background-color 0.2s ease-in-out;
+}
+
+.button:hover {
+    -fx-opacity: 0.9;
+}
+
+.button:pressed {
+    -fx-opacity: 0.8;
+}
+
+/* Category badge styles */
+.category-badge {
+    -fx-cursor: default;
+    -fx-background-color: #e6f4e6;
+    -fx-text-fill: #2c7a31;
+    -fx-background-radius: 18;
+    -fx-font-size: 11px;
+    -fx-padding: 4 12;
+}
+
+/* Product card styles */
+.product-item {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+    -fx-padding: 15;
+}
+
+/* Button styles */
+.btn-primary {
+    -fx-background-color: #38b036;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+}
+
+.btn-edit {
+    -fx-background-color: #f0f2f5;
+    -fx-text-fill: #1e293b;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.btn-edit:hover {
+    -fx-background-color: #e2e8f0;
+}
+
+.btn-delete {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #b91c1c;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.btn-delete:hover {
+    -fx-background-color: #fecaca;
+}
+
+.no-results-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 14px;
+    -fx-padding: 20;
+    -fx-alignment: center;
+}
+
+/* Search field styles */
+.search-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 13px;
+}
+
+.search-container {
+    -fx-background-color: #f5f7fa;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #e2e8f0;
+    -fx-padding: 8 10;
+}
+
+/* ScrollPane styles */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #cbd5e1;
+    -fx-background-radius: 5;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+/* Control bar styles */
+.control-bar {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 10, 0, 0, 2);
+    -fx-padding: 15 20;
 }

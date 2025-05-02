@@ -19,7 +19,7 @@ public class OrderService {
 
 
     public void add(order o) throws Exception {
-        String sql = "INSERT INTO `order` (buyer_id, total_price, status, ordcreated_at) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO `order` (buyer_id, total_price, status) VALUES (?, ?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, o.getBuyerId());
         ps.setDouble(2, o.getTotalPrice());
@@ -29,7 +29,7 @@ public class OrderService {
 
 
     public void update(order o) throws Exception {
-        String sql = "UPDATE `order` SET buyer_id=?, total_price=?, status=?, ordcreated_at=? WHERE id=?";
+        String sql = "UPDATE `order` SET buyer_id=?, total_price=?, status=? WHERE id=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, o.getBuyerId());
         ps.setDouble(2, o.getTotalPrice());

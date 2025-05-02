@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.devmasters.agrosphere.marketplaceManagement.Controller.loginController"
+            prefWidth="600" prefHeight="400"
+            style="-fx-background-color: #f0f0f0;">
+
+    <VBox alignment="CENTER" spacing="20" layoutX="150" layoutY="100" prefWidth="300" prefHeight="200">
+        <Label text="Welcome to AgroSphere" style="-fx-font-size: 20px;"/>
+        <Button fx:id="btnFarmerView" text="Farmer View" onAction="#handleFarmerView" prefWidth="200"/>
+        <Button fx:id="btnBuyerView" text="Buyer View" onAction="#handleBuyerView" prefWidth="200"/>
+    </VBox>
+</AnchorPane>

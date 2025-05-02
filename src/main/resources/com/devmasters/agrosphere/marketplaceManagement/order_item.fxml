@@ -11,12 +11,12 @@
     <HBox spacing="20" >
 
         <!-- Left VBox: Order Info and Products -->
-        <VBox spacing="20" prefWidth="500">
+        <VBox spacing="10" prefWidth="500">
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="order details" styleClass="order-h" />
+                <Label text="order details" styleClass="order-header" />
             </HBox>
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label fx:id="lblOrderHeader" styleClass="order-header" />
+                <Label fx:id="lblOrderHeader" styleClass="order-pill" />
                 <Label fx:id="lblOrderStatus" styleClass="order-status" />
             </HBox>
 

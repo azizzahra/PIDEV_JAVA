@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox fx:id="productCard" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.devmasters.agrosphere.marketplaceManagement.Controller.ProductCardController"
+      styleClass="product-card">
+
+    <!-- Image Container with fixed height -->
+    <StackPane styleClass="image-container" VBox.vgrow="NEVER">
+        <ImageView fx:id="imageView" fitWidth="220" fitHeight="180" preserveRatio="true" styleClass="product-image"/>
+    </StackPane>
+
+    <!-- Product Details -->
+    <VBox styleClass="product-details" VBox.vgrow="ALWAYS">
+        <Label fx:id="nameLabel" text="Product Name" styleClass="product-name"/>
+        <Label fx:id="descriptionLabel" text="Description" styleClass="product-description" wrapText="true"/>
+        <Label fx:id="priceLabel" text="Price" styleClass="product-price"/>
+        <Label fx:id="stockLabel" text="Stock" styleClass="product-stock"/>
+        <Button fx:id="categoryButton" text="Category" styleClass="category-button"/>
+
+        <HBox styleClass="button-container">
+            <Button fx:id="viewButton" styleClass="view-button" text="👁️"/>
+            <Button fx:id="addToCartButton" styleClass="add-cart-button" text="Add to Cart"/>
+        </HBox>
+    </VBox>
+</VBox>

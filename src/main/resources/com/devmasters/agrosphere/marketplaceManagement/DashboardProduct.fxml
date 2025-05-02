@@ -38,7 +38,8 @@
             <Pane VBox.vgrow="ALWAYS"/>
 
             <Separator style="-fx-background-color: #695e5e;"/>
-            <Button text="⚙️Paramètres"
+            <!-- Add this button in your dashboard's navigation area -->
+            <Button fx:id="marketplaceButton" text="Marketplace View" styleClass="nav-button" onAction="#handleMarketplaceNav"/><Button text="⚙️Paramètres"
                     style="-fx-background-color: transparent; -fx-text-fill: #c1e1c5; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
             <Button text="🚪Déconnexion" onAction="#handleLogout"
                     style="-fx-background-color: transparent; -fx-text-fill: #c1e1c5; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>

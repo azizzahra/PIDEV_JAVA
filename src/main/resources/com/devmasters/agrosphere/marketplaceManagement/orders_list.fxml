@@ -1,36 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.*?>
+<?import java.lang.String?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.ScrollPane?>
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.devmasters.agrosphere.marketplaceManagement.Controller.OrderListController"
+      style="-fx-padding: 15 20 20 20; -fx-background-color: #f8f9fa;">
 
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<ScrollPane fitToWidth="true"
-            styleClass="transparent-scroll-pane"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.devmasters.agrosphere.marketplaceManagement.Controller.OrderListController">
+    <!-- Control Bar with Search and Sort -->
+    <HBox styleClass="control-bar"
+          spacing="15" alignment="CENTER_LEFT">
 
-    <HBox style="-fx-background-color: #e6e6e6; -fx-background-radius: 5; -fx-border-color: #b3b3b3; -fx-border-radius: 5; -fx-padding: 10;"
-          spacing="10" alignment="CENTER_LEFT">
+        <padding>
+            <Insets top="15" right="20" bottom="15" left="20" />
+        </padding>
 
-        <Button text="🔍 Filter" styleClass="button"/>
-        <Button text="↕ Sort" styleClass="button"/>
+        <ComboBox fx:id="orderSortCombo"
+                  prefWidth="180"
+                  promptText="Sort by"
+                  styleClass="filter-combo">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Date (Newest)" />
+                    <String fx:value="Date (Oldest)" />
+                    <String fx:value="Total (High-Low)" />
+                    <String fx:value="Total (Low-High)" />
+                    <String fx:value="Status" />
+                </FXCollections>
+            </items>
+        </ComboBox>
 
-        <!-- Search field and button -->
-        <HBox spacing="5" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-            <TextField promptText="Search categories..." HBox.hgrow="ALWAYS"/>
-            <Button text="🔍" styleClass="button"/>
+        <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT"
+              styleClass="search-container">
+            <padding>
+                <Insets top="8" right="10" bottom="8" left="10" />
+            </padding>
+            <Label text="🔍" style="-fx-text-fill: #64748b;" />
+            <TextField fx:id="searchField"
+                       promptText="Search orders..."
+                       HBox.hgrow="ALWAYS"
+                       styleClass="search-field" />
         </HBox>
 
         <Button fx:id="btnToggleView"
                 text="+ Add New"
-                style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;"
-                />
+                styleClass="btn-primary" />
     </HBox>
 
-    <VBox fx:id="orderContainer"
-          styleClass="order-container"
-          spacing="15">
-    </VBox>
-</ScrollPane>
+    <!-- Main Order Container -->
+    <ScrollPane fitToWidth="true"
+                styleClass="scroll-pane"
+                VBox.vgrow="ALWAYS">
+        <VBox fx:id="orderContainer"
+              styleClass="order-container"
+              spacing="12"
+              style="-fx-padding: 10 5;">
+        </VBox>
+    </ScrollPane>
+</VBox>

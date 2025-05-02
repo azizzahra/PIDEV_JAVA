@@ -116,4 +116,82 @@ public class ProductService implements Iservices<product> {
 
         return name;
     }
+    public List<product> searchByName(String keyword) throws Exception {
+        List<product> list = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE name_prod LIKE ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, "%" + keyword + "%");
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            product p = new product();
+            p.setId(rs.getInt("id"));
+            p.setProdImg(rs.getString("prod_img"));
+            p.setNameProd(rs.getString("name_prod"));
+            p.setDescriptionProd(rs.getString("description_prod"));
+            p.setPriceProd(rs.getDouble("price_prod"));
+            p.setQuantity(rs.getInt("quantity"));
+            p.setCategoryProdId(rs.getInt("category_prod_id"));
+            p.setFarmerId(rs.getInt("farmer_id_id"));
+            list.add(p);
+        }
+        return list;
+    }
+    public List<product> searchWithCategoryFilter(String keyword, int categoryId) throws Exception {
+        List<product> list = new ArrayList<>();
+
+        String sql = "SELECT p.* FROM product p JOIN category c ON p.category_prod_id = c.id WHERE " +
+                "(p.name_prod LIKE ? OR p.description_prod LIKE ? OR c.name_category LIKE ?)";
+        if (categoryId != -1) {
+            sql += " AND c.id = ?";
+        }
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        String like = "%" + keyword + "%";
+        ps.setString(1, like);
+        ps.setString(2, like);
+        ps.setString(3, like);
+        if (categoryId != -1) ps.setInt(4, categoryId);
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            product p = new product();
+            p.setId(rs.getInt("id"));
+            p.setProdImg(rs.getString("prod_img"));
+            p.setNameProd(rs.getString("name_prod"));
+            p.setDescriptionProd(rs.getString("description_prod"));
+            p.setPriceProd(rs.getDouble("price_prod"));
+            p.setQuantity(rs.getInt("quantity"));
+            p.setCategoryProdId(rs.getInt("category_prod_id"));
+            p.setFarmerId(rs.getInt("farmer_id_id"));
+            list.add(p);
+        }
+
+        return list;
+    }
+
+    public List<product> getByCategory(int categoryId) throws Exception {
+        List<product> list = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE category_prod_id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, categoryId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            product p = new product();
+            p.setId(rs.getInt("id"));
+            p.setProdImg(rs.getString("prod_img"));
+            p.setNameProd(rs.getString("name_prod"));
+            p.setDescriptionProd(rs.getString("description_prod"));
+            p.setPriceProd(rs.getDouble("price_prod"));
+            p.setQuantity(rs.getInt("quantity"));
+            p.setCategoryProdId(rs.getInt("category_prod_id"));
+            p.setFarmerId(rs.getInt("farmer_id_id"));
+            list.add(p);
+        }
+        return list;
+    }
+
+
+
 }

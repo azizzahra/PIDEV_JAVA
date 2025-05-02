@@ -14,8 +14,8 @@
     </VBox>
 
     <VBox spacing="10" alignment="CENTER">
-        <Button text="Update" styleClass="btn-edit" prefWidth="100" onAction="#onEditClicked"/>
-        <Button text="Delete" styleClass="btn-delete" prefWidth="100" onAction="#onDeleteClicked"/>
+        <Button fx:id="editButton" text="Update" styleClass="btn-edit" prefWidth="100" onAction="#onEditClicked"/>
+        <Button fx:id="deleteButton" text="Delete" styleClass="btn-delete" prefWidth="100" onAction="#onDeleteClicked"/>
     </VBox>
 
 </HBox>

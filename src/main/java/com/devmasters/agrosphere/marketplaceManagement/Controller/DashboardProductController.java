@@ -4,12 +4,15 @@ package com.devmasters.agrosphere.marketplaceManagement.Controller;
 //import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import java.io.IOException;
+
 
 import java.util.List;
 
@@ -88,4 +91,21 @@ public class DashboardProductController {
         }
         activeButton.getStyleClass().add("product-nav-button-active");
     }
+    @FXML
+    private void handleMarketplaceNav() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/devmasters/agrosphere/marketplaceManagement/product_marketplace.fxml"));
+            BorderPane marketplaceView = loader.load();
+
+            StackPane contentArea = (StackPane) root.lookup("#contentArea");
+            if (contentArea != null) {
+                contentArea.getChildren().setAll(marketplaceView);
+            } else {
+                root.getScene().setRoot(marketplaceView); // fallback
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -1,20 +1,28 @@
 package com.devmasters.agrosphere.marketplaceManagement.entities;
 
+/**
+ * Entity class for categories in the marketplace management system.
+ * Note: Renamed from lowercase 'category' to proper capitalized 'Category'
+ * to follow Java naming conventions.
+ */
 public class category {
+
     private int id;
     private String nameCategory;
     private String descriptionCategory;
 
-    // Constructors
-    public category() {}
+    // Default constructor
+    public category() {
+    }
 
+    // Parameterized constructor
     public category(int id, String nameCategory, String descriptionCategory) {
         this.id = id;
         this.nameCategory = nameCategory;
         this.descriptionCategory = descriptionCategory;
     }
 
-    // Getters & Setters
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -37,5 +45,14 @@ public class category {
 
     public void setDescriptionCategory(String descriptionCategory) {
         this.descriptionCategory = descriptionCategory;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", nameCategory='" + nameCategory + '\'' +
+                ", descriptionCategory='" + descriptionCategory + '\'' +
+                '}';
     }
 }

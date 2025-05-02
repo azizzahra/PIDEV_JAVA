@@ -74,4 +74,24 @@ public class CategoryService implements Iservices<category> {
 
         return null; // or throw exception if preferred
     }
+
+    public List<category> searchByName(String keyword) throws Exception {
+        List<category> list = new ArrayList<>();
+        String sql = "SELECT * FROM category WHERE name_category LIKE ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, "%" + keyword + "%");
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            category c = new category();
+            c.setId(rs.getInt("id"));
+            c.setNameCategory(rs.getString("name_category"));
+            c.setDescriptionCategory(rs.getString("description_category"));
+            list.add(c);
+        }
+
+        return list;
+    }
+
+
 }

@@ -2,6 +2,7 @@ module com.devmasters.agrosphere {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires java.desktop;
 
     // Required to allow FXML reflection access
     opens com.devmasters.agrosphere.marketplaceManagement.Controller to javafx.fxml;

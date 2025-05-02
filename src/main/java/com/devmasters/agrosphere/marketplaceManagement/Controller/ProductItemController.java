@@ -33,30 +33,6 @@ public class ProductItemController {
     private ProductListController listController;
     private product currentProduct;
 
-    /*public void setData(product p, ProductListController controller) {
-        this.currentProduct = p;
-        this.listController = controller;
-
-        nameLabel.setText(p.getNameProd());
-        descriptionLabel.setText(p.getDescriptionProd());
-        priceLabel.setText(p.getPriceProd() + " TND");
-        stockLabel.setText("Stock: " + p.getQuantity());
-
-        // Load category name instead of ID
-        CategoryService cs = new CategoryService();
-        try {
-            category c = cs.getOne(p.getCategoryProdId());
-            categoryButton.setText(c.getNameCategory());
-        } catch (Exception e) {
-            categoryButton.setText("Unknown");
-        }
-
-        // Optional: Load image
-        File imageFile = new File("uploads/" + p.getProdImg());
-        if (imageFile.exists()) {
-            imageView.setImage(new Image(imageFile.toURI().toString()));
-        }
-    }*/
 
     public void setData(product p, ProductListController controller) {
         this.currentProduct = p;
