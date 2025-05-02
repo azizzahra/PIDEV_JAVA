@@ -18,14 +18,22 @@ public class OrderService {
     }
 
 
-    public void add(order o) throws Exception {
+    public int add(order o) throws Exception {
         String sql = "INSERT INTO `order` (buyer_id, total_price, status) VALUES (?, ?, ?)";
-        PreparedStatement ps = conn.prepareStatement(sql);
+        PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, o.getBuyerId());
         ps.setDouble(2, o.getTotalPrice());
         ps.setString(3, o.getStatus());
         ps.executeUpdate();
+
+        ResultSet rs = ps.getGeneratedKeys();
+        if (rs.next()) {
+            return rs.getInt(1); // return the generated ID
+        } else {
+            throw new Exception("Failed to retrieve inserted order ID.");
+        }
     }
+
 
 
     public void update(order o) throws Exception {

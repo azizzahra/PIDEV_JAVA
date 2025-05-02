@@ -9,13 +9,45 @@
 
 <BorderPane fx:id="root" styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.devmasters.agrosphere.marketplaceManagement.Controller.MarketplaceViewController">
     <top>
-        <!-- Marketplace Banner -->
+        <VBox spacing="10">
+            <!-- Header/Navigation Bar -->
+            <HBox styleClass="nav-bar" alignment="CENTER_LEFT" spacing="20">
+                <padding><Insets top="10" right="20" bottom="10" left="20"/></padding>
+
+                <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                    <Image url="@assets/images/logo.png"/>
+                </ImageView>
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Button text="Home" styleClass="nav-button" onAction="#handleNavigate"/>
+                <Button text="Market Place" styleClass="nav-button" onAction="#handleNavigate"/>
+                <Button text="Event" styleClass="nav-button" onAction="#handleNavigate"/>
+                <Button text="Forum" styleClass="nav-button" onAction="#handleNavigate"/>
+                <Button text="Farm" styleClass="nav-button" onAction="#handleNavigate"/>
+                <Button text="About Us" styleClass="nav-button" onAction="#handleNavigate"/>
+                <Button text="Contact" styleClass="nav-button" onAction="#handleNavigate"/>
+
+                <Button fx:id="cartButton" styleClass="cart-button" onAction="#viewCart"/>
+
+            </HBox>
+
+            <!-- Marketplace Banner -->
+            <VBox alignment="CENTER" styleClass="marketplace-banner">
+                <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+                <Label text="Marketplace" styleClass="marketplace-title"/>
+                <Label text="Providing Fresh Produce Every Single Day" styleClass="marketplace-subtitle"/>
+            </VBox>
+        </VBox>
+    </top>
+    <!--<top>
         <VBox alignment="CENTER" styleClass="marketplace-banner">
             <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
             <Label text="Marketplace" styleClass="marketplace-title"/>
             <Label text="Providing Fresh Produce Every Single Day" styleClass="marketplace-subtitle"/>
+
         </VBox>
-    </top>
+    </top>-->
 
     <center>
         <HBox spacing="20" styleClass="marketplace-content">

@@ -1,6 +1,8 @@
 package com.devmasters.agrosphere.marketplaceManagement.Controller;
 
 import com.devmasters.agrosphere.marketplaceManagement.entities.category;
+import com.devmasters.agrosphere.marketplaceManagement.entities.order;
+import com.devmasters.agrosphere.marketplaceManagement.entities.orderLine;
 import com.devmasters.agrosphere.marketplaceManagement.entities.product;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,8 +11,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import services.marketPlace.CategoryService;
+import services.marketPlace.OrderLineService;
+import services.marketPlace.OrderService;
 
 import java.io.File;
+import java.util.List;
 
 public class ProductCardController {
 
@@ -24,11 +29,18 @@ public class ProductCardController {
     @FXML private Button categoryButton;
     @FXML private ImageView imageView;
     private MarketplaceViewController listController;
+    private product currentProduct;
+
+    private final OrderService orderService = new OrderService();
+    private final OrderLineService orderLineService = new OrderLineService();
 
     @FXML
     private Button viewButton;
     @FXML
     private Button addToCartButton;
+
+    // Default buyer ID (in a real app, this would come from a logged in user)
+    private int buyerId = 3;
 
     @FXML
     public void initialize() {
@@ -44,6 +56,7 @@ public class ProductCardController {
 
     public void setProductData(product p, MarketplaceViewController controller) {
         this.listController = controller;
+        this.currentProduct = p;
 
         nameLabel.setText(p.getNameProd());
 
@@ -99,10 +112,67 @@ public class ProductCardController {
     }
 
     /**
-     * Handle add to cart action
+     * Handle add to cart action - this is the main function we're implementing
      */
     private void handleAddToCart() {
-        System.out.println("Adding to cart: " + nameLabel.getText());
-        // Implement add to cart logic here
+        try {
+            // 1. Find if there's an existing pending order for this buyer
+            order currentOrder = null;
+            List<order> allOrders = orderService.getAll();
+
+            for (order o : allOrders) {
+                if (o.getBuyerId() == buyerId && o.getStatus().equals("pending")) {
+                    currentOrder = o;
+                    break;
+                }
+            }
+
+            // 2. If no pending order exists, create a new one
+            if (currentOrder == null) {
+                currentOrder = new order();
+                currentOrder.setBuyerId(buyerId);
+                currentOrder.setStatus("pending");
+                int newOrderId = orderService.add(currentOrder);
+                currentOrder.setId(newOrderId);
+                System.out.println("Created new order with ID: " + newOrderId);
+            }
+
+            // 3. Check if the product is already in the cart
+            boolean productExists = false;
+            List<orderLine> existingLines = orderLineService.getByOrderId(currentOrder.getId());
+
+            for (orderLine line : existingLines) {
+                if (line.getProductId() == currentProduct.getId()) {
+                    // Product already in cart, increase quantity
+                    line.setOrderQuantity(line.getOrderQuantity() + 1);
+                    orderLineService.update(line);
+                    productExists = true;
+                    System.out.println("Updated quantity for product: " + currentProduct.getNameProd());
+                    break;
+                }
+            }
+
+            // 4. If product not in cart, add it as a new line
+            if (!productExists) {
+                orderLine newLine = new orderLine();
+                newLine.setOrdId(currentOrder.getId());
+                newLine.setProductId(currentProduct.getId());
+                newLine.setOrderQuantity(1);
+                orderLineService.add(newLine);
+                System.out.println("Added new product to cart: " + currentProduct.getNameProd());
+            }
+
+            // 5. Show success message or notification
+            System.out.println("Added to cart: " + nameLabel.getText());
+
+            // 6. Update cart badge count if you have one
+            if (listController != null) {
+                listController.updateCartBadge();
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error adding product to cart");
+            e.printStackTrace();
+        }
     }
 }
