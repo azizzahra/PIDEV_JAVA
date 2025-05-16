@@ -1,48 +1,77 @@
-🌾 SmartAgri Platform - Symfony & Java Project
-Welcome to SmartAgri, a web-based and desktop-integrated platform built with Symfony (PHP) and Java that aims to revolutionize smart agriculture. This system connects farmers, product vendors, and learners through a multi-functional digital ecosystem.
 
-📌 Features Overview
-1. 🛒 Marketplace (Symfony)
-Full CRUD operations for agricultural products such as seeds and machines.
+---
 
-Roles:
+# 🌿 AgroSphere – Application Desktop (JavaFX)
 
-Buyer: Can view and purchase items.
+Cette application desktop JavaFX complète l’écosystème **AgroSphere** avec une gestion locale et intelligente de la ferme pour les agriculteurs. Elle se concentre sur la gestion de parcelles, les cultures, les tâches agricoles et l’utilisation de l’IA pour aider au quotidien.
 
-Depositor: Can add/edit/delete products.
+## 🎯 Objectif
 
-Admin: Full access to all products and user actions.
+Permettre aux agriculteurs de gérer efficacement leur ferme à partir d’un poste local avec une interface simple, moderne, et intuitive.
 
-2. 📅 Events & Formations (Symfony)
-List of available training events (formations).
+---
 
-Users can view, join, or delete (admin only).
+## ⚙️ Technologies utilisées
 
-Events include: name, type, image, and price.
+- **Langage** : Java 
+- **Framework UI** : JavaFX
+- **Base de données** :  MySQL
+- **Design FXML** : Interface dynamique et modulaire
+- **IA intégrée** : via modèles TensorFlow / API prédictive
 
-Integrated with the marketplace and user role system.
+---
 
-3. 🧵 Forum with Bot Support (Symfony + Bot API)
-Reddit-style forum where users can post questions after creating an account.
+## 📋 Fonctionnalités principales
 
-Integrated Bot (AI or API-based) that answers users' questions using event or marketplace data.
+### 🌱 Gestion des cultures et des parcelles
+- Suivi des parcelles (nom, superficie, type de sol)
+- Suivi des cultures actuelles et planifiées
+- Historique des rendements
 
-User accounts managed via Symfony authentication system.
+### ✅ To-Do list intelligente
+- Ajout de tâches agricoles (plantation, irrigation, récolte…)
+- Priorisation automatique
+- Suivi des statuts (À faire / En cours / Terminé)
 
-4. 🚜 Farm Management (JavaFX)
-Desktop application built in JavaFX where users can:
+### 📸 Détection des maladies (IA)
+- Chargement d’image de plante malade
+- Détection automatique via modèle d’IA
+- Suggestions de traitement
 
-Create a virtual farm
+### 📅 Prédiction de la période de plantation
+- L’utilisateur choisit une culture
+- L’application prédit la meilleure saison pour planter
 
-Input farm details (size, crop type, etc.)
+---
 
-View/manage farm dashboard.
+## 🧭 Navigation de l'application
 
-5. 🧠 AI for Plant Disease Detection (Java + AI Model)
-Image upload and detection feature.
+- Tableau de bord principal
+- Menu latéral pour navigation entre modules
+- Fenêtres pop-up pour ajouts/modifications
+- Interface épurée, ergonomique et moderne
 
-Uses AI/ML to detect sick plants.
+---
 
-Returns result with diagnosis and treatment tips.
+## ▶️ Lancer le projet localement
 
-Optional integration with the forum or event section for further guidance.
+1. Cloner le dépôt :
+
+```bash
+git clone https://github.com/azizzahra/PIDEV_JAVA.git
+Ouvrir avec votre IDE Java (IntelliJ)
+S'assurer d'avoir JavaFX configuré
+Lancer le fichier Main.java
+
+🔮 Fonctionnalités futures
+Synchronisation avec l’application web
+
+Analyse météo pour planifier les activités
+
+Ajout de capteurs IoT pour données en temps réel
+
+👥 Équipe de développement
+Ce projet a été réalisé par une équipe  passionnés de technologie et d’agriculture intelligente.
+
+
+
