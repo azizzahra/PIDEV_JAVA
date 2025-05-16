@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.marketplaceManagement.ProductListController"
+      style="-fx-padding: 15 20 20 20; -fx-background-color: #f8f9fa;">
+
+    <!-- Filter and Search Bar -->
+    <HBox styleClass="control-bar"
+          style="-fx-background-color: white; -fx-background-radius: 8;
+                 -fx-border-color: #e2e8f0; -fx-border-radius: 8;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 10, 0, 0, 2);"
+          spacing="15" alignment="CENTER_LEFT">
+
+        <padding>
+            <Insets top="15" right="20" bottom="15" left="20" />
+        </padding>
+
+        <ComboBox fx:id="productFilterCombo"
+                  prefWidth="180"
+                  promptText="Filter by category"
+                  styleClass="filter-combo" />
+
+        <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT"
+              style="-fx-background-color: #f5f7fa; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #e2e8f0;">
+            <padding>
+                <Insets top="8" right="10" bottom="8" left="10" />
+            </padding>
+            <Label text="🔍" style="-fx-text-fill: #64748b;" />
+            <TextField fx:id="searchField"
+                       promptText="Search products..."
+                       HBox.hgrow="ALWAYS"
+                       style="-fx-background-color: transparent; -fx-border-color: transparent;" />
+        </HBox>
+
+        <Button fx:id="btnToggleView"
+                text="+ Add Product"
+                style="-fx-background-color: #38b036; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 6; -fx-padding: 10 20;"
+                onAction="#handleAddProduct"/>
+    </HBox>
+
+    <!-- Main Product Container -->
+    <ScrollPane fitToWidth="true"
+                style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;"
+                VBox.vgrow="ALWAYS">
+        <VBox fx:id="productContainer"
+              spacing="12"
+              style="-fx-padding: 10 5;">
+        </VBox>
+    </ScrollPane>
+</VBox>

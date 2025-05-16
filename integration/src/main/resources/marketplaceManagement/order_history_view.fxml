@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.marketplaceManagement.OrderHistoryViewController"
+      prefHeight="800.0"
+      prefWidth="1200.0">
+
+    <stylesheets>
+        <URL value="@../marketplaceManagement/assets/css/marketplace.css"/>
+    </stylesheets>
+
+    <!-- Include the navigation bar -->
+    <fx:include source="../NavBar.fxml" />
+
+    <!-- Marketplace Banner - Updated to match other pages -->
+    <VBox alignment="CENTER" styleClass="marketplace-banner">
+        <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+        <Label text="My Orders" styleClass="marketplace-title"/>
+        <Label text="See Your Previous Orders Here" styleClass="marketplace-subtitle"/>
+    </VBox>
+    <HBox spacing="10" styleClass="floating-button"
+          AnchorPane.rightAnchor="30" AnchorPane.topAnchor="20">
+        <Button text="Shop Again" styleClass="shop-again-button" onAction="#goToMarketplace"/>
+        <Button fx:id="cartButton" styleClass="cart-button"
+                onAction="#viewCart" text="🛒"/>
+    </HBox>
+
+    <AnchorPane VBox.vgrow="ALWAYS">
+        <BorderPane fx:id="root" style="-fx-background-color: #f0f5ea;"
+                    AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                    AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+
+            <!-- Main Content -->
+            <center>
+                <ScrollPane fitToWidth="true" styleClass="product-scroll" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                    <content>
+                        <VBox alignment="TOP_CENTER" spacing="30" style="-fx-padding: 20;">
+                            <!-- Shop Again Button at Top Right -->
+
+
+                            <!-- Orders Grid -->
+                            <FlowPane fx:id="ordersContainer" hgap="20" vgap="30" alignment="CENTER" />
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </center>
+        </BorderPane>
+    </AnchorPane>
+</VBox>

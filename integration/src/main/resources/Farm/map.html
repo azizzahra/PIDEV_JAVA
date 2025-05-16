@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OpenStreetMap Integration</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map-container {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #coordinates {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        #map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 900;
+            cursor: crosshair;
+            background-color: transparent;
+        }
+        #status-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        .connected {
+            background-color: #d4ffd4 !important;
+            color: #006400;
+        }
+        .disconnected {
+            background-color: #ffd4d4 !important;
+            color: #640000;
+        }
+    </style>
+</head>
+<body>
+<div id="map-container">
+    <!-- Default to Tunisia view -->
+    <iframe id="osm-iframe" src="https://www.openstreetmap.org/export/embed.html?bbox=10.1613,36.7963,10.2017,36.8167&layer=mapnik" allowfullscreen></iframe>
+    <div id="coordinates">Click on map to select location</div>
+    <div id="map-overlay"></div>
+    <div id="status-indicator" class="disconnected">Bridge: Checking...</div>
+</div>
+
+<script>
+    // Debug flag
+    var DEBUG = true;
+
+    // Variable pour suivre le statut de la connexion
+    var bridgeConnected = false;
+    var lastClickTime = 0;
+    var statusIndicator = document.getElementById('status-indicator');
+
+    function debugLog(message) {
+        if (DEBUG) {
+            console.log("[DEBUG] " + message);
+        }
+    }
+
+    // Default coordinates for Tunisia
+    var currentLat = 36.8065;
+    var currentLng = 10.1815;
+    var coordinatesDisplay = document.getElementById('coordinates');
+    var iframe = document.getElementById('osm-iframe');
+    var mapOverlay = document.getElementById('map-overlay');
+
+    // Variable to track last URL loaded in iframe to prevent unnecessary reloads
+    var lastIframeUrl = "";
+
+    // Initialize map with default coordinates
+    updateMap(currentLat, currentLng);
+
+    debugLog("Map initialized with default coordinates: " + currentLat + ", " + currentLng);
+
+    // Check if bridge is available periodically
+    function checkBridge() {
+        try {
+            bridgeConnected = (typeof window.javafxCallback !== 'undefined' && window.javafxCallback !== null);
+
+            if (bridgeConnected) {
+                statusIndicator.textContent = "Bridge: Connected";
+                statusIndicator.className = "connected";
+                debugLog("JavaFX bridge is connected");
+            } else {
+                statusIndicator.textContent = "Bridge: Disconnected";
+                statusIndicator.className = "disconnected";
+                debugLog("JavaFX bridge is NOT connected");
+            }
+        } catch (e) {
+            bridgeConnected = false;
+            statusIndicator.textContent = "Bridge: Error";
+            statusIndicator.className = "disconnected";
+            console.error("Error checking bridge:", e);
+        }
+
+        return bridgeConnected;
+    }
+
+    // Vérifier le bridge toutes les secondes
+    setInterval(checkBridge, 1000);
+
+    // Vérifier immédiatement
+    setTimeout(checkBridge, 100);
+
+    // Check for JavaFX bridge on DOM loaded
+    window.addEventListener('DOMContentLoaded', function() {
+        debugLog("DOM content loaded, checking for JavaFX bridge");
+        checkBridge();
+    });
+
+    // Also check when fully loaded
+    window.addEventListener('load', function() {
+        debugLog("Window fully loaded, checking for JavaFX bridge again");
+        checkBridge();
+
+        // Set marker with default coordinates to ensure it works
+        if (bridgeConnected) {
+            try {
+                debugLog("Attempting initial callback with default coordinates");
+                window.javafxCallback.call(currentLat, currentLng);
+            } catch (e) {
+                console.error("Error in initial callback:", e);
+            }
+        }
+    });
+
+    // Prévenir les clics trop rapides (debounce)
+    function debounce(func, wait) {
+        return function() {
+            var now = Date.now();
+            if (now - lastClickTime >= wait) {
+                lastClickTime = now;
+                func.apply(this, arguments);
+            } else {
+                debugLog("Click ignored (too soon): " + (now - lastClickTime) + "ms since last click");
+            }
+        };
+    }
+    function getCityName(lat, lng) {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=fr`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                let locationName = '';
+                if (data.address) {
+                    locationName = data.address.city || data.address.town || data.address.village || data.address.hamlet || data.address.suburb || data.address.county || data.address.state || data.address.country;
+                }
+                if (bridgeConnected) {
+                    try {
+                        window.javafxCallback.call(lat, lng, locationName);
+                    } catch (error) {
+                        console.error("Error calling JavaFX callback:", error);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching location name:", error);
+                if (bridgeConnected) {
+                    try {
+                        window.javafxCallback.call(lat, lng, "");
+                    } catch (error) {
+                        console.error("Error calling JavaFX callback:", error);
+                    }
+                }
+            });
+    }
+    // Add click event to the map overlay with debouncing
+    mapOverlay.addEventListener('click', debounce(function(e) {
+        debugLog("Map clicked, processing coordinates");
+
+        // Vérifier si le bridge est disponible
+        if (!checkBridge()) {
+            debugLog("Bridge unavailable, click ignored");
+            alert("Connection to JavaFX is not available. Please reload the page.");
+            return;
+        }
+
+        // Calculate relative position in the iframe
+        var rect = mapOverlay.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+
+        // Approximate coordinates based on the click position
+        var iframeWidth = rect.width;
+        var iframeHeight = rect.height;
+
+        // Get the current bounding box from the iframe URL
+        var src = iframe.src;
+        var bboxMatch = src.match(/bbox=([\d.-]+),([\d.-]+),([\d.-]+),([\d.-]+)/);
+
+        if (bboxMatch) {
+            var west = parseFloat(bboxMatch[1]);
+            var south = parseFloat(bboxMatch[2]);
+            var east = parseFloat(bboxMatch[3]);
+            var north = parseFloat(bboxMatch[4]);
+
+            // Calculate the latitude and longitude based on click position
+            var lng = west + (east - west) * (x / iframeWidth);
+            var lat = north - (north - south) * (y / iframeHeight);
+
+            // Update current coordinates
+            currentLat = parseFloat(lat.toFixed(6));
+            currentLng = parseFloat(lng.toFixed(6));
+
+            debugLog("Calculated coordinates: " + currentLat + ", " + currentLng);
+
+            // Display coordinates
+            coordinatesDisplay.textContent = 'Selected: ' + currentLat + ', ' + currentLng;
+
+            // Update iframe to center on new position
+            updateMap(currentLat, currentLng);
+            getCityName(currentLat, currentLng);
+
+            // Call the JavaFX callback function with coordinates
+            try {
+                debugLog("Calling JavaFX callback with coordinates: " + currentLat + ", " + currentLng);
+                window.javafxCallback.call(currentLat, currentLng);
+                debugLog("JavaFX callback invocation completed");
+            } catch (error) {
+                console.error("Error calling JavaFX callback:", error);
+                console.error(error.stack);
+                alert("Error sending coordinates to JavaFX. Please try again.");
+            }
+        }
+    }, 500)); // 500ms debounce
+
+    // Function to update the map with new coordinates
+    function updateMap(lat, lng) {
+        // Calculate a bounding box around the point
+        var delta = 0.01; // approximately 1km
+        var bbox = (lng - delta) + ',' + (lat - delta) + ',' + (lng + delta) + ',' + (lat + delta);
+
+        // Create the new URL
+        var newUrl = 'https://www.openstreetmap.org/export/embed.html?bbox=' +
+            bbox + '&layer=mapnik&marker=' + lat + ',' + lng;
+
+        // Only update if the URL has changed to avoid unnecessary reloads
+        if (newUrl !== lastIframeUrl) {
+            lastIframeUrl = newUrl;
+            iframe.src = newUrl;
+            debugLog("Map updated with new coordinates");
+
+            // Monitor iframe load to ensure bridge is still working
+            iframe.onload = function() {
+                debugLog("iframe reloaded - checking bridge");
+                setTimeout(checkBridge, 200);
+            };
+        } else {
+            debugLog("Map update skipped - URL unchanged");
+        }
+    }
+
+    // Function to set marker from Java code
+    function setMarker(lat, lng) {
+        debugLog("setMarker called from Java with: " + lat + ", " + lng);
+
+        currentLat = parseFloat(lat);
+        currentLng = parseFloat(lng);
+
+        // Update coordinates display
+        coordinatesDisplay.textContent = 'Selected: ' + currentLat + ', ' + currentLng;
+
+        // Update map
+        updateMap(currentLat, currentLng);
+    }
+
+    // Expose functions for debugging in the console
+    window.debugMap = {
+        checkBridge: checkBridge,
+        testCallback: function() {
+            if (bridgeConnected) {
+                try {
+                    window.javafxCallback.call(currentLat, currentLng);
+                    return "Callback test sent!";
+                } catch (e) {
+                    return "Error: " + e.message;
+                }
+            } else {
+                return "Bridge not connected!";
+            }
+        },
+        getCoordinates: function() {
+            return { lat: currentLat, lng: currentLng };
+        }
+    };
+</script>
+</body>
+</html>

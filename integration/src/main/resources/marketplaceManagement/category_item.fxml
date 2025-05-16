@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.marketplaceManagement.CategoryItemController"
+      styleClass="product-card"
+      spacing="20" alignment="CENTER_LEFT"
+      prefHeight="140" prefWidth="800">
+
+    <VBox spacing="4" HBox.hgrow="ALWAYS">
+        <Label fx:id="nameLabel" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+        <Label fx:id="descLabel" wrapText="true" maxWidth="500" style="-fx-text-fill: #555;"/>
+    </VBox>
+
+    <VBox spacing="10" alignment="CENTER">
+        <Button fx:id="editButton" text="Update" styleClass="btn-edit" prefWidth="100" onAction="#onEditClicked"/>
+        <Button fx:id="deleteButton" text="Delete" styleClass="btn-delete" prefWidth="100" onAction="#onDeleteClicked"/>
+    </VBox>
+
+</HBox>

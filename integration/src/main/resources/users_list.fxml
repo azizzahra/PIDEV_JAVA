@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.UserListController"
+            prefWidth="1000" prefHeight="600"
+            stylesheets="@user.css"
+            styleClass="background-agriculture">
+
+    <VBox spacing="15" alignment="TOP_CENTER">
+        <padding>
+            <Insets top="20" right="30" bottom="20" left="30"/>
+        </padding>
+
+        <Label text="🌿 Liste des Utilisateurs" styleClass="header-label"/>
+
+        <!-- Barre d'outils avec recherche -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="searchField"
+                       promptText="Rechercher un utilisateur..."
+                       style="-fx-pref-width: 300; -fx-pref-height: 30; -fx-background-radius: 15;"/>
+            <Button text="🔄 Réinitialiser" onAction="#resetSearch"
+                    style="-fx-background-color: #757575; -fx-text-fill: white; -fx-background-radius: 5;"/>
+        </HBox>
+
+        <TableView fx:id="userTable" prefHeight="400" styleClass="styled-table">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="60" sortable="true"/>
+                <TableColumn fx:id="colNom" text="Nom" prefWidth="120" sortable="true"/>
+                <TableColumn fx:id="colPrenom" text="Prénom" prefWidth="120" sortable="true"/>
+                <TableColumn fx:id="colEmail" text="Email" prefWidth="180" sortable="true"/>
+                <TableColumn fx:id="colRole" text="Rôle" prefWidth="100" sortable="true"/>
+                <TableColumn fx:id="colTel" text="Téléphone" prefWidth="120" sortable="true"/>
+                <TableColumn fx:id="colStatus" text="Status" prefWidth="100" sortable="true"/>
+                <TableColumn fx:id="colBirth" text="Date Naissance" prefWidth="120" sortable="true"/>
+                <TableColumn fx:id="colAction" text="Action" prefWidth="300"/>
+            </columns>
+        </TableView>
+
+        <HBox spacing="20" alignment="CENTER">
+            <Button text="➕ Ajouter un utilisateur" styleClass="add-button"/>
+            <Button text="🔄 Rafraîchir" onAction="#refreshUsers"
+                    style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-pref-width: 120; -fx-background-radius: 5;"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

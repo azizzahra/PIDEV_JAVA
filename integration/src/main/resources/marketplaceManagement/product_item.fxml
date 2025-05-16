@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.marketplaceManagement.ProductItemController"
+            style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);"
+            prefHeight="140" prefWidth="800">
+
+    <HBox spacing="20" alignment="CENTER_LEFT" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+        <padding>
+            <Insets top="15" right="20" bottom="15" left="20" />
+        </padding>
+
+        <!-- Product Image -->
+        <StackPane style="-fx-background-color: #f5f7fa; -fx-background-radius: 8; -fx-min-width: 100; -fx-min-height: 100; -fx-max-width: 100; -fx-max-height: 100;">
+            <ImageView fx:id="imageView" fitWidth="80" fitHeight="80" preserveRatio="true"/>
+        </StackPane>
+
+        <!-- Product Details -->
+        <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <!-- Category Badge -->
+            <Button fx:id="categoryButton"
+                    styleClass="category-badge"
+                    style="-fx-background-color: #e6f4e6; -fx-text-fill: #2c7a31;
+                           -fx-background-radius: 18; -fx-padding: 4 12;
+                           -fx-font-size: 11px; -fx-cursor: default;
+                           -fx-effect: innershadow(gaussian, rgba(0,0,0,0.05), 1, 0, 0, 1);" />
+
+            <!-- Product Name -->
+            <Label fx:id="nameLabel" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+
+            <!-- Product Description -->
+            <Label fx:id="descriptionLabel" wrapText="true" maxWidth="500"
+                   style="-fx-text-fill: #666; -fx-font-size: 13px;" />
+
+            <!-- Product Details -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label fx:id="priceLabel"
+                       style="-fx-font-weight: bold; -fx-text-fill: #2c7a31; -fx-font-size: 14px;"/>
+                <Label fx:id="stockLabel"
+                       style="-fx-text-fill: #666; -fx-font-size: 13px;"/>
+            </HBox>
+        </VBox>
+
+        <!-- Action Buttons -->
+        <VBox spacing="10" alignment="CENTER">
+            <Button fx:id="updateButton" text="Update"
+                    style="-fx-background-color: #f0f2f5; -fx-text-fill: #1e293b;
+                           -fx-background-radius: 6; -fx-padding: 8 16;
+                           -fx-font-size: 12px; -fx-font-weight: bold;
+                           -fx-effect: innershadow(gaussian, rgba(0,0,0,0.05), 1, 0, 0, 1);"
+                    prefWidth="100" onAction="#onEditClicked"/>
+
+            <Button fx:id="deleteButton" text="Delete"
+                    style="-fx-background-color: #fee2e2; -fx-text-fill: #b91c1c;
+                           -fx-background-radius: 6; -fx-padding: 8 16;
+                           -fx-font-size: 12px; -fx-font-weight: bold;
+                           -fx-effect: innershadow(gaussian, rgba(0,0,0,0.05), 1, 0, 0, 1);"
+                    prefWidth="100" onAction="#onDeleteClicked"/>
+        </VBox>
+    </HBox>
+</AnchorPane>

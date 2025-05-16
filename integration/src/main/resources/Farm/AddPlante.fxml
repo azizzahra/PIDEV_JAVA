@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Insets?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.Farm.AddPlanteController"
+      stylesheets="@styles.css">
+
+    <!-- Include the navigation bar -->
+    <fx:include source="../NavBar.fxml" />
+
+    <AnchorPane VBox.vgrow="ALWAYS">
+        <!-- ScrollPane principal qui rend toute l'interface scrollable -->
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                    AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+            <BorderPane>
+                <!-- En-tête avec image de fond (comme dans FarmDetails) -->
+                <top>
+                    <VBox spacing="10" styleClass="header-background">
+                        <padding><Insets top="40" right="20" bottom="40" left="20"/></padding>
+
+                        <!-- Titre principal -->
+                        <HBox alignment="CENTER">
+                            <Label text="Add New Plant" styleClass="header-title"/>
+                        </HBox>
+
+                        <!-- Description sous le titre -->
+                        <HBox alignment="CENTER">
+                            <Label text="Add a new plant to your farm collection with detailed information to track its growth and harvest"
+                                   styleClass="header-subtitle" textAlignment="CENTER" wrapText="true"/>
+                        </HBox>
+
+                        <!-- Fil d'Ariane -->
+                        <HBox spacing="5" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                            <Label text="Home" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label text="Farm" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label fx:id="farmNameBreadcrumb" text="Farm Name" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label text="Add Plant" styleClass="breadcrumb-current"/>
+                        </HBox>
+                    </VBox>
+                </top>
+
+                <!-- Contenu principal (comme dans AddFarm) -->
+                <center>
+                    <StackPane>
+                        <!-- Background Image -->
+                        <ImageView fx:id="backgroundImageView" preserveRatio="true">
+                            <image>
+                                <Image url="file:/C:/xampp/htdocs/uploads/plant_image/bg.jpg" />
+                            </image>
+                            <opacity>0.3</opacity>
+                        </ImageView>
+
+                        <Rectangle width="1200" height="800" arcWidth="10" arcHeight="10"
+                                   style="-fx-fill: #e6e4e4; -fx-stroke: #2e7d32; -fx-stroke-width: 2;" />
+
+                        <!-- Main Content -->
+                        <VBox alignment="CENTER" spacing="30">
+                            <!-- Title -->
+                            <Label text="Plant Information" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+
+                            <HBox alignment="TOP_CENTER" spacing="50">
+                                <!-- Left Side - Image Upload -->
+                                <VBox alignment="TOP_CENTER" spacing="10" minWidth="300">
+                                    <StackPane>
+                                        <!-- Image Selection Area -->
+                                        <Rectangle width="190" height="180" arcWidth="10" arcHeight="10"
+                                                   style="-fx-fill: transparent; -fx-stroke: #2e7d32; -fx-stroke-width: 2;" />
+                                        <!-- Preview Image -->
+                                        <ImageView fx:id="imagePreview" fitWidth="180" fitHeight="150" preserveRatio="true">
+                                            <image>
+                                                <Image url="file:/C:/xampp/htdocs/uploads/plant_image/plant.png" />
+                                            </image>
+                                        </ImageView>
+                                    </StackPane>
+
+                                    <Label text="Choose an Image" style="-fx-font-size: 14px; -fx-text-fill: #2e7d32;" />
+
+                                    <Button fx:id="chooseImageButton" text="Browse"
+                                            styleClass="form-button"/>
+
+                                    <Label fx:id="imageError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                    <Label fx:id="imagePathLabel" text="No image selected" styleClass="file-path-label" visible="false"/>
+                                </VBox>
+
+                                <!-- Right Side - Form Fields -->
+                                <VBox spacing="20" minWidth="600" maxWidth="800">
+                                    <!-- Plant Name -->
+                                    <VBox spacing="5">
+                                        <Label text="Plant Name" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                        <TextField fx:id="nameField" promptText="Enter plant name"
+                                                   style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                        -fx-padding: 8; -fx-font-size: 14px;" />
+                                        <Label fx:id="nameError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                    </VBox>
+
+                                    <!-- Plant Type -->
+                                    <VBox spacing="5">
+                                        <Label text="Plant Type" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                        <ComboBox fx:id="typeComboBox" promptText="Select plant type" prefWidth="400"
+                                                  style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                        -fx-padding: 8; -fx-font-size: 14px;" />
+                                        <Label fx:id="typeError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                    </VBox>
+
+                                    <!-- Dates in a horizontal layout -->
+                                    <HBox spacing="5">
+                                        <!-- Plantation Date -->
+                                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                            <Label text="Plantation Date" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                            <DatePicker fx:id="plantationDatePicker" promptText="Select plantation date"
+                                                        style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                            -fx-padding: 8; -fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
+                                            <Label fx:id="plantationDateError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                        </VBox>
+
+                                        <!-- Harvest Date -->
+                                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                            <Label text="Harvest Date" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                            <DatePicker fx:id="harvestDatePicker" promptText="Select harvest date"
+                                                        style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                            -fx-padding: 8; -fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
+                                            <Label fx:id="harvestDateError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                        </VBox>
+                                    </HBox>
+
+                                    <!-- tips for plantation -->
+                                    <VBox spacing="5">
+                                        <Label fx:id="predictionLabel" style="-fx-font-size: 14px; -fx-text-fill: #2e7d32;" visible="false" />
+                                        <Label fx:id="recommendationLabel" style="-fx-font-size: 14px; -fx-text-fill: #2e7d32;" wrapText="true" visible="false" />
+                                    </VBox>
+
+                                    <!-- Quantity -->
+                                    <VBox spacing="5">
+                                        <Label text="Quantity" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                                        <TextField fx:id="quantityField" promptText="Enter quantity"
+                                                   style="-fx-background-color: rgba(255, 255, 255, 0.8); -fx-background-radius: 3;
+                                                        -fx-padding: 8; -fx-font-size: 14px;" />
+                                        <Label fx:id="quantityError" style="-fx-text-fill: red; -fx-font-size: 12px;" visible="false" />
+                                    </VBox>
+
+                                    <!-- Buttons -->
+                                    <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20 0 0 0;">
+                                        <Button text="Save Plant" onAction="#savePlant" styleClass="form-button" />
+                                        <Button text="Cancel" onAction="#cancel" styleClass="form-button"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </StackPane>
+                </center>
+            </BorderPane>
+        </ScrollPane>
+    </AnchorPane>
+</VBox>

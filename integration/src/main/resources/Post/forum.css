@@ -1,0 +1,145 @@
+/* 🎨 Variables générales */
+.root {
+    -general-padding: 20px;
+    -primary-color: #2E7D32; /* Vert forêt */
+    -secondary-color: #1B5E20; /* Vert foncé */
+    -accent-color: #A1887F; /* Brun terre */
+    -light-background: #F1F8E9; /* Vert clair */
+    -text-dark: #2C3E50;
+    -text-light: #666666;
+}
+
+/* 📌 Mise en page générale */
+.general-padding {
+    -fx-padding: 20px;
+}
+.meta-item.link {
+    -fx-text-fill: -primary-color;
+    -fx-underline: true;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.meta-item.link:hover {
+    -fx-text-fill: #1B5E20; /* Vert plus foncé */
+}
+/* 🌿 Cartes de posts */
+.post-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-padding: 20px;
+    -fx-border-color: -primary-color;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 100, 0, 0.1), 8, 0, 2, 2);
+}
+
+/* 🏷️ Catégorie des posts */
+.badge-category {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: white;
+    -fx-padding: 5px 12px;
+    -fx-background-radius: 15px;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* 👤 Nom de l'auteur */
+.username {
+    -fx-text-fill: -secondary-color;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* 📝 Titre du post */
+.post-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-wrap-text: true;
+    -fx-text-fill: -text-dark;
+}
+
+/* 📜 Aperçu du post */
+.post-preview {
+    -fx-font-size: 14px;
+    -fx-fill: -text-light;
+}
+
+/* 📅 Métadonnées */
+.post-meta {
+    -fx-border-color: #DDD;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 0 0 10px 0;
+}
+
+.meta-item {
+    -fx-text-fill: -text-light;
+    -fx-font-size: 12px;
+}
+
+/* 🔗 Liens */
+.link {
+    -fx-text-fill: -primary-color;
+    -fx-cursor: hand;
+    -fx-underline: true;
+}
+
+/* 👍 Boutons de réactions */
+.reaction-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #444;
+    -fx-border-color: #DDD;
+    -fx-border-radius: 20px;
+    -fx-padding: 6px 18px;
+    -fx-font-weight: bold;
+    -fx-transition: 0.3s;
+}
+
+.reaction-btn:hover {
+    -fx-background-color: #E8F5E9;
+    -fx-border-color: -primary-color;
+    -fx-text-fill: -primary-color;
+}
+
+/* 📌 Barre latérale */
+.sidebar-box {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-border-color: -accent-color;
+    -fx-border-width: 1.5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 0);
+}
+
+/* 📌 Titres de la barre latérale */
+.sidebar-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -secondary-color;
+}
+
+/* 🎯 Boutons de catégories */
+
+
+/* 🔥 Tendances */
+.trend-item {
+    -fx-text-fill: -text-light;
+    -fx-font-size: 13px;
+    -fx-padding: 5px 0;
+}
+.active-category {
+    -fx-background-color: #2d4d2d;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.category-btn {
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: #333333;
+    -fx-padding: 5 10;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.category-btn:hover {
+    -fx-background-color: #e0e0e0;
+}

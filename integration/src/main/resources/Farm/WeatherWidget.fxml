@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="weatherWidget" xmlns="http://javafx.com/javafx/20.0.2"
+      xmlns:fx="http://javafx.com/fxml/1"
+      styleClass="weather-widget"
+      spacing="10"
+      alignment="CENTER">
+
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+
+    <!-- Weather Header -->
+    <HBox alignment="CENTER" spacing="10">
+        <Label text="Weather Conditions" styleClass="weather-title"/>
+        <ImageView fx:id="refreshIcon" fitWidth="20" fitHeight="20" />
+    </HBox>
+
+    <!-- Current Weather Data -->
+    <HBox alignment="CENTER" spacing="15">
+        <!-- Weather Icon -->
+        <ImageView fx:id="weatherIcon" fitWidth="64" fitHeight="64" preserveRatio="true"/>
+
+        <!-- Temperature -->
+        <VBox alignment="CENTER">
+            <Label fx:id="temperatureLabel" styleClass="temperature-value"/>
+            <Label text="Temperature" styleClass="weather-label"/>
+        </VBox>
+    </HBox>
+
+    <!-- Weather Details -->
+    <HBox spacing="20" alignment="CENTER">
+        <!-- Description -->
+        <VBox alignment="CENTER">
+            <Label fx:id="descriptionLabel" styleClass="weather-value"/>
+            <Label text="Condition" styleClass="weather-label"/>
+        </VBox>
+
+        <!-- Humidity -->
+        <VBox alignment="CENTER">
+            <Label fx:id="humidityLabel" styleClass="weather-value"/>
+            <Label text="Humidity" styleClass="weather-label"/>
+        </VBox>
+
+        <!-- Wind Speed -->
+        <VBox alignment="CENTER">
+            <Label fx:id="windSpeedLabel" styleClass="weather-value"/>
+            <Label text="Wind Speed" styleClass="weather-label"/>
+        </VBox>
+    </HBox>
+
+    <!-- Last Updated -->
+    <HBox alignment="CENTER">
+        <Label fx:id="lastUpdatedLabel" styleClass="last-updated"/>
+    </HBox>
+
+    <!-- Loading Indicator -->
+    <StackPane fx:id="loadingPane" visible="false" managed="false">
+        <ProgressIndicator />
+    </StackPane>
+
+    <!-- Error Message -->
+    <Label fx:id="errorLabel" styleClass="error-label" visible="false" managed="false"/>
+</VBox>

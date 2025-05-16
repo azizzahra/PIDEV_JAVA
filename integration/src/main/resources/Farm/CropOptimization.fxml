@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.Farm.CropOptimizationController" spacing="10" alignment="CENTER"
+      stylesheets="@styles.css">
+    <Label fx:id="yieldPredictionLabel" text="Predicted Yield: N/A" styleClass="label"/>
+    <TextArea fx:id="recommendationTextArea" promptText="Recommendations will appear here..." wrapText="true"
+              prefHeight="100" styleClass="text-area"/>
+    <Label fx:id="errorLabel" text="" styleClass="error-label" visible="false"/>
+</VBox>

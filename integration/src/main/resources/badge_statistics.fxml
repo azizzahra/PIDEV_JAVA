@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #f6f9ed;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.BadgeStatisticsController">
+    <top>
+        <VBox spacing="10.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Statistiques des Certifications Agricoles" textFill="#2e7d32">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                <HBox alignment="CENTER_LEFT" spacing="20.0">
+                    <children>
+                        <Label text="Filtrer par période:" textFill="#33691e">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                        <ComboBox fx:id="filterComboBox" prefWidth="150.0" style="-fx-background-color: #e8f5e9;" />
+                        <Label text="Type:" textFill="#33691e">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                        <ComboBox fx:id="typeFilterComboBox" prefWidth="150.0" style="-fx-background-color: #e8f5e9;" />
+                        <Button mnemonicParsing="false" onAction="#refreshData" style="-fx-background-color: #558b2f; -fx-text-fill: white;" text="Actualiser" />
+                        <Button mnemonicParsing="false" onAction="#exportStatistics" style="-fx-background-color: #558b2f; -fx-text-fill: white;" text="Exporter" />
+                    </children>
+                </HBox>
+                <Separator prefWidth="200.0" style="-fx-background-color: #a5d6a7;" />
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </top>
+    <center>
+        <VBox spacing="20.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox spacing="20.0">
+                    <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="280.0" style="-fx-background-color: #e8f5e9; -fx-background-radius: 5; -fx-border-color: #a5d6a7; -fx-border-radius: 5;">
+                            <children>
+                                <Label fx:id="totalBadgesLabel" text="Nombre total de certifications : 0" textFill="#2e7d32">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" top="10.0" />
+                                    </VBox.margin>
+                                </Label>
+                                <Label fx:id="mostCommonTypeLabel" text="Type de certification le plus courant : N/A" textFill="#2e7d32">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" />
+                                    </VBox.margin>
+                                </Label>
+                                <Label fx:id="recentBadgesLabel" text="Certifications attribuées cette semaine : 0" textFill="#2e7d32">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </padding>
+                        </VBox>
+                        <PieChart fx:id="badgeTypePieChart" prefHeight="200.0" prefWidth="330.0" style="-fx-background-color: #e8f5e9; -fx-background-radius: 5; -fx-border-color: #a5d6a7; -fx-border-radius: 5;" title="Répartition des certifications par type" />
+                        <TableView fx:id="badgeStatTable" prefHeight="200.0" prefWidth="230.0" style="-fx-background-color: #e8f5e9; -fx-border-color: #a5d6a7;">
+                            <columns>
+                                <TableColumn fx:id="typeColumn" prefWidth="150.0" text="Type de Certification" />
+                                <TableColumn fx:id="countColumn" prefWidth="79.0" text="Nombre" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </HBox>
+                <BarChart fx:id="userBadgesBarChart" prefHeight="320.0" style="-fx-background-color: #e8f5e9; -fx-background-radius: 5; -fx-border-color: #a5d6a7; -fx-border-radius: 5;" title="Certifications par cultivateur">
+                    <xAxis>
+                        <CategoryAxis label="Cultivateur" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Nombre de certifications" side="LEFT" />
+                    </yAxis>
+                </BarChart>
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+            </padding>
+        </VBox>
+    </center>
+</BorderPane>

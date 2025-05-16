@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.marketplaceManagement.CategoryListController"
+      style="-fx-padding: 15 20 20 20; -fx-background-color: #f8f9fa;">
+
+    <!-- Control Bar with Search and Sort -->
+    <HBox styleClass="control-bar"
+          spacing="15" alignment="CENTER_LEFT">
+
+        <padding>
+            <Insets top="15" right="20" bottom="15" left="20" />
+        </padding>
+
+        <ComboBox fx:id="categorySortCombo"
+                  prefWidth="180"
+                  promptText="Sort by"
+                  styleClass="filter-combo">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Name (A-Z)" />
+                    <String fx:value="Name (Z-A)" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT"
+              styleClass="search-container">
+            <padding>
+                <Insets top="8" right="10" bottom="8" left="10" />
+            </padding>
+            <Label text="🔍" style="-fx-text-fill: #64748b;" />
+            <TextField fx:id="categorySearchField"
+                       promptText="Search categories..."
+                       HBox.hgrow="ALWAYS"
+                       styleClass="search-field" />
+        </HBox>
+
+        <Button fx:id="btnAddCategory"
+                text="+ Add Category"
+                styleClass="btn-primary"
+                onAction="#handleAddCategory"/>
+    </HBox>
+
+    <!-- Main Category Container with ScrollPane -->
+    <ScrollPane fitToWidth="true"
+                styleClass="scroll-pane"
+                VBox.vgrow="ALWAYS">
+        <VBox fx:id="categoryContainer"
+              spacing="12"
+              style="-fx-padding: 10 5;"/>
+    </ScrollPane>
+</VBox>

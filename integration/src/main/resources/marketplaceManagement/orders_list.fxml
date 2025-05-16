@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.*?>
+<?import java.lang.String?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.marketplaceManagement.OrderListController"
+      style="-fx-padding: 15 20 20 20; -fx-background-color: #f8f9fa;">
+
+    <!-- Control Bar with Search and Sort -->
+    <HBox styleClass="control-bar"
+          spacing="15" alignment="CENTER_LEFT">
+
+        <padding>
+            <Insets top="15" right="20" bottom="15" left="20" />
+        </padding>
+
+        <ComboBox fx:id="orderSortCombo"
+                  prefWidth="180"
+                  promptText="Sort by"
+                  styleClass="filter-combo">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Date (Newest)" />
+                    <String fx:value="Date (Oldest)" />
+                    <String fx:value="Total (High-Low)" />
+                    <String fx:value="Total (Low-High)" />
+                    <String fx:value="Status" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT"
+              styleClass="search-container">
+            <padding>
+                <Insets top="8" right="10" bottom="8" left="10" />
+            </padding>
+            <Label text="🔍" style="-fx-text-fill: #64748b;" />
+            <TextField fx:id="searchField"
+                       promptText="Search orders..."
+                       HBox.hgrow="ALWAYS"
+                       styleClass="search-field" />
+        </HBox>
+
+
+    </HBox>
+
+    <!-- Content Section -->
+    <HBox spacing="15" VBox.vgrow="ALWAYS">
+        <!-- Left side: Order statistics dashboard -->
+        <VBox spacing="15" prefWidth="300" styleClass="stats-sidebar">
+            <padding>
+                <Insets top="10" right="15" bottom="15" left="15" />
+            </padding>
+
+            <!-- Dashboard Title -->
+            <Label text="Order Dashboard" styleClass="dashboard-title"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+            <!-- Order Summary Cards -->
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50" />
+                    <ColumnConstraints percentWidth="50" />
+                </columnConstraints>
+
+                <!-- Total Orders Card -->
+                <VBox styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                      style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                    <Label text="Total Orders" style="-fx-text-fill: #64748b;" />
+                    <Label fx:id="totalOrdersLabel" text="0"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+                </VBox>
+
+                <!-- Revenue Card -->
+                <VBox styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                      style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                    <Label text="Total Revenue" style="-fx-text-fill: #64748b;" />
+                    <Label fx:id="totalRevenueLabel" text="0.00 TND"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                </VBox>
+
+                <!-- Status Breakdown -->
+                <!-- Pending -->
+                <VBox styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                      style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #f57c00; -fx-border-width: 0 0 3 0;">
+                    <Label text="Pending" style="-fx-text-fill: #64748b;" />
+                    <Label fx:id="pendingOrdersCount" text="0"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #f57c00;" />
+                </VBox>
+
+                <!-- Delivered -->
+                <VBox styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                      style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #2e7d32; -fx-border-width: 0 0 3 0;">
+                    <Label text="Delivered" style="-fx-text-fill: #64748b;" />
+                    <Label fx:id="deliveredOrdersCount" text="0"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;" />
+                </VBox>
+
+                <!-- Processing -->
+                <VBox styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                      style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #1976d2; -fx-border-width: 0 0 3 0;">
+                    <Label text="Processing" style="-fx-text-fill: #64748b;" />
+                    <Label fx:id="processingOrdersCount" text="0"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1976d2;" />
+                </VBox>
+
+                <!-- Cancelled -->
+                <VBox styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                      style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #d32f2f; -fx-border-width: 0 0 3 0;">
+                    <Label text="Cancelled" style="-fx-text-fill: #64748b;" />
+                    <Label fx:id="cancelledOrdersCount" text="0"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #d32f2f;" />
+                </VBox>
+            </GridPane>
+
+            <!-- Pie Chart -->
+            <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                <Label text="Orders by Status"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                <PieChart fx:id="statusChart"
+                          legendVisible="true"
+                          labelsVisible="true"
+                          prefHeight="200" />
+            </VBox>
+
+            <!-- Status Details -->
+            <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                <Label text="Status Breakdown"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                <VBox fx:id="statsContainer" spacing="8" style="-fx-padding: 10 0 0 0;">
+                    <!-- Status counts will be added here dynamically -->
+                </VBox>
+            </VBox>
+        </VBox>
+
+        <!-- Right side: Order list -->
+        <ScrollPane fitToWidth="true"
+                    styleClass="scroll-pane"
+                    HBox.hgrow="ALWAYS">
+            <VBox fx:id="orderContainer"
+                  styleClass="order-container"
+                  spacing="12"
+                  style="-fx-padding: 10 5;">
+            </VBox>
+        </ScrollPane>
+    </HBox>
+</VBox>

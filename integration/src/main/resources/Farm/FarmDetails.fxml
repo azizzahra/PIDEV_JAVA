@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+
+<?import javafx.scene.web.WebView?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.Farm.FarmDetailsController"
+      stylesheets="@styles.css">
+
+    <!-- Include the navigation bar -->
+    <fx:include source="../NavBar.fxml" />
+
+    <AnchorPane VBox.vgrow="ALWAYS">
+        <!-- ScrollPane principal qui rend toute l'interface scrollable -->
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                    AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+            <!-- Layout principal -->
+            <BorderPane>
+                <!-- En-tête avec image de fond -->
+                <top>
+                    <VBox spacing="10" styleClass="header-background">
+                        <padding><Insets top="40" right="20" bottom="40" left="20"/></padding>
+
+                        <!-- Titre principal -->
+                        <HBox alignment="CENTER">
+                            <Label text="Farm Details" styleClass="header-title"/>
+                        </HBox>
+
+                        <!-- Description sous le titre -->
+                        <HBox alignment="CENTER">
+                            <Label text="View and manage detailed information about your farm including plants, tasks, and statistics"
+                                   styleClass="header-subtitle" textAlignment="CENTER" wrapText="true"/>
+                        </HBox>
+
+                        <!-- Fil d'Ariane -->
+                        <HBox spacing="5" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                            <Label text="Home" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label text="Liste Farm" styleClass="breadcrumb"/>
+                            <Label text="/" styleClass="breadcrumb-separator"/>
+                            <Label fx:id="farmNameBreadcrumb" text="Farm Name" styleClass="breadcrumb-current"/>
+                        </HBox>
+                    </VBox>
+                </top>
+
+                <!-- Contenu principal -->
+                <center>
+                    <!-- Add a wrapper HBox with center alignment to contain the main content -->
+                    <HBox alignment="CENTER">
+                        <!-- Main content container with max width to keep it centered -->
+                        <HBox spacing="20" maxWidth="1200" HBox.hgrow="ALWAYS">
+                            <!-- Section gauche avec les détails de la ferme - reduced width -->
+                            <VBox spacing="20" HBox.hgrow="ALWAYS" styleClass="farm-details-container" maxWidth="850">
+                                <padding><Insets top="30" right="20" bottom="30" left="30"/></padding>
+
+                                <!-- Image de la ferme - adjusted size -->
+                                <ImageView fx:id="farmImage" fitWidth="800" fitHeight="330" preserveRatio="false" styleClass="farm-detail-image"/>
+
+                                <!-- Titre et informations principales -->
+                                <VBox spacing="10">
+                                    <Label fx:id="farmName" text="Alpine Acres" styleClass="farm-title" style="-fx-font-size: 30px;"/>
+
+                                    <HBox spacing="15" alignment="CENTER_LEFT">
+                                        <!-- Location -->
+                                        <HBox spacing="5" alignment="CENTER_LEFT">
+                                            <FontAwesomeIconView glyphName="MAP_MARKER" styleClass="icon"/>
+                                            <Label fx:id="farmLocation" text="Nabeul" styleClass="detail-value"/>
+                                        </HBox>
+
+                                        <!-- Size -->
+                                        <HBox spacing="5" alignment="CENTER_LEFT">
+                                            <FontAwesomeIconView glyphName="ARROWS_ALT" styleClass="icon"/>
+                                            <Label fx:id="farmSize" text="657 KM²" styleClass="detail-value"/>
+                                        </HBox>
+
+                                        <!-- Coordinates, if needed -->
+                                        <HBox spacing="5" alignment="CENTER_LEFT" visible="false">
+                                            <FontAwesomeIconView glyphName="GLOBE" styleClass="icon"/>
+                                            <Label fx:id="farmCoordinates" text="Lat: 0, Long: 0" styleClass="detail-value"/>
+                                        </HBox>
+                                    </HBox>
+                                </VBox>
+
+                                <!-- Description -->
+                                <VBox spacing="10">
+                                    <Label text="Description:" styleClass="detail-section-title"/>
+                                    <TextArea fx:id="farmDescription" wrapText="true" editable="false" styleClass="farm-description-area" prefHeight="100"/>
+                                </VBox>
+
+                                <!-- Liste des plantes - Titre et statistiques -->
+                                <VBox spacing="5">
+                                    <HBox spacing="10" alignment="CENTER_LEFT">
+                                        <Label fx:id="listOfPlantsLabel" text="List of plants" styleClass="detail-section-title"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label text="Number of plants : " styleClass="detail-value"/>
+                                        <Label fx:id="plantCount" text="5" styleClass="detail-value" style="-fx-font-weight: bold;"/>
+                                    </HBox>
+                                </VBox>
+
+                                <!-- Plants container - adjusted size and width -->
+                                <FlowPane fx:id="plantsContainer"
+                                          hgap="20" vgap="20"
+                                          prefWrapLength="650"
+                                          styleClass="plants-container"/>
+
+                                <!-- Pagination -->
+                                <!-- Pagination -->
+                                <HBox fx:id="paginationButtons" styleClass="pagination-container" alignment="CENTER">
+                                    <Button fx:id="prevPageButton" text="« Previous" styleClass="pagination-button"/>
+                                    <!-- Page buttons will be dynamically created here -->
+                                    <Button fx:id="nextPageButton" text="Next »" styleClass="pagination-button"/>
+                                </HBox>
+                            </VBox>
+
+
+                            <!--  ////////////////////////// Side Bar    ////////////////// -->
+                            <VBox spacing="25" prefWidth="350" styleClass="sidebar">
+                                <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+
+                                <!-- Farm Location Map - Nouvelle section ajoutée -->
+                                <VBox styleClass="map-container" spacing="10">
+                                    <Label text="Farm Location" styleClass="section-title"/>
+                                    <!-- WebView pour afficher la carte OpenStreetMap -->
+                                    <WebView fx:id="locationMapView" prefHeight="250" prefWidth="310" styleClass="location-map-view"/>
+                                </VBox>
+                                <!-- To-Do List - Nouvelle section comme sur l'image -->
+                                <VBox styleClass="todo-container" spacing="10">
+                                    <Label text="To-Do List" styleClass="section-title"/>
+
+                                    <!-- Input container with improved styling -->
+                                    <HBox styleClass="todo-input-container" spacing="10" alignment="CENTER_LEFT">
+                                        <TextField fx:id="todoInputField"
+                                                   promptText="Add a new task..."
+                                                   HBox.hgrow="ALWAYS"
+                                                   styleClass="todo-input-field"/>
+
+                                        <ComboBox fx:id="priorityComboBox"
+                                                  prefWidth="100"
+                                                  styleClass="priority-combo"/>
+
+                                        <Button fx:id="addTodoButton"
+                                                text="+"
+                                                styleClass="add-todo-button"/>
+                                    </HBox>
+
+                                    <!-- Todo items container with scroll capability -->
+                                    <ScrollPane fitToWidth="true" maxHeight="300" styleClass="transparent-scroll-pane">
+                                        <VBox fx:id="todoItemsContainer" spacing="10" styleClass="todo-items-container"/>
+                                    </ScrollPane>
+                                </VBox>
+
+                                <!-- Recherche de plantes -->
+                                <VBox spacing="10">
+                                    <Label text="Search Plants" styleClass="section-title"/>
+                                    <HBox spacing="5">
+                                        <TextField fx:id="searchPlantField" promptText="Search plants by name..." styleClass="search-field" HBox.hgrow="ALWAYS"/>
+                                        <Button styleClass="button">
+                                            <graphic>
+                                                <FontAwesomeIconView glyphName="SEARCH" styleClass="button-icon"/>
+                                            </graphic>
+                                        </Button>
+                                    </HBox>
+                                </VBox>
+
+                                <!-- Catégories -->
+                                <VBox spacing="10">
+                                    <Label text="Categories" styleClass="section-title"/>
+                                    <VBox fx:id="categoriesContainer" spacing="8">
+                                    </VBox>
+                                </VBox>
+
+                                <!-- Détection des maladies avec IA -->
+                                <VBox spacing="10">
+                                    <Label text="Detect Plants Disease AI" styleClass="section-title"/>
+                                    <Label text="Upload Plant Image:"/>
+                                    <HBox spacing="5">
+                                        <TextField fx:id="imagePathField" promptText="No file selected" editable="false" HBox.hgrow="ALWAYS"/>
+                                        <Button fx:id="chooseFileButton" text="Choose File" styleClass="button"/>
+                                    </HBox>
+                                    <Button fx:id="detectButton" text="Detect Diseases" styleClass="button"/>
+                                </VBox>
+
+                                <!-- Actions -->
+                                <VBox spacing="10">
+                                    <Label text="Actions" styleClass="section-title"/>
+                                    <HBox spacing="10">
+                                        <Button fx:id="updateButton" text="Update Farm" onAction="#openUpdateForm"
+                                                styleClass="button" HBox.hgrow="ALWAYS"/>
+                                        <Button fx:id="deleteButton" text="Remove Farm" onAction="#deleteFarm"
+                                                styleClass="button" HBox.hgrow="ALWAYS"/>
+                                    </HBox>
+                                </VBox>
+                                <!-- <Button fx:id="optimizeCropsButton" text="Optimize Crops" styleClass="button" onAction="#openCropOptimization"/>-->
+                            </VBox>
+                        </HBox>
+                    </HBox>
+                </center>
+            </BorderPane>
+        </ScrollPane>
+    </AnchorPane>
+</VBox>

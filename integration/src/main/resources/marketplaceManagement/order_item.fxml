@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.marketplaceManagement.OrderItemController"
+            styleClass="order-card"
+            style="-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15" />
+    </padding>
+
+    <VBox spacing="10" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+
+        <!-- Top section: Order ID, Status, Total -->
+        <HBox spacing="15">
+            <!-- Order Info -->
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label fx:id="orderIdLabel" text="Order #12345"
+                       style="-fx-font-weight: bold; -fx-font-size: 16px;" />
+
+                <Label fx:id="buyerNameLabel" text="Mahmoud Lajmi"
+                       style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Status:" style="-fx-text-fill: #64748b;" />
+                    <Label fx:id="orderStatusLabel" text="Pending"
+                           style="-fx-font-weight: bold; -fx-text-fill: #f57c00;" />
+                </HBox>
+
+                <Label fx:id="orderTotalLabel" text="125.50 TND"
+                       style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+            </VBox>
+
+            <!-- Action Button -->
+            <VBox alignment="TOP_RIGHT">
+                <Button fx:id="btnDeliver" text="Deliver"
+                        style="-fx-background-color: #2e7d32; -fx-text-fill: white;" />
+
+                <Button fx:id="btnViewDetails" text="View Details"
+                        style="-fx-background-color: #f0f0f0; -fx-text-fill: #1976d2; -fx-margin-top: 10px;" />
+            </VBox>
+        </HBox>
+
+        <!-- Items with quantities -->
+        <VBox fx:id="itemsContainer" spacing="5" style="-fx-background-color: #f9f9f9; -fx-padding: 10; -fx-background-radius: 5;">
+            <Label text="Items:" style="-fx-font-weight: bold;" />
+            <!-- Items will be added dynamically in the controller -->
+        </VBox>
+    </VBox>
+</AnchorPane>

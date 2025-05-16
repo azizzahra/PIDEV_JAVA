@@ -1,0 +1,779 @@
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+.main-panel {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);
+}
+/* /////////////////////////////////     Styles de l'en-tête   ///////////////////////////////////////*/
+.header-background {
+    -fx-background-image: url("file:/C:/xampp/htdocs/uploads/farm_image/bg.jpg");
+    -fx-background-size: auto;
+    -fx-background-position: center;
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 5);
+}
+.header-title {
+    -fx-font-size: 42px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 3, 0, 0, 2);
+}
+.header-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #e9ecef;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 2, 0, 0, 1);
+}
+.breadcrumb {
+    -fx-font-size: 14px;
+    -fx-text-fill: #e0e0e0;
+    -fx-cursor: hand;
+}
+
+.breadcrumb-separator {
+    -fx-font-size: 14px;
+    -fx-text-fill: #e0e0e0;
+}
+
+.breadcrumb-current {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2ecc71;
+}
+/* /////////////////////////////////     Buttons       ///////////////////////////////////////////// */
+.button {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+.button:hover {
+    -fx-background-color: #1b5e20;
+}
+.button:pressed {
+    -fx-opacity: 0.8;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+
+
+/* ////////////////////////////////   Styles pour les formulaire  ///////////////////////////////// */
+.form-panel {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+}
+
+.form-title {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 1, 1);
+}
+.form-button {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 30;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+
+.form-button:hover {
+    -fx-background-color: #1b5e20;
+    -fx-cursor: hand;
+}
+.form-button:pressed {
+    -fx-opacity: 0.8;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+.text-field, .text-area {
+    -fx-background-color: #e8e8e8;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: transparent;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.1), 3, 0, 1, 1);
+}
+
+.text-field:focused, .text-area:focused {
+    -fx-border-color: #95be76;
+    -fx-background-color: white;
+}
+
+/* /////////////////////////////////////////////////////////////     list farm      /////////////////////////////////*/
+.search-field {
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #dee2e6;
+    -fx-font-size: 14px;
+}
+
+.add-farm-btn {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+}
+
+.add-farm-btn:hover {
+    -fx-background-color: #1b5e20;
+}
+
+/* Styles du container des fermes */
+.farm-container {
+    -fx-padding: 15;
+    -fx-background-color: transparent;
+}
+
+/* Style des cartes fermes */
+.farm-card {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 4);
+}
+
+.farm-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 12, 0, 0, 6);
+}
+
+.farm-card-tag {
+    -fx-background-color: #2C3E50;
+    -fx-background-radius: 4px;
+    -fx-text-fill: white;
+    -fx-padding: 3 8;
+    -fx-font-size: 11px;
+}
+
+.farm-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+.farm-location {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6c757d;
+}
+
+.farm-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: #495057;
+}
+/* -------------------------s side bar    ----*/
+.sidebar {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);
+    -fx-padding: 20px;
+    -fx-border-width: 0 0 0 1px;
+    -fx-border-color: #f0f0f0;
+}
+.sidebar-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 0 0 10 0;
+}
+.filter-category {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 10 0 5 0;
+}
+
+.filter-count {
+    -fx-text-fill: #6c757d;
+    -fx-font-size: 12px;
+}
+
+.filter-apply-btn {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 8 15;
+    -fx-background-radius: 5;
+}
+
+.filter-apply-btn:hover {
+    -fx-background-color: #1b5e20;
+}
+
+.filter-clear-btn {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-padding: 8 12;
+    -fx-background-radius: 5;
+}
+
+.filter-clear-btn:hover {
+    -fx-background-color: #c0392b;
+}
+/* Icônes */
+.plus-icon {
+    -fx-shape: "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";
+    -fx-background-color: white;
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+}
+
+.filter-icon {
+    -fx-shape: "M3,2H21V2H21V4H20.92L14,10.92V22.91L10,18.91V10.91L3.08,4H3V2Z";
+    -fx-background-color: white;
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+}
+
+.trash-icon {
+    -fx-shape: "M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z";
+    -fx-background-color: white;
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+}
+
+/* /////////////////////////////////////////////    farm details    //////////////////////////////////////////*/
+
+.farm-scroll-pane {
+    -fx-background-color: white;
+    -fx-background: transparent;
+}
+
+.farm-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Styles pour le ScrollPane principal */
+.transparent-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.transparent-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.transparent-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 2;
+}
+
+.transparent-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(46, 125, 50, 0.46);
+    -fx-background-radius: 2;
+}
+/*------------------------------info farm ------*/
+.farm-details-container {
+    -fx-padding: 20px;
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+.farm-detail-image {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 3);
+    -fx-background-radius: 5px;
+}
+
+.detail-section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+}
+
+.detail-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #555555;
+}
+
+.detail-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.farm-description-area {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: white;
+    -fx-border-radius: 5px;
+    -fx-border-width: 0;
+}
+
+
+.search-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 3px;
+}
+
+.file-button {
+    -fx-background-color: #9E9E9E;
+    -fx-text-fill: white;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 3px;
+}
+
+
+/* -------------------------Plant card styles ---------------*/
+.plants-container {
+    -fx-background-color: white;
+    -fx-padding: 15px 5px;
+}
+
+.plant-card {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #e8e8e8;
+    -fx-border-width: 1px;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 280px;
+}
+.plant-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 4);
+    -fx-border-color: #2e7d32;
+}
+.plant-card-tag {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 8px;
+    -fx-background-radius: 4px;
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+}
+.plant-type {
+    -fx-background-color: #2C3E50;
+    -fx-text-fill: white;
+    -fx-padding: 5px 8px;
+    -fx-background-radius: 12px;
+    -fx-font-size: 12px;
+}
+.plant-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+.plant-quantity {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6c757d;
+    -fx-font-weight: normal;
+}
+.plant-date-tag {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    /*-fx-padding: 6px 10px;*/
+    -fx-background-radius: 8px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.month-text {
+    -fx-font-size: 12px;
+}
+/* Buttons dans les cards */
+.card-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #1b5e20;
+    -fx-border-color: #2e7d32;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-padding: 5px 10px;
+    -fx-cursor: hand;
+}
+.card-button:hover{
+    -fx-background-color: #1b5e20;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+}
+
+.tile-pane {
+    -fx-padding: 20;
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+}
+
+.add-plant-container {
+    -fx-border-color: #dee2e6;
+    -fx-border-style: dashed;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-color: rgba(46, 125, 50, 0.1);
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 280px;
+}
+.add-plant-container:hover {
+    -fx-border-color: #2e7d32;
+}
+.add-plant-icon {
+    -fx-text-fill: #2e7d32;
+    -fx-font-size: 32px;
+}
+.add-plant-text {
+    -fx-text-fill: #2e7d32;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* -----------    side bar    ---------------*/
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 0 0 10px 0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #f0f0f0;
+}
+
+/* Todo List Container Styles - Keep these existing styles */
+.todo-container {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 3);
+    -fx-padding: 20px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 1px;
+}
+
+.todo-input-container {
+    -fx-spacing: 10px;
+    -fx-padding: 0 0 15px 0;
+}
+
+.todo-input-field {
+    -fx-background-color: #f9f9f9;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+    -fx-prompt-text-fill: #aaa;
+}
+
+.todo-input-field:focused {
+    -fx-border-color: #2e7d32;
+    -fx-background-color: white;
+}
+
+/* Priority ComboBox Styles - New and updated styles */
+.priority-combo {
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-padding: 6px;
+    -fx-font-size: 13px;
+    -fx-max-width: 70px; /* Fixed width for better alignment */
+}
+
+/* Styled ComboBox for task items */
+.priority-combo-high {
+    -fx-background-color: #ffebee;
+    -fx-border-color: #ffcdd2;
+}
+
+.priority-combo-medium {
+    -fx-background-color: #fff8e1;
+    -fx-border-color: #ffecb3;
+}
+
+.priority-combo-low {
+    -fx-background-color: #e8f5e9;
+    -fx-border-color: #c8e6c9;
+}
+
+.priority-combo-done {
+    -fx-background-color: #e3f2fd;
+    -fx-border-color: #bbdefb;
+}
+
+/* Priority ComboBox Items */
+.priority-item-high {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+}
+
+.priority-item-medium {
+    -fx-text-fill: #f39c12;
+    -fx-font-weight: bold;
+}
+
+.priority-item-low {
+    -fx-text-fill: #2ecc71;
+    -fx-font-weight: bold;
+}
+
+.priority-item-done {
+    -fx-text-fill: #3498db;
+    -fx-font-weight: bold;
+}
+
+/* Add Button Styles - Keep your existing styles */
+.add-todo-button {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px 15px;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.add-todo-button:hover {
+    -fx-background-color: #1b5e20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+.add-todo-button .text {
+    -fx-font-size: 18px;
+}
+
+/* Todo Items Container */
+.todo-items-container {
+    -fx-padding: 5px 0;
+    -fx-spacing: 10px;
+}
+
+/* Todo Item */
+.todo-item {
+    -fx-background-color: #f9f9f9;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #eeeeee;
+    -fx-border-width: 1px;
+    -fx-padding: 10px 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 3, 0, 0, 1);
+    -fx-alignment: center-left;
+}
+
+.todo-item:hover {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #e0e0e0;
+}
+
+/* Task Content */
+.task-content {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3c3c3c;
+    -fx-padding: 0 0 0 5px;
+    -fx-wrap-text: true;
+}
+
+.task-date {
+    -fx-font-size: 11px;
+    -fx-text-fill: #888;
+    -fx-padding: 3px 0 0 5px;
+}
+
+/* Delete Button */
+.delete-todo-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #bbb;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0px 5px;
+    -fx-cursor: hand;
+    -fx-background-radius: 50%;
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+    -fx-max-width: 24px;
+    -fx-max-height: 24px;
+}
+
+.delete-todo-button:hover {
+    -fx-background-color: #ffebee;
+    -fx-text-fill: #e74c3c;
+}
+
+/* Custom styling for combo box dropdown list */
+.combo-box-popup .list-view {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
+}
+
+.combo-box-popup .list-cell {
+    -fx-padding: 8px 12px;
+    -fx-border-color: transparent transparent #f0f0f0 transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+
+.category-item {
+    -fx-padding: 5px 0;
+}
+.category-name{
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+}
+.category-name:hover{
+    -fx-text-fill: #2e7d32;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 4);
+    -fx-background-color: rgba(208, 214, 218, 0.11);
+    -fx-background-radius:2px ;
+}
+.category-count {
+    -fx-text-fill: #6c757d;
+    -fx-font-size: 12px;
+}
+
+/* //////////////////////////////      Style pour la pagination      ///////////////////////////*/
+.pagination-container {
+    -fx-padding: 20px 0;
+    -fx-spacing: 5px;
+    -fx-alignment: center;
+}
+
+.pagination-button {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dee2e6;
+    -fx-text-fill: #495057;
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-background-radius: 2px;
+    -fx-border-radius: 2px;
+}
+
+.pagination-button:hover {
+    -fx-background-color: #e9ecef;
+}
+
+.pagination-button.active {
+    -fx-background-color: #2e7d32;
+    -fx-border-color: #2e7d32;
+    -fx-text-fill: white;
+}
+
+/* Styles pour la section de détection de maladies */
+.disease-result-container {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #ced4da;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.disease-result-container .section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Styles pour les statuts de maladie */
+.healthy-status {
+    -fx-text-fill: #2ecc71;
+    -fx-font-weight: bold;
+}
+
+.diseased-status {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+}
+
+/* Weather Styles for Farm Cards */
+.farm-card-weather {
+    -fx-background-color: rgba(46, 125, 50, 0.64);
+    -fx-border-color: #e0e8f0;
+    -fx-border-width: 1px 0 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0, 0, 1);
+}
+
+.weather-temp {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #343a40;
+}
+
+.weather-condition {
+    -fx-font-size: 12px;
+    -fx-text-fill: #000000;
+    -fx-font-style: italic;
+}
+
+/* Styles for Weather Widget */
+.weather-widget {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #e9ecef;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 4);
+}
+
+.weather-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #495057;
+}
+
+.temperature-value {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #343a40;
+}
+
+.weather-value {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #495057;
+}
+
+.weather-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6c757d;
+}
+
+.last-updated {
+    -fx-font-size: 10px;
+    -fx-text-fill: #adb5bd;
+    -fx-font-style: italic;
+}
+
+.error-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #dc3545;
+    -fx-padding: 10px;
+}
+
+/* Add hover effect for refresh icon */
+.refreshIcon {
+    -fx-cursor: hand;
+    -fx-opacity: 0.7;
+}
+
+.refreshIcon:hover {
+    -fx-opacity: 1.0;
+}
+
+.map-container {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}
+.location-map-view {
+    -fx-background-color: #f0f0f0;
+    -fx-border-radius: 5;
+}

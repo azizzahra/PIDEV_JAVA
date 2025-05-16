@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="AnchorPane"
+            fx:controller="Controller.Event.OwnerController"
+            style="-fx-background-color: #4CAF50;">
+
+    <!-- Header Section with dark background -->
+    <VBox layoutX="20" layoutY="10" style="-fx-background-color: #2b2b2b; -fx-background-radius: 10; -fx-padding: 20; -fx-spacing: 10;">
+        <!-- Include the navigation bar at the top -->
+        <fx:include source="../NavBar.fxml" />
+
+        <!-- Welcome Text Box -->
+        <VBox alignment="CENTER" spacing="5" style="-fx-padding: 10;" prefWidth="1500">
+            <Label text="Owner Management" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #ffffff;"/>
+            <Label text="Manage owner information and associations" style="-fx-font-size: 16px; -fx-text-fill: #cccccc;"/>
+        </VBox>
+    </VBox>
+
+    <!-- Form Section - positioned below welcome box -->
+    <HBox spacing="15" layoutX="20" layoutY="290" style="-fx-padding: 0 20;">
+        <TextField fx:id="nameField" promptText="Name" prefWidth="200"
+                   style="-fx-background-color: white; -fx-text-fill: #333333; -fx-prompt-text-fill: #666666; -fx-border-color: #2b2b2b; -fx-border-radius: 5;"/>
+        <TextField fx:id="emailField" promptText="Email" prefWidth="200"
+                   style="-fx-background-color: white; -fx-text-fill: #333333; -fx-prompt-text-fill: #666666; -fx-border-color: #2b2b2b; -fx-border-radius: 5;"/>
+        <TextField fx:id="numberField" promptText="Phone Number" prefWidth="200"
+                   style="-fx-background-color: white; -fx-text-fill: #333333; -fx-prompt-text-fill: #666666; -fx-border-color: #2b2b2b; -fx-border-radius: 5;"/>
+        <ComboBox fx:id="loanComboBox" promptText="Select Formation" prefWidth="200"
+                  style="-fx-background-color: white; -fx-text-fill: #333333; -fx-prompt-text-fill: #666666; -fx-border-color: #2b2b2b; -fx-border-radius: 5;"/>
+    </HBox>
+
+    <!-- Actions Section -->
+    <HBox spacing="15" alignment="CENTER_LEFT" layoutX="20" layoutY="250" style="-fx-padding: 0 20;">
+        <Button text="Add" onAction="#handleAdd"
+                style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15; -fx-background-radius: 5;"/>
+        <Button text="Edit" onAction="#handleEdit"
+                style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15; -fx-background-radius: 5;"/>
+        <Button text="Delete" onAction="#handleDelete"
+                style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15; -fx-background-radius: 5;"/>
+    </HBox>
+
+    <!-- Data Table Section -->
+    <TableView fx:id="ownerTable" layoutX="20" layoutY="330" prefWidth="1000" prefHeight="400"
+               style="-fx-background-color: white; -fx-text-fill: #333333; -fx-table-cell-border-color: transparent;">
+        <columns>
+            <TableColumn text="Name" fx:id="nameCol" style="-fx-text-fill: #333333; -fx-alignment: CENTER;"/>
+            <TableColumn text="Email" fx:id="emailCol" style="-fx-text-fill: #333333; -fx-alignment: CENTER;"/>
+            <TableColumn text="Number" fx:id="numberCol" style="-fx-text-fill: #333333; -fx-alignment: CENTER;"/>
+            <TableColumn text="Formation" fx:id="formationCol" style="-fx-text-fill: #333333; -fx-alignment: CENTER;"/>
+        </columns>
+    </TableView>
+
+</AnchorPane>

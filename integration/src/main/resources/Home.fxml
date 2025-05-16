@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<?import javafx.scene.shape.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+
+<VBox xmlns="http://javafx.com/javafx/15.0.1"
+      fx:controller="Controller.HomeController"
+      xmlns:fx="http://javafx.com/fxml/1"
+      styleClass="main-container">
+    <stylesheets>
+        <URL value="@home.css"/>
+    </stylesheets>
+    <!-- Include the navigation bar -->
+    <fx:include source="/NavBar.fxml" />
+
+    <!-- Section Hero Image avec overlay de texte améliorée -->
+    <StackPane VBox.vgrow="ALWAYS" styleClass="hero-section">
+        <!-- Image héro qui s'étend pour remplir tout l'espace -->
+        <ImageView fitWidth="1920" fitHeight="935" styleClass="hero-image">
+           <Image url="hero_1.jpg" />
+        </ImageView>
+
+        <!-- Overlay sombre pour améliorer la lisibilité du texte -->
+        <Rectangle width="1600" height="730" opacity="0.5" fill="BLACK" />
+
+        <!-- Contenu central (titre, sous-titre et CTA) -->
+        <VBox alignment="CENTER" spacing="25" maxWidth="800" styleClass="hero-content">
+            <Label text="Cultivons ensemble un avenir durable" styleClass="hero-title" textFill="WHITE" wrapText="true" alignment="CENTER">
+                <font>
+                    <Font name="System Bold" size="46.0" />
+                </font>
+            </Label>
+
+            <Label text="Découvrez comment notre approche de l'agriculture moderne contribue à résoudre les défis alimentaires mondiaux tout en préservant notre planète pour les générations futures."
+                   styleClass="hero-subtitle"
+                   textFill="WHITE"
+                   wrapText="true"
+                   alignment="CENTER">
+                <font>
+                    <Font size="18.0" />
+                </font>
+                <padding>
+                    <Insets left="40" right="40" />
+                </padding>
+            </Label>
+
+            <!-- Boutons d'appel à l'action -->
+            <HBox alignment="CENTER" spacing="15">
+                <Button text="Découvrir nos solutions" styleClass="cta-button">
+                    <graphic>
+                        <FontIcon iconLiteral="fa-arrow-right" iconSize="14" />
+                    </graphic>
+                </Button>
+
+                <Button text="Nous contacter" styleClass="secondary-cta-button" />
+            </HBox>
+        </VBox>
+
+        <!-- Flèches de navigation du slider améliorées -->
+        <HBox alignment="CENTER" StackPane.alignment="CENTER">
+            <Button styleClass="slider-arrow, left-arrow">
+                <graphic>
+                    <FontIcon iconLiteral="fa-chevron-left" iconSize="30" iconColor="white" />
+                </graphic>
+                <HBox.margin>
+                    <Insets right="1100" />
+                </HBox.margin>
+            </Button>
+
+            <Button styleClass="slider-arrow, right-arrow">
+                <graphic>
+                    <FontIcon iconLiteral="fa-chevron-right" iconSize="30" iconColor="white" />
+                </graphic>
+                <HBox.margin>
+                    <Insets left="1100" />
+                </HBox.margin>
+            </Button>
+        </HBox>
+
+        <!-- Indicateurs de pagination du slider -->
+        <HBox alignment="CENTER" spacing="10" StackPane.alignment="BOTTOM_CENTER">
+            <Circle radius="6" styleClass="slider-indicator, active-indicator" />
+            <Circle radius="6" styleClass="slider-indicator" />
+            <Circle radius="6" styleClass="slider-indicator" />
+            <padding>
+                <Insets bottom="30" />
+            </padding>
+        </HBox>
+    </StackPane>
+
+</VBox>

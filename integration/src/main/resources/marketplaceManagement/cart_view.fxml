@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.marketplaceManagement.CartViewController"
+            style="-fx-background-color: white;" prefWidth="1000" prefHeight="600">
+
+    <center>
+        <VBox alignment="CENTER" styleClass="marketplace-banner">
+            <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+            <Label text="Marketplace" styleClass="marketplace-title"/>
+            <Label text="Providing Fresh Produce Every Single Day" styleClass="marketplace-subtitle"/>
+        </VBox>
+        <VBox spacing="20" style="-fx-padding: 30;">
+            <Label text="Your Shopping Cart" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <VBox fx:id="cartItemsContainer" spacing="15"/>
+        </VBox>
+    </center>
+
+    <right>
+        <VBox spacing="15" style="-fx-padding: 30; -fx-background-color: #f8f8f8;" prefWidth="300">
+            <Label text="Have a coupon?" style="-fx-font-weight: bold"/>
+            <HBox spacing="5">
+                <TextField promptText="Coupon code"/>
+                <Button text="Apply"/>
+            </HBox>
+
+            <Separator/>
+
+            <Label fx:id="lblSubtotal" text="Total price: 0 TND"/>
+            <Label text="Discount: - 0 TND"/>
+            <Label fx:id="lblTVA" text="TVA (17%): 0.0 TND"/>
+            <Label fx:id="lblTotal" text="Total: 0.0 TND" style="-fx-font-size: 18px; -fx-font-weight: bold"/>
+
+            <Button fx:id="btnPurchase" text="🛒 MAKE PURCHASE"  style="-fx-background-color: green; -fx-text-fill: white;"/>
+            <Button fx:id="btninvoice" text="get details"  style="-fx-background-color: black ; -fx-text-fill: white;"/>
+            <Button text="← BACK TO SHOP" onAction="#goBack"/>
+        </VBox>
+    </right>
+</BorderPane>

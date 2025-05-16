@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.UserPortfolioController"
+            prefWidth="1200" prefHeight="800"
+            stylesheets="@user.css"
+            styleClass="background-agriculture">
+
+    <top>
+        <VBox style="-fx-background-color: #2e7d32; -fx-padding: 20;">
+            <Label text="🌿 Mon Portfolio de Badges"
+                   style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <Label fx:id="userNameLabel"
+                   style="-fx-text-fill: white; -fx-font-size: 18px;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background: transparent; -fx-background-color: transparent;">
+            <FlowPane fx:id="badgesContainer"
+                      hgap="20" vgap="20"
+                      style="-fx-padding: 20; -fx-alignment: center;">
+                <!-- Les badges seront ajoutés dynamiquement ici -->
+            </FlowPane>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20; -fx-background-color: #e8f5e9;">
+            <Button text="Retour" onAction="#goBack"
+                    style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-pref-width: 120; -fx-background-radius: 5;"/>
+        </HBox>
+    </bottom>
+</BorderPane> 

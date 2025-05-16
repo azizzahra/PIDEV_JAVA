@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.AjoutController"
+            xmlns="http://javafx.com/javafx/16" prefWidth="500" prefHeight="500">
+
+    <center>
+        <VBox spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+            <Label text="Ajouter un nouveau post"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2d4d2d;" />
+
+            <TextField fx:id="titleField" promptText="Titre du post" maxWidth="400"/>
+            <TextField fx:id="usernameField" promptText="Identifiant de l'utilisateur" maxWidth="400"/>
+            <TextArea fx:id="contentArea" promptText="Contenu du post" prefRowCount="5" maxWidth="400"/>
+
+            <ComboBox fx:id="categoryCombo" promptText="Choisissez une catégorie" maxWidth="400"/>
+            <Button fx:id="choisirFichierBtn" text="Choisir une pièce jointe" onAction="#choisirFichier" />
+            <TextField fx:id="attachmentField" promptText="Nom du fichier" editable="false" />
+
+
+            <DatePicker fx:id="datePicker" promptText="Date de création" maxWidth="400"/>
+
+            <Button text="Ajouter" onAction="#handleAddPost"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10 20;" />
+        </VBox>
+    </center>
+</BorderPane>
+

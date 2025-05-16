@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<BorderPane xmlns="http://javafx.com/javafx/24"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.Event.LoanController"
+            style="-fx-background-color: #4CAF50;">
+
+    <!-- Top Section (with Navigation Bar and Buttons) -->
+    <top>
+        <VBox spacing="10" style="-fx-background-color: #2b2b2b; -fx-background-radius: 10; -fx-padding: 20;">
+            <!-- Include the navigation bar at the top -->
+            <fx:include source="../NavBar.fxml" />
+
+            <!-- Buttons styled to match the first file -->
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20;">
+                <Button text="Add New Loan" onAction="#handleAdd" fx:id="addLoanBtn"
+                        style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15; -fx-background-radius: 5;"/>
+                <Button text="Back to Place" onAction="#handleBackToPlace" fx:id="backToPlaceBtn"
+                        style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15; -fx-background-radius: 5;"/>
+                <Button text="Go to Users" onAction="#handleGoToUsers" fx:id="goToUsersBtn"
+                        style="-fx-background-color: #2b2b2b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15; -fx-background-radius: 5;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center Section (Table View for Loans) -->
+    <center>
+        <TableView fx:id="loanTable" style="-fx-background-color: white; -fx-text-fill: #333333; -fx-table-cell-border-color: transparent;" prefWidth="1000" prefHeight="400">
+            <columns>
+                <TableColumn text="Ticket Price" fx:id="priceCol" style="-fx-text-fill: #333333; -fx-alignment: CENTER;"/>
+                <TableColumn text="Tickets Left" fx:id="ticketsLeftCol" style="-fx-text-fill: #333333; -fx-alignment: CENTER;"/>
+                <TableColumn text="Formation" fx:id="formationCol" style="-fx-text-fill: #333333; -fx-alignment: CENTER;"/>
+                <TableColumn text="Place" fx:id="placeCol" style="-fx-text-fill: #333333; -fx-alignment: CENTER;"/>
+                <TableColumn text="Actions" fx:id="actionsCol" style="-fx-text-fill: #333333; -fx-alignment: CENTER;"/>
+            </columns>
+        </TableView>
+    </center>
+
+</BorderPane>

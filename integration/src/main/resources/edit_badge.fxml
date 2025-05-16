@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.EditBadgeController"
+            prefWidth="400" prefHeight="300"
+            stylesheets="@user.css"
+            styleClass="background-agriculture">
+
+    <VBox spacing="15" alignment="TOP_CENTER">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <Label text="🎖 Modifier le Badge" styleClass="header-label"/>
+
+        <GridPane vgap="10" hgap="10">
+            <Label text="Titre :" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="titreField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="Description :" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextArea fx:id="descriptionField" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                     prefRowCount="3"/>
+
+            <Label text="Type :" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <ComboBox fx:id="typeComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Label text="Date :" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                       editable="false"/>
+        </GridPane>
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Enregistrer" onAction="#updateBadge"
+                    style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-background-radius: 5;"/>
+            <Button text="Annuler" onAction="#cancel"
+                    style="-fx-background-color: #757575; -fx-text-fill: white; -fx-background-radius: 5;"/>
+        </HBox>
+    </VBox>
+</AnchorPane> 

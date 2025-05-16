@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import java.net.URL?>
+
+<HBox xmlns="http://javafx.com/javafx/15.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.NavBarController"
+      styleClass="nav-bar"
+      fx:id="navbarRoot">
+    <!-- Feuille de style spécifique à la navbar qui sera toujours appliquée -->
+    <stylesheets>
+        <URL value="@/navbar.css" />
+    </stylesheets>
+
+    <!-- Logo à gauche -->
+    <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" styleClass="logo-container">
+        <FontIcon iconLiteral="fa-leaf" iconSize="24" iconColor="#4CAF50" />
+        <Label text="AGROSPHERE" styleClass="logo-text">
+            <font>
+                <Font name="System Bold" size="22.0" />
+            </font>
+            <padding>
+                <Insets left="10" />
+            </padding>
+        </Label>
+    </HBox>
+
+    <!-- Menu au centre -->
+    <HBox alignment="CENTER" HBox.hgrow="ALWAYS" spacing="25" styleClass="nav-menu">
+        <Button text="Home" onAction="#navigateToHome" styleClass="nav-button" />
+        <Button text="MarketPlace" styleClass="nav-button" onAction="#navigateToMarketPlace"/>
+        <Button text="Event" styleClass="nav-button" onAction="#navigateToEvent" />
+        <Button text="Forum" onAction="#navigateToForum" styleClass="nav-button" />
+        <Button text="Farm" onAction="#navigateToListFarm" styleClass="nav-button" />
+        <Button text="About Us" styleClass="nav-button" />
+        <Button text="Contact" styleClass="nav-button" />
+        <Button text="Mon portfolio" styleClass="nav-button"  onAction="#goToPortfolioFront"/>
+
+    </HBox>
+    <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" styleClass="login-container" spacing="15">
+        <Button styleClass="login-button" onAction="#showProfile">
+            <graphic>
+                <HBox spacing="8" alignment="CENTER">
+                    <FontIcon iconLiteral="fa-user" iconSize="16" />
+                    <Label text="Lajmi" styleClass="user-name" />
+                    <FontIcon iconLiteral="fa-caret-down" iconSize="12" />
+                </HBox>
+            </graphic>
+        </Button>
+
+        <!-- Bouton logout amélioré - thème agricole -->
+        <Button styleClass="logout-button" onAction="#logout">
+            <graphic>
+                <HBox spacing="8" alignment="CENTER">
+                    <FontIcon iconLiteral="fa-sign-out" iconSize="16" iconColor="#FFFFFF" />
+                    <Label text="Se déconnecter" textFill="WHITE" styleClass="logout-text" />
+                </HBox>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Quitter votre session" />
+            </tooltip>
+        </Button>
+    </HBox>
+
+    <!-- Bouton de connexion à droite -->
+
+
+    <padding>
+        <Insets top="18" right="40" bottom="18" left="40" />
+    </padding>
+</HBox>

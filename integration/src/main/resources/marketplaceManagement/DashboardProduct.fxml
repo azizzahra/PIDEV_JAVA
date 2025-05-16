@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<?import java.net.URL?>
+<BorderPane fx:id="dashboardRoot" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.marketplaceManagement.DashboardProductController" styleClass="assets.moder">
+    <stylesheets>
+        <URL value="@../marketplaceManagement/assets/css/modern.css"/>
+    </stylesheets>
+    <top>
+        <!-- Top header -->
+        <HBox style="-fx-background-color: #3e8914; -fx-padding: 15px; -fx-alignment: center-left; -fx-spacing: 10px;">
+            <Label text="🌱 AgroSmart Dashboard" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label text="Bonjour, Zeineb" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+            <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true">
+                <!--<Image url="@user_profile.png"/>-->
+            </ImageView>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox style="-fx-background-color: #1e5631; -fx-padding: 15px; -fx-spacing: 15px;" prefWidth="220">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <Button text="🏠 Dashboard"
+                    style="-fx-background-color: #2d7340; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="👨‍🌾 User"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="🌾 Ferme"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="📅 Liste des Evenements"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="🛒 Liste des Produits" onAction="#navigateToDashboard"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="💬 Forum" onAction="#handleForum"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="📊 Analyses Sol"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="💧 Irrigation"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Button text="🌤️ Météo"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+
+            <Pane VBox.vgrow="ALWAYS"/>
+
+            <Separator style="-fx-background-color: #2d7340;"/>
+            <Button text="⚙️ Paramètres"
+                    style="-fx-background-color: transparent; -fx-text-fill: #c1e1c5; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+            <Button text="🚪 Déconnexion" onAction="#handleLogout"
+                    style="-fx-background-color: transparent; -fx-text-fill: #c1e1c5; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10 15; -fx-background-radius: 5;"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox>
+            <!-- Product navigation bar -->
+            <HBox style="-fx-background-color: #ffffff; -fx-padding: 10px; -fx-alignment: center; -fx-min-width: 100%; -fx-spacing: 10px;">
+                <!-- Title aligned to the left -->
+                <Label text="📦 Product Dashboard" styleClass="nav-title" style="-fx-text-fill: #1e5631; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <!-- Spacer to push buttons to the right -->
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- Navigation buttons -->
+                <Button fx:id="btnProducts" text="Products"
+                        styleClass="product-nav-button-active, product-nav-button"
+                        onAction="#handleProductList"/>
+                <Button fx:id="btnCategories" text="Categories"
+                        styleClass="product-nav-button"
+                        onAction="#handleCategoryList"/>
+                <Button fx:id="btnOrders" text="Orders"
+                        styleClass="product-nav-button"
+                        onAction="#handleOrdersList"/>
+                <Button fx:id="btnArchived" text="Archived Products"
+                        styleClass="product-nav-button"
+                        onAction="#handleArchivedProducts"/>
+            </HBox>
+            <!-- Content area -->
+            <StackPane fx:id="contentArea" style=" -fx-background-color: #c4e1bf;-fx-padding: 10;" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </center>
+</BorderPane>

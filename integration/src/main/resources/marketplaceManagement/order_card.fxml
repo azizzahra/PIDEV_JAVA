@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-padding: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);"
+      maxWidth="300" maxHeight="300" minWidth="250" prefWidth="280">
+
+    <!-- Order Number with improved visibility -->
+    <Label fx:id="orderNumberLabel" text="Order #00"
+           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #bf3434;"
+           maxWidth="Infinity" wrapText="false" />
+
+    <Separator style="-fx-padding: 5 0 10 0;" />
+
+    <!-- Status Badge -->
+    <HBox spacing="5" alignment="CENTER_LEFT" style="-fx-padding: 3 0;">
+        <Label text="Status:" style="-fx-font-weight: bold;" />
+        <Label fx:id="statusBadge" text="Pending"
+               style="-fx-background-color: #FFD54F; -fx-text-fill: white; -fx-padding: 2 8; -fx-background-radius: 20;" />
+    </HBox>
+
+    <!-- Item Count -->
+    <HBox spacing="5" alignment="CENTER_LEFT" style="-fx-padding: 5 0 3 0;">
+        <Label text="Items:" style="-fx-font-weight: bold; -fx-min-width: 55;" />
+        <Label fx:id="itemCountLabel" text="0 items" style="-fx-font-weight: normal;" />
+    </HBox>
+
+    <!-- Total Price -->
+    <HBox spacing="5" alignment="CENTER_LEFT" style="-fx-padding: 3 0 10 0;">
+        <Label text="Total:" style="-fx-font-weight: bold; -fx-min-width: 55;" />
+        <Label fx:id="totalPriceLabel" text="0.00 TND" style="-fx-font-weight: normal;" />
+    </HBox>
+
+    <Separator style="-fx-padding: 5 0 10 0;" />
+
+    <!-- Button Container -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="viewDetailsButton" text="View Details"
+                style="-fx-background-color: #2D2D2D; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15; -fx-cursor: hand;"
+                minWidth="110" prefWidth="130" />
+
+        <Button fx:id="pdfButton" text="Export PDF"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15; -fx-cursor: hand;"
+                minWidth="110" prefWidth="130" />
+    </HBox>
+</VBox>

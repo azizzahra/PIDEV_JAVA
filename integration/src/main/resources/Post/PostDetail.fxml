@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/16"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.PostDetailController"
+            stylesheets="@post_detail1.css"
+            styleClass="main-container">
+
+    <center>
+        <ScrollPane fitToWidth="true"
+                    vbarPolicy="AS_NEEDED"
+                    hbarPolicy="NEVER"
+                    styleClass="transparent-background">
+
+            <VBox fx:id="mainVBox"
+                  spacing="20"
+                  alignment="TOP_CENTER"
+                  styleClass="post-detail-container"
+                  maxWidth="1550">
+
+                <!-- En-tête du post -->
+                <VBox spacing="10">
+                    <Label fx:id="postTitleLabel"
+                           styleClass="post-title"
+                           text="Titre du Post..."/>
+
+                    <HBox spacing="15" styleClass="post-meta-container">
+                        <Label fx:id="postUsernameLabel"
+                               styleClass="post-author"
+                               text="Auteur"/>
+                        <Label fx:id="postDateLabel"
+                               styleClass="post-date"
+                               text="Date"/>
+                        <Label fx:id="viewsLabel"
+                               styleClass="post-views"
+                               text="0 vues"/>
+                        <!-- Bouton Modifier (visible uniquement pour l'auteur) -->
+                        <Button fx:id="editPostButton"
+                                text="Modifier"
+                                styleClass="edit-button"
+                                onAction="#handleEditPost"
+                                visible="false"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Contenu principal -->
+                <Text fx:id="postContentText"
+                      styleClass="post-content"
+                      wrappingWidth="1200"/>
+
+                <!-- Formulaire d'édition (invisible par défaut) -->
+                <VBox fx:id="editFormContainer"
+                      spacing="15"
+                      styleClass="edit-form-container"
+                      visible="false"
+                      managed="false">
+                    <Label text="Modifier le post" styleClass="form-title"/>
+
+                    <TextField fx:id="editTitleField"
+                               styleClass="edit-title-input"
+                               promptText="Titre du post"/>
+
+                    <TextArea fx:id="editContentArea"
+                              styleClass="edit-content-input"
+                              promptText="Contenu du post"
+                              wrapText="true"/>
+
+                    <HBox spacing="10">
+                        <Button text="Enregistrer"
+                                onAction="#handleSaveEdit"
+                                styleClass="save-button"/>
+                        <Button text="Annuler"
+                                onAction="#handleCancelEdit"
+                                styleClass="cancel-button"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Séparateur -->
+                <Separator styleClass="section-separator"/>
+
+                <!-- Section commentaires -->
+                <VBox spacing="20" styleClass="comments-section">
+                    <Label text="Commentaires" styleClass="section-title"/>
+
+                    <!-- Container des commentaires (rempli dynamiquement) -->
+                    <VBox fx:id="commentsContainer"
+                          spacing="20"
+                          styleClass="comments-tree"/>
+                </VBox>
+
+                <!-- Formulaire de commentaire -->
+                <VBox spacing="15" styleClass="comment-form-container">
+                    <Label text="Laisser un commentaire" styleClass="form-title"/>
+
+                    <TextArea fx:id="commentTextArea"
+                              styleClass="comment-input"
+                              promptText="Écrivez votre commentaire ici..."
+                              wrapText="true"/>
+
+                    <HBox spacing="10">
+                        <Button text="Envoyer"
+                                onAction="#handleCommentSubmit"
+                                styleClass="submit-button"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Espacement final -->
+                <Region minHeight="40"/>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/24"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.Event.UpdateLoanController"
+      stylesheets="style.css"
+
+      spacing="10" style="-fx-padding: 20;">
+
+    <Label text="Update Loan" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="10">
+        <Label text="Ticket Price:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="priceField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Tickets Left:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="ticketsLeftField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Formation:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="formationField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Image:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="imageField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Place:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="placeCombo" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <HBox spacing="10">
+        <Button text="Update" onAction="#handleUpdate"/>
+        <Button text="Cancel" onAction="#handleCancel"/>
+    </HBox>
+    <!-- Add this to your update-loan.fxml -->
+
+</VBox>

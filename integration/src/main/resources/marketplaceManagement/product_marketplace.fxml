@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Text?>
+
+<?import java.net.URL?>
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.marketplaceManagement.MarketplaceViewController"
+      prefHeight="800.0"
+      prefWidth="1200.0">
+
+    <stylesheets>
+        <URL value="@../marketplaceManagement/assets/css/marketplace.css"/>
+    </stylesheets>
+
+    <!-- Include the navigation bar -->
+    <fx:include source="../NavBar.fxml" />
+    <VBox spacing="10">
+        <!-- Marketplace Banner -->
+        <VBox alignment="CENTER" styleClass="marketplace-banner">
+            <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+            <Label text="Marketplace" styleClass="marketplace-title"/>
+            <Label text="Providing Fresh Produce Every Single Day" styleClass="marketplace-subtitle"/>
+        </VBox>
+    </VBox>
+    <HBox spacing="10" styleClass="floating-buttons"
+          AnchorPane.rightAnchor="30" AnchorPane.topAnchor="20">
+        <Button fx:id="orderHistoryButton" styleClass="history-button"
+                onAction="#viewOrderHistory" text="📋 Orders"/>
+        <Button fx:id="cartButton" styleClass="cart-button"
+                onAction="#viewCart" text="🛒"/>
+    </HBox>
+    <AnchorPane VBox.vgrow="ALWAYS">
+        <!-- Floating Action Buttons -->
+
+        <BorderPane fx:id="root" styleClass="root"
+                    AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                    AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+            <center>
+
+                <HBox spacing="20" styleClass="marketplace-content">
+                    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                    <!-- Filter Panel -->
+                    <VBox styleClass="filter-panel" spacing="15" minWidth="200">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                        <Label text="Filtre" styleClass="filter-title"/>
+
+                        <VBox spacing="10">
+                            <VBox spacing="10">
+                                <Label text="Search" styleClass="filter-subtitle"/>
+                                <TextField fx:id="searchField" prefWidth="160" promptText="Search products...">
+                                    <tooltip>
+                                        <Tooltip text="Search for products"/>
+                                    </tooltip>
+                                </TextField>
+                            </VBox>
+                            <Label text="Filter" styleClass="filter-subtitle"/>
+                            <ComboBox fx:id="productFilterCombo" prefWidth="160" promptText="Categories">
+                                <tooltip>
+                                    <Tooltip text="Filter products by category"/>
+                                </tooltip>
+                            </ComboBox>
+                        </VBox>
+
+                        <VBox spacing="10">
+                            <Label text="Sorting" styleClass="filter-subtitle"/>
+                            <ComboBox fx:id="sortingCombo" prefWidth="160" promptText="Sort By">
+                                <tooltip>
+                                    <Tooltip text="Sort products"/>
+                                </tooltip>
+                            </ComboBox>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Product Grid -->
+                    <ScrollPane fitToWidth="true" styleClass="product-scroll" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                        <content>
+                            <FlowPane fx:id="productContainer" styleClass="product-grid" hgap="20" vgap="20">
+                                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                            </FlowPane>
+                        </content>
+                    </ScrollPane>
+                </HBox>
+            </center>
+        </BorderPane>
+    </AnchorPane>
+</VBox>

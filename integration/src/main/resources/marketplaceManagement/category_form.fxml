@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.marketplaceManagement.CategoryController"
+      styleClass="main-container"
+      spacing="15"
+      style="-fx-padding: 20;">
+
+    <HBox styleClass="top-bar" alignment="CENTER_LEFT">
+        <Label fx:id="formTitleLabel" text="🏷️ Add New Category" styleClass="hero-title" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="⬅ Back to List" fx:id="btnToggleView" onAction="#handleToggleView"
+                styleClass="nav-button" />
+    </HBox>
+
+    <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+        <HBox spacing="20" alignment="TOP_CENTER">
+            <!-- Left Column - Icon Representation -->
+            <VBox spacing="15" alignment="TOP_CENTER" styleClass="image-column" minWidth="250">
+                <VBox alignment="CENTER" spacing="10" styleClass="image-container">
+                    <Label text="🏷️" style="-fx-font-size: 80px;" />
+                    <Label text="Category" styleClass="category-pill" style="-fx-font-size: 16px;" />
+                </VBox>
+            </VBox>
+
+            <!-- Right Column - Form Fields -->
+            <VBox spacing="15" HBox.hgrow="ALWAYS" styleClass="form-column">
+                <Label text="Category Details" styleClass="section-title"/>
+
+                <VBox spacing="5">
+                    <Label text="Category Name" styleClass="field-label" />
+                    <TextField fx:id="nameField" promptText="Enter category name" styleClass="form-field" />
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Description" styleClass="field-label" />
+                    <TextArea fx:id="descriptionField" promptText="Enter category description"
+                              wrapText="true" prefHeight="150" styleClass="form-field" />
+                </VBox>
+
+                <Region prefHeight="20" VBox.vgrow="ALWAYS" />
+
+                <HBox alignment="CENTER">
+                    <Button fx:id="saveButton" text="Save Category" onAction="#saveCategory" styleClass="save-button" />
+                </HBox>
+            </VBox>
+        </HBox>
+    </ScrollPane>
+</VBox>

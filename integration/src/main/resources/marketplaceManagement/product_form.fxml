@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.marketplaceManagement.ProductController"
+      styleClass="main-container"
+      spacing="15"
+      style="-fx-padding: 20;">
+
+    <HBox styleClass="top-bar" alignment="CENTER_LEFT">
+        <Label text="📦 Add New Product" styleClass="hero-title" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="⬅ Back to List" fx:id="btnToggleView" onAction="#handleToggleView"
+                styleClass="nav-button" />
+    </HBox>
+
+    <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+        <HBox spacing="20" alignment="TOP_CENTER">
+            <VBox spacing="15" alignment="TOP_CENTER" styleClass="image-column" minWidth="250">
+                <VBox alignment="CENTER" spacing="10" styleClass="image-container">
+                    <ImageView fx:id="imagePreview" fitHeight="220" fitWidth="220"
+                               preserveRatio="true" styleClass="product-image" />
+                    <Button fx:id="imageButton" text="Choose Image" styleClass="image-button" />
+                    <Label fx:id="imageLabel" text="No file selected" styleClass="image-label" />
+                </VBox>
+            </VBox>
+
+            <VBox spacing="15" HBox.hgrow="ALWAYS" styleClass="form-column">
+                <Label text="Product Details" styleClass="section-title"/>
+
+                <VBox spacing="5">
+                    <Label text="Product Name" styleClass="field-label" />
+                    <TextField fx:id="nameField" promptText="Enter product name" styleClass="form-field" />
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Description" styleClass="field-label" />
+                    <TextArea fx:id="descriptionField" promptText="Enter product description"
+                              wrapText="true" prefHeight="100" styleClass="form-field" />
+                </VBox>
+
+                <HBox spacing="15">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Price (DT)" styleClass="field-label" />
+                        <TextField fx:id="priceField" promptText="Enter price" styleClass="form-field" />
+                    </VBox>
+
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Quantity" styleClass="field-label" />
+                        <TextField fx:id="quantityField" promptText="Enter quantity" styleClass="form-field" />
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Category" styleClass="field-label" />
+                    <ComboBox fx:id="categoryComboBox" promptText="Select category"
+                              maxWidth="Infinity" styleClass="custom-combo-box" />
+                </VBox>
+
+                <Region prefHeight="20" VBox.vgrow="ALWAYS" />
+
+                <HBox alignment="CENTER">
+                    <Button fx:id="saveButton" text="Save Product" styleClass="save-button" />
+                </HBox>
+            </VBox>
+        </HBox>
+    </ScrollPane>
+</VBox>
